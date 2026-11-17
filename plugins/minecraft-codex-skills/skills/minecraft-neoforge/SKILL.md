@@ -122,10 +122,9 @@ directly.
 | Datagen providers changed | The repo's datagen task (`runData` or `runClientData`), then inspect the diff in the generated resources |
 | Access transformer changed | `validate-access-transformer` through the MCP server, then a build |
 
-Run these once at the end of a slice, not after every edit. Hot reload is
-usually already running, so do not rebuild between edits unless asked. Where
-the repo has `just check` and `just lint`, those replace the build and
-GameTest rows (`just check` does not build the jar; CI does).
+Run these once at the end of a slice, not after every edit. If the repo's
+`justfile` has `check` or `lint` recipes, use them for the build and GameTest
+rows.
 
 Report failures with the actual error output. A slice that adds gameplay logic
 without a GameTest needs a stated reason.
@@ -176,10 +175,10 @@ the project's Minecraft version and the key files, then runs `./gradlew build`.
 # Build the mod jar
 ./gradlew build
 
-# Run the Minecraft client to test
+# Run the Minecraft client to test (ask first, see Checkpoints)
 ./gradlew runClient
 
-# Run a dedicated server to test
+# Run a dedicated server to test (ask first, see Checkpoints)
 ./gradlew runServer
 
 # NeoForge Game Tests (when the project configures this run)
@@ -240,12 +239,12 @@ code. Those names are stale for the examples in this skill.
 Every registry entry needs a namespaced ID:
 
 ```java
-// 26.x official names
+// 1.21.11 and 26.x
 Identifier id = Identifier.fromNamespaceAndPath("mymod", "my_block");
 ```
 
-Older Mojang mappings use `ResourceLocation`. Keep the class name that the
-project's version uses.
+1.21.1 uses `ResourceLocation`. 1.21.11 renamed it to `Identifier`, and 26.x
+keeps `Identifier`. Keep the class name that the project's version uses.
 
 ---
 
