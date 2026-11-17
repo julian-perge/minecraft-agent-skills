@@ -8,7 +8,14 @@ This plugin packages the same 13 Minecraft skills for Codex and Claude Code.
 - Codex: preserve the repository layout: `.agents/plugins/marketplace.json`
   and `plugins/minecraft-codex-skills/` share the same project root. Install
   `minecraft-codex-skills` from the plugins surface.
-- Claude Code:
+- Claude Code, from the marketplace (unverified):
+
+  ```bash
+  claude plugin marketplace add julian-perge/minecraft-agent-skills
+  claude plugin install minecraft-codex-skills@minecraft-agent-skills
+  ```
+
+- Claude Code, from a local clone:
 
   ```bash
   claude --plugin-dir ./plugins/minecraft-codex-skills

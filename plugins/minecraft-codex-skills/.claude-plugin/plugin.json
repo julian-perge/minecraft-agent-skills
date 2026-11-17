@@ -1,12 +1,12 @@
 {
   "name": "minecraft-codex-skills",
-  "description": "A dual-target Minecraft development skills bundle for Claude Code and Codex; image-generation workflows are Codex-first and host-conditional.",
-  "version": "2.5.4",
+  "description": "15 Minecraft development and operations skills for Codex and Claude Code.",
+  "version": "3.0.0",
   "author": {
-    "name": "Jahrome907",
-    "url": "https://github.com/Jahrome907"
+    "name": "Julian Perge",
+    "url": "https://github.com/julian-perge"
   },
-  "homepage": "https://github.com/Jahrome907/minecraft-agent-skills",
-  "repository": "https://github.com/Jahrome907/minecraft-agent-skills",
+  "homepage": "https://github.com/julian-perge/minecraft-agent-skills",
+  "repository": "https://github.com/julian-perge/minecraft-agent-skills",
   "license": "MIT"
 }

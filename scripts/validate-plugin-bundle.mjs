@@ -11,6 +11,8 @@ const CODEX_MANIFEST = path.join(PLUGIN_ROOT, ".codex-plugin", "plugin.json");
 const CLAUDE_MANIFEST = path.join(PLUGIN_ROOT, ".claude-plugin", "plugin.json");
 const PLUGIN_SKILLS = path.join(PLUGIN_ROOT, "skills");
 const MARKETPLACE = path.join(ROOT, ".agents", "plugins", "marketplace.json");
+const CLAUDE_MARKETPLACE = path.join(ROOT, ".claude-plugin", "marketplace.json");
+const CLAUDE_PLUGIN_SOURCE = "./plugins/minecraft-codex-skills";
 const errors = [];
 
 function addError(file, message) {
@@ -42,6 +44,7 @@ const packageLock = readJson(PACKAGE_LOCK);
 const codexManifest = readJson(CODEX_MANIFEST);
 const claudeManifest = readJson(CLAUDE_MANIFEST);
 const marketplace = readJson(MARKETPLACE);
+const claudeMarketplace = readJson(CLAUDE_MARKETPLACE);
 
 if (!fs.existsSync(PLUGIN_ROOT)) addError(PLUGIN_ROOT, "plugin root directory is missing");
 if (!fs.existsSync(PLUGIN_SKILLS)) addError(PLUGIN_SKILLS, "plugin skills directory is missing");
@@ -84,6 +87,18 @@ if (marketplace) {
     if (pluginEntry.policy?.installation !== "AVAILABLE") addError(MARKETPLACE, "expected installation policy \`AVAILABLE\`");
     if (pluginEntry.policy?.authentication !== "ON_INSTALL") addError(MARKETPLACE, "expected authentication policy \`ON_INSTALL\`");
     requireText(pluginEntry.category, MARKETPLACE, "plugin category");
+  }
+}
+
+if (claudeMarketplace) {
+  const pluginEntry = Array.isArray(claudeMarketplace.plugins)
+    ? claudeMarketplace.plugins.find((entry) => entry?.name === PLUGIN_NAME)
+    : null;
+
+  if (!pluginEntry) {
+    addError(CLAUDE_MARKETPLACE, `missing plugin entry for \`${PLUGIN_NAME}\``);
+  } else if (pluginEntry.source !== CLAUDE_PLUGIN_SOURCE) {
+    addError(CLAUDE_MARKETPLACE, `expected plugin source \`${CLAUDE_PLUGIN_SOURCE}\``);
   }
 }
 

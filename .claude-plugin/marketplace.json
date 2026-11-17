@@ -1,0 +1,14 @@
+{
+  "name": "minecraft-agent-skills",
+  "description": "Minecraft skills for Codex and Claude Code.",
+  "owner": {
+    "name": "Julian Perge"
+  },
+  "plugins": [
+    {
+      "name": "minecraft-codex-skills",
+      "source": "./plugins/minecraft-codex-skills",
+      "description": "15 Minecraft development and operations skills."
+    }
+  ]
+}

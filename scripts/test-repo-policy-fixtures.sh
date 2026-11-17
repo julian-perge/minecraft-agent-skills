@@ -44,6 +44,7 @@ echo "=== Running Repo Policy Fixtures ==="
 
 expect_pass "skill reference links" node ./scripts/test-skill-link-fixtures.mjs
 expect_pass "forge 1.20.1 data paths" node ./scripts/test-forge-path-fixtures.mjs
+expect_pass "plugin bundle claude marketplace" node ./scripts/test-plugin-bundle-fixtures.mjs
 
 expect_pass "workflow pins valid" \
   node ./scripts/check-workflow-action-pins.mjs \
