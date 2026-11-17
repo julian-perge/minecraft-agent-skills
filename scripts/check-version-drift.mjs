@@ -267,7 +267,9 @@ const checks = [
       /references\/fabric-api\.md/,
       /Identifier\.fromNamespaceAndPath/,
       /Registries\.SCREEN_HANDLER/,
-      /implements ModInitializer/
+      /implements ModInitializer/,
+      /spawnPlacement/,
+      /CreativeModeTabEvents/
     ],
     forbidden: [
       /common-patterns\.md/,

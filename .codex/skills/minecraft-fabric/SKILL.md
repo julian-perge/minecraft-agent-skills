@@ -37,7 +37,7 @@ covers legacy 1.21.11 examples only.
 
 ```bash
 # Fabric project signature
-grep -r "fabric" gradle.properties build.gradle settings.gradle 2>/dev/null | head -5
+grep -r "fabric" gradle.properties build.gradle build.gradle.kts settings.gradle settings.gradle.kts 2>/dev/null | head -5
 
 # Read mod ID and version
 cat gradle.properties
