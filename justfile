@@ -11,7 +11,7 @@ set positional-arguments
 default:
     @just --list --unsorted
 
-# Every recipe below runs its package.json script through this. It uses bun when bun is on PATH and npm otherwise.
+# Each recipe that wraps a package.json script runs it through this. It uses bun when bun is on PATH and npm otherwise.
 [private]
 run script:
     #!/usr/bin/env bash
