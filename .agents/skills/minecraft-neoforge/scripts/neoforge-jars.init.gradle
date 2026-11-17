@@ -1,0 +1,77 @@
+// Prints the NeoForge universal jar and the FML loader jar of a ModDevGradle project.
+// Run from the root of a NeoForge mod project:
+//   ./gradlew -q --init-script <skill dir>/scripts/neoforge-jars.init.gradle printNeoForgeJars
+// In a build with several NeoForge projects, name one: :26.3:printNeoForgeJars.
+// Output on stdout is four key=value lines and nothing else. Errors fail the build.
+
+import groovy.json.JsonSlurper
+
+gradle.allprojects { project ->
+    project.plugins.withId('net.neoforged.moddev') {
+        project.tasks.register('printNeoForgeJars') { task ->
+            task.group = 'help'
+            task.description = 'Prints the NeoForge universal jar and the FML loader jar.'
+
+            def projectPath = project.path
+            def lines = []
+            def error = null
+
+            // The jars are resolved while the task is configured, because the configuration
+            // cache does not allow a task action to resolve dependencies.
+            // The moddev-config.json of the NeoForge version names both jars. The compile
+            // classpath is not used, because on 1.21.1 it holds a merged jar from
+            // build/moddev/artifacts instead of the universal jar.
+            try {
+                // ModDevGradle 2.x returns a String here. The Provider branch keeps the
+                // script working if a ModDevGradle version returns a Property instead.
+                def neoForgeVersion = project.extensions.getByName('neoForge').version
+                if (neoForgeVersion instanceof Provider) {
+                    neoForgeVersion = neoForgeVersion.getOrNull()
+                }
+                if (neoForgeVersion == null) {
+                    throw new GradleException('the neoForge block sets no NeoForge version')
+                }
+                def resolveOne = { String notation ->
+                    def dependency = project.dependencies.create(notation)
+                    dependency.transitive = false
+                    project.configurations.detachedConfiguration(dependency).singleFile
+                }
+                def config = new JsonSlurper().parse(resolveOne("net.neoforged:neoforge:${neoForgeVersion}:moddev-config@json"))
+                def loaderNotation = config.libraries.find { it.startsWith('net.neoforged.fancymodloader:loader:') }
+                if (loaderNotation == null) {
+                    throw new GradleException("moddev-config.json of NeoForge ${neoForgeVersion} names no net.neoforged.fancymodloader:loader library")
+                }
+
+                // The NeoForm version is the Minecraft version, a hyphen and a NeoForm
+                // build, such as 26.1.2-1 or 1.21.1-20240808.144430.
+                def neoFormVersion = config.mcp.split('@')[0].split(':')[2]
+                def minecraftVersion = neoFormVersion.replaceFirst(/-[^-]+$/, '')
+
+                lines = [
+                    "minecraft_version=${minecraftVersion}",
+                    "neoforge_version=${neoForgeVersion}",
+                    "neoforge_universal_jar=${resolveOne(config.universal).absolutePath}",
+                    "fml_loader_jar=${resolveOne(loaderNotation).absolutePath}",
+                ].collect { it.toString() }
+            } catch (Exception e) {
+                error = "printNeoForgeJars: project ${projectPath}: ${e.message}".toString()
+            }
+
+            task.doLast {
+                if (error != null) {
+                    throw new GradleException(error)
+                }
+                println lines.join('\n')
+            }
+        }
+    }
+}
+
+// A task name without a project path runs the task in every project that has it.
+// That would print several sets of lines, so the build fails and names the projects.
+gradle.taskGraph.whenReady { graph ->
+    def paths = graph.allTasks.findAll { it.name == 'printNeoForgeJars' }.collect { it.path }
+    if (paths.size() > 1) {
+        throw new GradleException("printNeoForgeJars: several NeoForge projects match (${paths.join(', ')}). Run one of them, for example ${paths.last()}.")
+    }
+}

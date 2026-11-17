@@ -554,4 +554,64 @@ expect_fail_contains "worldgen legacy path" "legacy path detected" \
   ./.agents/skills/minecraft-world-generation/scripts/validate-worldgen-json.sh \
   --root tests/fixtures/validators/worldgen/legacy
 
+neoforge_jars_script="$PWD/.agents/skills/minecraft-neoforge/scripts/neoforge-jars.sh"
+neoforge_jars_fixtures="$PWD/tests/fixtures/validators/neoforge-jars"
+neoforge_jars_cache="$neoforge_jars_fixtures/gradle-home/caches/modules-2/files-2.1"
+
+# neoforge-jars.sh reads gradle.properties and build.gradle from the current directory,
+# so each case runs it from inside a fixture project.
+run_neoforge_jars() {
+  local project="$1"
+  shift
+  (cd "$neoforge_jars_fixtures/projects/$project" &&
+    GRADLE_USER_HOME="$neoforge_jars_fixtures/gradle-home" bash "$neoforge_jars_script" "$@")
+}
+
+expect_neoforge_jars_stdout() {
+  local name="$1"
+  local expected="$2"
+  shift
+  shift
+
+  local actual
+  if actual="$(run_neoforge_jars "$@" 2>/dev/null)" && [[ "$actual" == "$expected" ]]; then
+    echo "$PASS $name"
+  else
+    echo "$actual"
+    echo "$FAIL $name (stdout is not the expected four lines)" >&2
+    exit 1
+  fi
+}
+
+expect_path "$neoforge_jars_cache/net.neoforged/neoforge/26.3.0.101/1a02/neoforge-26.3.0.101.pom"
+expect_path "$neoforge_jars_cache/net.neoforged/neoforge/21.1.229/2b02/neoforge-21.1.229.pom"
+expect_neoforge_jars_stdout "neoforge-jars version from neo_version" \
+  "minecraft_version=26.3
+neoforge_version=26.3.0.101
+neoforge_universal_jar=$neoforge_jars_cache/net.neoforged/neoforge/26.3.0.101/1a01/neoforge-26.3.0.101-universal.jar
+fml_loader_jar=$neoforge_jars_cache/net.neoforged.fancymodloader/loader/12.0.12/3c01/loader-12.0.12.jar" \
+  neo-version
+expect_pass_contains "neoforge-jars version from neoforge_version" "neoforge_version=26.3.0.101" \
+  run_neoforge_jars neoforge-version
+expect_neoforge_jars_stdout "neoforge-jars neo_version with spaces and CRLF" \
+  "minecraft_version=26.3
+neoforge_version=26.3.0.101
+neoforge_universal_jar=$neoforge_jars_cache/net.neoforged/neoforge/26.3.0.101/1a01/neoforge-26.3.0.101-universal.jar
+fml_loader_jar=$neoforge_jars_cache/net.neoforged.fancymodloader/loader/12.0.12/3c01/loader-12.0.12.jar" \
+  spaced-crlf
+expect_pass_contains "neoforge-jars version from build.gradle" "neoforge_version=26.3.0.101" \
+  run_neoforge_jars build-gradle
+expect_neoforge_jars_stdout "neoforge-jars 21.1.x version from build.gradle.kts" \
+  "minecraft_version=1.21.1
+neoforge_version=21.1.229
+neoforge_universal_jar=$neoforge_jars_cache/net.neoforged/neoforge/21.1.229/2b01/neoforge-21.1.229-universal.jar
+fml_loader_jar=$neoforge_jars_cache/net.neoforged.fancymodloader/loader/4.0.42/4d01/loader-4.0.42.jar" \
+  build-gradle-kts
+expect_pass_contains "neoforge-jars --neo-version override" "neoforge_version=21.1.229" \
+  run_neoforge_jars neo-version --neo-version 21.1.229
+expect_fail_contains "neoforge-jars unknown version with two cached versions" "cached versions: 21.1.229 26.3.0.101" \
+  run_neoforge_jars no-version
+expect_fail_contains "neoforge-jars missing cache" "NeoForge 26.1.2.999" \
+  run_neoforge_jars missing-cache
+
 echo "$PASS all validator fixture checks completed"

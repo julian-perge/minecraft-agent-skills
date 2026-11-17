@@ -57,14 +57,27 @@ version number from memory. Check it first, in this order:
    The `target` decides whether a class is found. NeoForge and FML classes are
    not in the vanilla artifact, and `workspace` targets did not find them
    either, because the patched jars in `build/moddev/artifacts` do not contain
-   them.
+   them. Before a NeoForge or FML read, run one of this skill's scripts from
+   the mod repo root to get the two jar paths:
+
+   ```bash
+   ./gradlew -q --init-script <skill dir>/scripts/neoforge-jars.init.gradle printNeoForgeJars
+   bash <skill dir>/scripts/neoforge-jars.sh [--neo-version <version>]
+   ```
+
+   The init script asks Gradle. When several projects apply NeoForge, run
+   `:<project>:printNeoForgeJars`. The `.sh` script needs no Gradle, but the
+   jars must already be in the Gradle cache. Use only the
+   `neoforge_universal_jar=` and `fml_loader_jar=` lines, because a build
+   script can print its own lines. If both scripts fail, say which NeoForge or
+   FML lookup could not be verified. Both were checked on 1.21.1, 1.21.11,
+   26.1.2 and 26.3.
 
    | To read | Target |
    |---|---|
    | Vanilla | `{kind: version, value: <mc version>}` |
-   | NeoForge source | `{kind: dependency, group: net.neoforged, name: neoforge, version: <neo version>}` |
-   | NeoForge members, or any source read that fails | `{kind: jar, value: <path to neoforge-<version>-universal.jar>}`, found under `~/.gradle/caches/modules-2` |
-   | FML, such as `ModList` | `jar` target on `net.neoforged.fancymodloader:loader`, at the version in the NeoForge pom |
+   | NeoForge classes, members and source | `{kind: jar, value: <neoforge_universal_jar>}` |
+   | FML, such as `ModList` | `{kind: jar, value: <fml_loader_jar>}` |
    | AE2 and other addons | `jar` target on the addon's jar under `~/.gradle/caches/modules-2` |
 
    Pass explicit versions. `versionFromProject` fails with
