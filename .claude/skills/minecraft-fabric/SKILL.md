@@ -263,7 +263,8 @@ When adding a **new item**:
 - [ ] 1.21.4+ item definition -> `assets/<modid>/items/<name>.json`
 - [ ] Texture PNG
 - [ ] Language entry
-- [ ] Creative tab entry with `ItemGroupEvents`
+- [ ] Creative tab entry with `CreativeModeTabEvents` (26.x) or
+      `ItemGroupEvents` (1.21.11)
 - [ ] Recipe JSON if craftable (`data/<modid>/recipe/` for 26.x; check the
       exact version's data format before you edit a 1.21.x project)
 
