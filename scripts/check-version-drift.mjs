@@ -243,7 +243,14 @@ const checks = [
       /^\| 1\.21\.1 \|/m,
       /^\| 1\.21\.11 \|/m,
       /^\| 26\.1\.2 \|/m,
-      /^\| 26\.3 \|/m
+      /^\| 26\.3 \|/m,
+      /^\| 1\.21\.1 \| Java 21 .*\| Mojang names with Parchment .*\| `21\.1\.x`.*\| \[MDK-1\.21\.1-ModDevGradle\]/m,
+      /^\| 1\.21\.11 \| Java 21 .*\| Mojang names with Parchment .*\| `21\.11\.x`.*\| \[MDK-1\.21\.11-ModDevGradle\]/m,
+      /^\| 26\.1\.2 \| Java 25 .*\| Mojang names, no obfuscation.*\| `26\.1\.2\.x`.*\| \[MDK-26\.1\.2-ModDevGradle\]/m,
+      /^\| 26\.3 \| Java 25 .*\| Mojang names, no obfuscation.*\| `26\.3\.0\.x`.*\| \[MDK-26\.3-ModDevGradle\]/m
+    ],
+    forbidden: [
+      /^\| [0-9.]+ \|.*\bunverified\b/m
     ]
   },
   {
