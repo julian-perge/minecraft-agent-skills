@@ -593,6 +593,12 @@ fml_loader_jar=$neoforge_jars_cache/net.neoforged.fancymodloader/loader/12.0.12/
   neo-version
 expect_pass_contains "neoforge-jars version from neoforge_version" "neoforge_version=26.3.0.101" \
   run_neoforge_jars neoforge-version
+expect_neoforge_jars_stdout "neoforge-jars neo_version with spaces and CRLF" \
+  "minecraft_version=26.3
+neoforge_version=26.3.0.101
+neoforge_universal_jar=$neoforge_jars_cache/net.neoforged/neoforge/26.3.0.101/1a01/neoforge-26.3.0.101-universal.jar
+fml_loader_jar=$neoforge_jars_cache/net.neoforged.fancymodloader/loader/12.0.12/3c01/loader-12.0.12.jar" \
+  spaced-crlf
 expect_pass_contains "neoforge-jars version from build.gradle" "neoforge_version=26.3.0.101" \
   run_neoforge_jars build-gradle
 expect_neoforge_jars_stdout "neoforge-jars 21.1.x version from build.gradle.kts" \

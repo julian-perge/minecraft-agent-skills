@@ -11,10 +11,13 @@ fail() {
     exit 1
 }
 
+# Gradle accepts spaces around "=" and CRLF line endings in gradle.properties, so both are removed from the value.
 read_gradle_property() {
     local key="$1"
     if [[ -f gradle.properties ]]; then
-        sed -n "s/^${key}=//p" gradle.properties | head -1
+        tr -d '\r' < gradle.properties |
+            sed -n "s/^[[:space:]]*${key}[[:space:]]*=[[:space:]]*\(.*[^[:space:]]\)[[:space:]]*$/\1/p" |
+            head -1
     fi
 }
 
