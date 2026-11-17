@@ -243,6 +243,55 @@ const checks = [
     ]
   },
   {
+    file: ".agents/skills/minecraft-fabric/references/fabric-api.md",
+    required: [
+      /minecraft_version=1\.21\.11/,
+      /loader_version=0\.19\.3/,
+      /fabric_version=0\.141\.4\+1\.21\.11/,
+      /yarn_mappings=1\.21\.11\+build\.6/,
+      /"fabric-api": ">=0\.141\.4\+1\.21\.11"/
+    ],
+    forbidden: [
+      /0\.114\.0\+1\.21\.1/,
+      /0\.116\.10\+1\.21\.1/,
+      /loader_version=0\.17\.3/,
+      /yarn_mappings=1\.21\.1\+build\.3/,
+      /"fabric-api": "\*"/
+    ]
+  },
+  {
+    file: ".agents/skills/minecraft-fabric/SKILL.md",
+    required: [
+      /Fabric\*\* \| 26\.x current; 1\.21\.11 examples retained \| Java 25 current; Java 21 on 1\.21\.x \| Gradle \+ Fabric Loom/,
+      /Fabric project signature/,
+      /references\/fabric-api\.md/,
+      /Identifier\.fromNamespaceAndPath/,
+      /Registries\.SCREEN_HANDLER/,
+      /implements ModInitializer/,
+      /spawnPlacement/,
+      /CreativeModeTabEvents/
+    ],
+    forbidden: [
+      /common-patterns\.md/,
+      /neoforge-api\.md/,
+      /forge-1\.20\.1-api\.md/
+    ]
+  },
+  {
+    file: ".agents/skills/minecraft-fabric/scripts/check-build.sh",
+    required: [
+      /PLATFORM="fabric"/,
+      /parse_java_major/,
+      /REQUIRED_JAVA=21/,
+      /REQUIRED_JAVA=25/,
+      /src\/main\/resources\/fabric\.mod\.json/
+    ],
+    forbidden: [
+      /forge/i,
+      /architectury/i
+    ]
+  },
+  {
     file: ".agents/skills/minecraft-datapack/scripts/validate-datapack.sh",
     required: [
       /pack\.min_format/,
