@@ -207,6 +207,8 @@ const checks = [
       /references\/neoforge-api\.md/,
       /references\/common-patterns\.md/,
       /references\/versions\.md/,
+      /scripts\/neoforge-jars\.init\.gradle printNeoForgeJars/,
+      /bash <skill dir>\/scripts\/neoforge-jars\.sh/,
       /Identifier\.fromNamespaceAndPath/,
       /DeferredRegister\.createBlocks/,
       /GatherDataEvent\.Client/,
