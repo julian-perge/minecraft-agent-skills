@@ -2,10 +2,6 @@
 node_modules/
 npm-debug.log*
 
-# OS
-.DS_Store
-Thumbs.db
-
 # Editor
 .vscode/
 .idea/
@@ -14,6 +10,9 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Agent workflow scratch
+tasks/
 
 # Secrets and local environment
 .env
@@ -27,8 +26,13 @@ Thumbs.db
 *.crt
 
 # This repo intentionally versions compatibility mirrors in these root folders.
-# Keep them includable even if contributors have global ignore rules for .codex/.claude.
+# Git must track them even when a contributor's global ignore rules list .codex or .claude.
 !/.codex/
 !/.codex/**
 !/.claude/
 !/.claude/**
+
+# OS
+# These rules come after the mirror rules, because a later rule wins and the mirror rules would include these files again.
+.DS_Store
+Thumbs.db
