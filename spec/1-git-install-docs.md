@@ -10,7 +10,7 @@ Let Julian install one versioned skill, or the whole bundle, from this git repo 
 
 ## Tech Stack
 
-Markdown, JSON, SVG text. Node 22 scripts for validation. Package manager: `bun` first and `npm` as the fallback in docs and in `AGENTS.md`. CI stays on `npm ci` and `npm run check` (see Boundaries).
+Markdown, JSON, SVG text. Node 22 scripts for validation. Package manager: `bun` first and `npm` as the fallback in docs and in `AGENTS.md`. `bun.lock` is the local lockfile since #13. CI stays on `npm ci` and `npm run check` until #14 (see Boundaries).
 
 ## Commands
 
@@ -98,7 +98,7 @@ JSON with 2-space indentation. Prose in plain ASCII, short sentences. Example of
 - Always: keep the plugin name `minecraft-codex-skills`; keep all version fields equal; mark any install form that was not run as `unverified`.
 - Ask first: pushing a branch for the remote install test; `claude plugin marketplace add` (it writes user settings, so remove it after with `claude plugin marketplace remove minecraft-agent-skills`); changing `.github/workflows/skills-audit.yml`.
 - Never: publish to npm; add a plugin `.mcp.json` (it would start a Node server for every plugin user); open an upstream PR; touch `~/.claude/settings.json`.
-- CI stays on npm: `package-lock.json` is the only lockfile and the workflow caches npm. The bun-first rule covers docs and `AGENTS.md` only.
+- CI stays on npm until #14: the workflow runs `npm ci` against `package-lock.json` and caches npm. `bun.lock` is the local lockfile since #13, so a dependency change updates both lockfiles until #14 removes `package-lock.json`. This module does not change CI.
 
 ## Success Criteria
 
@@ -115,7 +115,7 @@ JSON with 2-space indentation. Prose in plain ASCII, short sentences. Example of
 ## Out of Scope (Deferred)
 
 - An npm publish, a plugin `.mcp.json`, syncing from Jahrome907, and upstream PRs.
-- Moving CI to bun.
+- Moving CI to bun and removing `package-lock.json`: #14.
 - A Windows install guide.
 - A tagged release or changelog for 3.0.0. This module sets the version only.
 - Codex plugin author fields. The Codex manifest has none today.

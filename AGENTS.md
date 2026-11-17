@@ -9,6 +9,11 @@ This repository contains 13 Minecraft skills and a plugin for Codex and Claude C
   `.claude/skills/`, and `plugins/minecraft-codex-skills/skills/`.
 - Do not hand-edit mirrored skill trees.
 - Run `npm run check` before publishing changes.
+- The root `justfile` has one recipe for each `package.json` script, plus
+  `bash-n`, `install` and `clean`. Run `just` to list them. The recipes use bun
+  when it is on PATH and npm otherwise.
+- `bun.lock` is the local lockfile. CI still installs from `package-lock.json`
+  until #14, so a dependency change updates both lockfiles.
 
 ## Skill standards
 
