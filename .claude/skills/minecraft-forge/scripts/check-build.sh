@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# check-build.sh
 # Verifies the Forge 1.20.1 mod build environment and runs the project's build task.
 # Run from the root of a Forge 1.20.1 mod project.
 

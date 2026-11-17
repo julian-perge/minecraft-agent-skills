@@ -191,7 +191,7 @@ public class ModBlocks {
 
 ---
 
-## 6. JSON Asset Templates
+## 6. JSON Assets
 
 Always provide matching JSON assets for every registered block and item.
 Generate or update these files alongside the Java code. Before you create loot
