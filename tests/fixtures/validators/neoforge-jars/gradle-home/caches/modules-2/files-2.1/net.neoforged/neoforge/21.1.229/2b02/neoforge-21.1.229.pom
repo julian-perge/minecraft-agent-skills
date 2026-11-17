@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>net.neoforged</groupId>
+  <artifactId>neoforge</artifactId>
+  <version>21.1.229</version>
+  <dependencies>
+    <dependency>
+      <groupId>net.neoforged</groupId>
+      <artifactId>neoform</artifactId>
+      <version>1.21.1-20240808.144430</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.neoforged.fancymodloader</groupId>
+      <artifactId>earlydisplay</artifactId>
+      <version>4.0.42</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.neoforged.fancymodloader</groupId>
+      <artifactId>loader</artifactId>
+      <version>4.0.42</version>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+</project>
