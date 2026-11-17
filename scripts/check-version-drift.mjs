@@ -226,6 +226,62 @@ const checks = [
     ]
   },
   {
+    file: ".agents/skills/minecraft-neoforge/references/neoforge-api.md",
+    required: [
+      /minecraft_version=1\.21\.11/,
+      /neo_version=21\.11\.42/,
+      /minecraft_version_range=\[1\.21\.11,1\.22\)/
+    ],
+    forbidden: [
+      /neo_version=21\.1\.172/,
+      /(^|\r?\n)minecraft_version=1\.21\.1(\r?\n|$)/
+    ]
+  },
+  {
+    file: ".agents/skills/minecraft-neoforge/references/versions.md",
+    required: [
+      /^\| 1\.21\.1 \|/m,
+      /^\| 1\.21\.11 \|/m,
+      /^\| 26\.1\.2 \|/m,
+      /^\| 26\.3 \|/m
+    ]
+  },
+  {
+    file: ".agents/skills/minecraft-neoforge/SKILL.md",
+    required: [
+      /1\.21\.1, 1\.21\.11, 26\.1\.2 and 26\.3/,
+      /NeoForge project signature/,
+      /references\/neoforge-api\.md/,
+      /references\/common-patterns\.md/,
+      /references\/versions\.md/,
+      /Identifier\.fromNamespaceAndPath/,
+      /DeferredRegister\.createBlocks/,
+      /GatherDataEvent\.Client/,
+      /minecraft-multiloader/
+    ],
+    forbidden: [
+      /fabric-api\.md/,
+      /forge-1\.20\.1-api\.md/,
+      /Registries\.SCREEN_HANDLER/,
+      /ModInitializer/
+    ]
+  },
+  {
+    file: ".agents/skills/minecraft-neoforge/scripts/check-build.sh",
+    required: [
+      /PLATFORM="neoforge"/,
+      /parse_java_major/,
+      /REQUIRED_JAVA=21/,
+      /REQUIRED_JAVA=25/,
+      /src\/main\/resources\/META-INF\/neoforge\.mods\.toml/
+    ],
+    forbidden: [
+      /(?<!neo)forge/i,
+      /fabric/i,
+      /architectury/i
+    ]
+  },
+  {
     file: ".agents/skills/minecraft-modding/references/fabric-api.md",
     required: [
       /minecraft_version=1\.21\.11/,
