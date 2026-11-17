@@ -1,6 +1,6 @@
 ---
 name: minecraft-multiloader
-description: "Build and maintain Architectury-based Minecraft 26.x or 1.21.x mods that share one codebase across NeoForge and Fabric. Use only when both loaders are required; use minecraft-modding for a single-loader project."
+description: "Build and maintain Architectury-based Minecraft 26.x or 1.21.x mods that share one codebase across NeoForge and Fabric. Use only when both loaders are required; use minecraft-neoforge, minecraft-fabric or minecraft-forge for a single-loader project."
 ---
 
 # Minecraft Multiloader Skill (Architectury)
@@ -14,7 +14,7 @@ platform-specific behavior behind the `@ExpectPlatform` abstraction.
 
 ### Routing Boundaries
 - `Use when`: one shared codebase must build and ship both NeoForge and Fabric artifacts.
-- `Do not use when`: the project is single-loader only (`minecraft-modding` for NeoForge/Fabric, not both).
+- `Do not use when`: the project is single-loader only (`minecraft-neoforge`, `minecraft-fabric`, `minecraft-forge` for one loader, not both).
 - `Do not use when`: the task is Paper/Bukkit plugin development (`minecraft-plugin-dev`).
 
 | Component | Purpose |

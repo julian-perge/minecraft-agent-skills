@@ -9,7 +9,7 @@ description: "Set up, operate, tune, and troubleshoot Minecraft Java 26.x and le
 
 ### Routing Boundaries
 - `Use when`: the task is infrastructure or live operations for Minecraft servers (deployment choice, tuning, backups, proxying, security, incident response).
-- `Do not use when`: the task is writing plugin code (`minecraft-plugin-dev`) or writing mods/loaders (`minecraft-modding`, `minecraft-multiloader`).
+- `Do not use when`: the task is writing plugin code (`minecraft-plugin-dev`) or writing mods/loaders (`minecraft-neoforge`, `minecraft-fabric`, `minecraft-forge`, `minecraft-multiloader`).
 - `Do not use when`: the task is WorldEdit command workflows (`minecraft-worldedit-ops`) or EssentialsX workflow/policy design (`minecraft-essentials-ops`).
 - `Do not use when`: the task is datapack/resource-pack authoring (`minecraft-datapack`, `minecraft-resource-pack`).
 

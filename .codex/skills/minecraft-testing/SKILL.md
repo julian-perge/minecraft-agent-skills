@@ -20,7 +20,7 @@ and Forge 1.20.1 on Java 17. Do not combine source layouts or APIs across versio
 
 ### Routing Boundaries
 - `Use when`: the task is designing or implementing automated tests (unit, mock, gametest, CI test jobs) for Minecraft projects.
-- `Do not use when`: the task is implementing gameplay features rather than testing them (`minecraft-modding`, `minecraft-plugin-dev`, `minecraft-datapack`).
+- `Do not use when`: the task is implementing gameplay features rather than testing them (`minecraft-neoforge`, `minecraft-fabric`, `minecraft-forge`, `minecraft-plugin-dev`, `minecraft-datapack`).
 - `Do not use when`: the task is release automation or publishing pipelines (`minecraft-ci-release`).
 
 ## Bundled References And Helpers
