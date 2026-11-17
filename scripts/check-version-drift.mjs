@@ -6,37 +6,6 @@ const repoRoot = process.cwd();
 
 const checks = [
   {
-    file: ".agents/skills/minecraft-modding/SKILL.md",
-    required: [
-      /Forge 1\.20\.1/,
-      /Forge 1\.20\.1 project signature/,
-      /references\/forge-1\.20\.1-api\.md/,
-      /ForgeRegistries\.BLOCKS/,
-      /FMLJavaModLoadingContext/,
-      /Forge\*\* \| 1\.20\.1 legacy lane/,
-      /Loot table JSON -> 1\.21\.x: `data\/<modid>\/loot_table\/blocks\/<name>\.json`; Forge 1\.20\.1: `data\/<modid>\/loot_tables\/blocks\/<name>\.json`/
-    ]
-  },
-  {
-    file: ".agents/skills/minecraft-modding/references/forge-1.20.1-api.md",
-    required: [
-      /minecraft_version=1\.20\.1/,
-      /forge_version=47\.4\.28/,
-      /java\.toolchain\.languageVersion = JavaLanguageVersion\.of\(17\)/,
-      /src\/main\/resources\/META-INF\/mods\.toml/,
-      /FMLJavaModLoadingContext context/,
-      /MinecraftForge\.EVENT_BUS/,
-      /ForgeRegistries\.BLOCKS/,
-      /RegistryObject<Block>/,
-      /NetworkRegistry\.newSimpleChannel/,
-      /modEventBus\.addListener\(ModDataGen::gatherData\)/,
-      /class ModBlockStateProvider extends BlockStateProvider/,
-      /class ModRecipeProvider extends RecipeProvider/,
-      /class ModItemTagsProvider extends ItemTagsProvider/,
-      /data\/<modid>\/loot_tables\/blocks\/<block>\.json/
-    ]
-  },
-  {
     file: ".agents/skills/minecraft-forge/SKILL.md",
     required: [
       /Forge 1\.20\.1/,
@@ -158,17 +127,6 @@ const checks = [
     ]
   },
   {
-    file: ".agents/skills/minecraft-modding/scripts/check-build.sh",
-    required: [
-      /PLATFORM="forge"/,
-      /parse_java_major/,
-      /MINECRAFT_VERSION" == "1\.20\.1"/,
-      /REQUIRED_JAVA=17/,
-      /Minecraft 26\.x requires Java 25/,
-      /src\/main\/resources\/META-INF\/mods\.toml/
-    ]
-  },
-  {
     file: ".agents/skills/minecraft-plugin-dev/SKILL.md",
     required: [
       /paper-api:26\.3\.build\.\+/,
@@ -211,18 +169,6 @@ const checks = [
       /minecraft-server:java25/,
       /VERSION: "26\.3"/,
       /java -Xms4G -Xmx4G -jar server\.jar --nogui/
-    ]
-  },
-  {
-    file: ".agents/skills/minecraft-modding/references/neoforge-api.md",
-    required: [
-      /minecraft_version=1\.21\.11/,
-      /neo_version=21\.11\.42/,
-      /minecraft_version_range=\[1\.21\.11,1\.22\)/
-    ],
-    forbidden: [
-      /neo_version=21\.1\.172/,
-      /(^|\r?\n)minecraft_version=1\.21\.1(\r?\n|$)/
     ]
   },
   {
@@ -304,7 +250,7 @@ const checks = [
       /~\/\.agents/,
       /neoforge-mod-workflow/,
       /referencing-local-repos/,
-      /minecraft-modding/,
+      /^(?!.*MCP).*minecraft-modding/m,
       /\b26\.1 \(default\)/
     ]
   },
@@ -321,23 +267,6 @@ const checks = [
       /(?<!neo)forge/i,
       /fabric/i,
       /architectury/i
-    ]
-  },
-  {
-    file: ".agents/skills/minecraft-modding/references/fabric-api.md",
-    required: [
-      /minecraft_version=1\.21\.11/,
-      /loader_version=0\.19\.3/,
-      /fabric_version=0\.141\.4\+1\.21\.11/,
-      /yarn_mappings=1\.21\.11\+build\.6/,
-      /"fabric-api": ">=0\.141\.4\+1\.21\.11"/
-    ],
-    forbidden: [
-      /0\.114\.0\+1\.21\.1/,
-      /0\.116\.10\+1\.21\.1/,
-      /loader_version=0\.17\.3/,
-      /yarn_mappings=1\.21\.1\+build\.3/,
-      /"fabric-api": "\*"/
     ]
   },
   {

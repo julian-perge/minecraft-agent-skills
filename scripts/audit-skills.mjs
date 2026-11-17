@@ -118,15 +118,12 @@ function checkPathConventions(file, text) {
     ["1.21.1-2.0.0", "use `{mod_version}+{mc_version}` for mod version examples"],
   ];
 
-  const legacyForgeReference = file.endsWith("forge-1.20.1-api.md");
-  const moddingSkill = relativeFile.endsWith("minecraft-modding/SKILL.md");
-  const forgeSkill = relativeFile.endsWith("minecraft-forge/SKILL.md");
+  // The minecraft-forge skill supports only Forge 1.20.1, so its files may use the 1.20.1 data paths.
+  const forgeSkillFile = relativeFile.includes("/minecraft-forge/");
 
-  for (const line of text.split("\n")) {
-    const lineAllowsLegacyForge1201Paths =
-      legacyForgeReference || ((moddingSkill || forgeSkill) && line.includes("Forge 1.20.1"));
+  if (!forgeSkillFile) {
     for (const [needle, msg] of legacyForge1201PathNeedles) {
-      if (line.includes(needle) && !lineAllowsLegacyForge1201Paths) addError(file, msg);
+      if (text.includes(needle)) addError(file, msg);
     }
   }
 
