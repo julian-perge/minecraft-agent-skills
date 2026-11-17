@@ -120,9 +120,11 @@ function checkPathConventions(file, text) {
 
   const legacyForgeReference = file.endsWith("forge-1.20.1-api.md");
   const moddingSkill = relativeFile.endsWith("minecraft-modding/SKILL.md");
+  const forgeSkill = relativeFile.endsWith("minecraft-forge/SKILL.md");
 
   for (const line of text.split("\n")) {
-    const lineAllowsLegacyForge1201Paths = legacyForgeReference || (moddingSkill && line.includes("Forge 1.20.1"));
+    const lineAllowsLegacyForge1201Paths =
+      legacyForgeReference || ((moddingSkill || forgeSkill) && line.includes("Forge 1.20.1"));
     for (const [needle, msg] of legacyForge1201PathNeedles) {
       if (line.includes(needle) && !lineAllowsLegacyForge1201Paths) addError(file, msg);
     }

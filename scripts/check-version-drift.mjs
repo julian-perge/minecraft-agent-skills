@@ -37,6 +37,52 @@ const checks = [
     ]
   },
   {
+    file: ".agents/skills/minecraft-forge/SKILL.md",
+    required: [
+      /Forge 1\.20\.1/,
+      /Forge 1\.20\.1 project signature/,
+      /references\/forge-1\.20\.1-api\.md/,
+      /ForgeRegistries\.BLOCKS/,
+      /FMLJavaModLoadingContext/,
+      /Forge\*\* \| 1\.20\.1 legacy lane/,
+      /Loot table JSON -> 1\.21\.x: `data\/<modid>\/loot_table\/blocks\/<name>\.json`; Forge 1\.20\.1: `data\/<modid>\/loot_tables\/blocks\/<name>\.json`/
+    ]
+  },
+  {
+    file: ".agents/skills/minecraft-forge/references/forge-1.20.1-api.md",
+    required: [
+      /minecraft_version=1\.20\.1/,
+      /forge_version=47\.4\.28/,
+      /java\.toolchain\.languageVersion = JavaLanguageVersion\.of\(17\)/,
+      /src\/main\/resources\/META-INF\/mods\.toml/,
+      /FMLJavaModLoadingContext context/,
+      /MinecraftForge\.EVENT_BUS/,
+      /ForgeRegistries\.BLOCKS/,
+      /RegistryObject<Block>/,
+      /NetworkRegistry\.newSimpleChannel/,
+      /modEventBus\.addListener\(ModDataGen::gatherData\)/,
+      /class ModBlockStateProvider extends BlockStateProvider/,
+      /class ModRecipeProvider extends RecipeProvider/,
+      /class ModItemTagsProvider extends ItemTagsProvider/,
+      /data\/<modid>\/loot_tables\/blocks\/<block>\.json/
+    ]
+  },
+  {
+    file: ".agents/skills/minecraft-forge/scripts/check-build.sh",
+    required: [
+      /PLATFORM="forge"/,
+      /parse_java_major/,
+      /MINECRAFT_VERSION" == "1\.20\.1"/,
+      /REQUIRED_JAVA=17/,
+      /src\/main\/resources\/META-INF\/mods\.toml/
+    ],
+    forbidden: [
+      /neoforge/i,
+      /fabric/i,
+      /architectury/i
+    ]
+  },
+  {
     file: ".agents/skills/minecraft-multiloader/SKILL.md",
     references: [".agents/skills/minecraft-multiloader/references/legacy-1.21.11-template.md"],
     required: [
