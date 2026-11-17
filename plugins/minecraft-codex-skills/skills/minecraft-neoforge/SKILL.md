@@ -34,6 +34,119 @@ examples only.
 - `Do not use when`: the task is command-only vanilla logic (`minecraft-commands-scripting`) or pure datapacks (`minecraft-datapack`).
 - `Do not use when`: the task targets Paper/Bukkit plugins (`minecraft-plugin-dev`).
 
+## Scope
+
+- NeoForge only. If a request needs Fabric, Forge or a multiloader setup, say
+  so and stop.
+- 26.3 is the default for new mods.
+- In an existing repo, the version is whatever `gradle.properties` says. Never
+  change it, or any dependency version, unless asked.
+- The repo's `AGENTS.md` and `CLAUDE.md` take precedence over this skill.
+
+## Looking Things Up
+
+Never write an API name, method signature, registry name, event name or
+version number from memory. Check it first, in this order:
+
+1. If the `minecraft-modding` MCP server (adhi-jp) is connected, check against
+   the project's exact Minecraft version: `check-symbol-exists` or
+   `batch-symbol-exists` before using a class or method, `get-class-source` and
+   `get-class-members` to read vanilla code, `get-registry-data` for registry
+   ids, `validate-access-transformer` after editing an access transformer, and
+   `analyze-mod-jar` or `search-mod-source` for a dependency's API.
+   The `target` decides whether a class is found. NeoForge and FML classes are
+   not in the vanilla artifact, and `workspace` targets did not find them
+   either, because the patched jars in `build/moddev/artifacts` do not contain
+   them.
+
+   | To read | Target |
+   |---|---|
+   | Vanilla | `{kind: version, value: <mc version>}` |
+   | NeoForge source | `{kind: dependency, group: net.neoforged, name: neoforge, version: <neo version>}` |
+   | NeoForge members, or any source read that fails | `{kind: jar, value: <path to neoforge-<version>-universal.jar>}`, found under `~/.gradle/caches/modules-2` |
+   | FML, such as `ModList` | `jar` target on `net.neoforged.fancymodloader:loader`, at the version in the NeoForge pom |
+   | AE2 and other addons | `jar` target on the addon's jar under `~/.gradle/caches/modules-2` |
+
+   Pass explicit versions. `versionFromProject` fails with
+   `ERR_DEPENDENCY_VERSION_UNRESOLVED` when several versions of the artifact
+   are cached, and it reads only keys like `neoforge_version`, never
+   `neo_version`. A repo can carry both keys for that reason.
+2. The NeoForge docs at `https://docs.neoforged.net` with the matching version
+   selected, and the NeoForge changelog for that version.
+3. A local clone of the upstream repo, if one exists, especially for addon
+   APIs such as AE2.
+4. This skill's references. `references/neoforge-api.md` is for 1.21.x only.
+   For 26.x, use the sections labelled 26.x in `references/common-patterns.md`.
+
+Without the MCP server, use the docs and the changelog. If a lookup fails and
+the answer still matters, say what could not be verified instead of guessing.
+
+## Checkpoints
+
+Work in small slices and stop at each checkpoint. Do not chain slices together
+without approval.
+
+1. **Orient.** Read `gradle.properties`, the build script,
+   `neoforge.mods.toml`, and the repo's `AGENTS.md`, `DEVELOPMENT.md` and
+   `justfile` if present. Follow the repo's own
+   conventions over this skill's.
+2. **Plan, then stop.** Before writing code, give a short plan: what changes,
+   which files, which existing classes are reused, how it will be verified,
+   and any open question. Wait for approval.
+3. **Implement one slice.** One feature or one coherent part of a feature,
+   never the whole backlog.
+4. **Verify the slice** (see below), then **stop and report**: what changed,
+   what was verified and how, and what was not verified. Propose the next
+   slice instead of starting it.
+
+Always ask before:
+
+- adding, removing or upgrading a dependency, or editing `build.gradle`,
+  `settings.gradle` or `gradle.properties`;
+- deleting or renaming files, registry ids or config keys, because renames
+  break existing worlds and configs;
+- changing saved-data, attachment or data-component formats that existing
+  worlds already contain;
+- running `runClient` or `runServer`, which open long-running processes;
+- anything the plan did not cover.
+
+## Verification
+
+Use the repo's `justfile` recipes when they exist. Otherwise call Gradle
+directly.
+
+| After | Run |
+|---|---|
+| Any Java change | `./gradlew build` (compiles and runs unit tests) |
+| Gameplay logic: blocks, machines, recipes, entities, persistence | `./gradlew runGameTestServer`, plus each variant the repo's CI runs (for example optional-dependency flags) |
+| Datagen providers changed | The repo's datagen task (`runData` or `runClientData`), then inspect the diff in the generated resources |
+| Access transformer changed | `validate-access-transformer` through the MCP server, then a build |
+
+Run these once at the end of a slice, not after every edit. If the repo's
+`justfile` has `check` or `lint` recipes, use them for the build and GameTest
+rows.
+
+Report failures with the actual error output. A slice that adds gameplay logic
+without a GameTest needs a stated reason.
+
+Rules that apply to every slice:
+
+- Server-authoritative logic. Validate every client packet.
+- Client-only classes live in client packages and never load on a dedicated
+  server.
+- Every registered block or item gets its model, texture, language entry, loot
+  table or recipe in the same slice. No missing textures or raw translation
+  keys.
+- Item state uses data components. World and entity state uses saved data or
+  data attachments.
+
+## Starting a New Mod
+
+For a new mod from an empty folder, copy `references/new-mod-prompt.md` into
+the new folder as `PROMPT.md`. Fill in its placeholders with the user. Do not
+invent them. The checkpoints above still apply: the design bible is the first
+checkpoint, then each MVP slice.
+
 ---
 
 ## 1. Identifying the Platform
@@ -62,10 +175,10 @@ the project's Minecraft version and the key files, then runs `./gradlew build`.
 # Build the mod jar
 ./gradlew build
 
-# Run the Minecraft client to test
+# Run the Minecraft client to test (ask first, see Checkpoints)
 ./gradlew runClient
 
-# Run a dedicated server to test
+# Run a dedicated server to test (ask first, see Checkpoints)
 ./gradlew runServer
 
 # NeoForge Game Tests (when the project configures this run)
@@ -88,52 +201,7 @@ distributable before you publish it.
 
 ---
 
-## 3. Project Layout (NeoForge)
-
-```
-src/
-  main/
-    java/<groupId>/<modid>/
-      MyMod.java               <- @Mod entry point
-      block/
-        ModBlocks.java         <- DeferredRegister.Blocks
-        MyCustomBlock.java
-      item/
-        ModItems.java          <- DeferredRegister.Items
-      entity/
-        ModEntities.java       <- DeferredRegister.Entities
-      menu/                    <- custom GUI containers
-      recipe/
-      worldgen/
-      datagen/
-        ModDataGen.java        <- GatherDataEvent handler
-        providers/
-    resources/
-      META-INF/
-        neoforge.mods.toml     <- mod metadata (renamed from mods.toml in NeoForge 1.20.5+)
-      assets/<modid>/
-        blockstates/           <- JSON blockstate definitions
-        models/
-          block/               <- block model JSON
-          item/                <- item model JSON
-        items/                 <- 1.21.4+ item-definition JSON
-        textures/
-          block/               <- 16x16 PNG textures
-          item/
-        lang/
-          en_us.json           <- translation strings
-      data/<modid>/
-        recipe/                <- crafting recipe JSON (26.x)
-        loot_table/
-          blocks/              <- per-block loot table JSON
-        tags/
-          block/
-          item/
-```
-
----
-
-## 4. Core Concepts Cheatsheet
+## 3. Core Concepts Cheatsheet
 
 ### Sides
 
@@ -171,16 +239,16 @@ code. Those names are stale for the examples in this skill.
 Every registry entry needs a namespaced ID:
 
 ```java
-// 26.x official names
+// 1.21.11 and 26.x
 Identifier id = Identifier.fromNamespaceAndPath("mymod", "my_block");
 ```
 
-Older Mojang mappings use `ResourceLocation`. Keep the class name that the
-project's version uses.
+1.21.1 uses `ResourceLocation`. 1.21.11 renamed it to `Identifier`, and 26.x
+keeps `Identifier`. Keep the class name that the project's version uses.
 
 ---
 
-## 5. NeoForge Quick Patterns
+## 4. NeoForge Quick Patterns
 
 For 26.x, use the explicitly labelled 26.x sections in
 `references/common-patterns.md` and select the project's exact version in the
@@ -224,7 +292,7 @@ public class ModBlocks {
 
 ---
 
-## 6. JSON Asset Templates
+## 5. JSON Asset Templates
 
 Always provide matching JSON assets for every registered block and item.
 Generate or update these files alongside the Java code.
@@ -241,7 +309,7 @@ See `references/common-patterns.md` for full JSON templates for:
 
 ---
 
-## 7. Data Generation
+## 6. Data Generation
 
 Use the project's configured data providers. Current NeoForge uses
 `GatherDataEvent.Client` / `.Server` and `event.createProvider(...)`. The MDK
@@ -252,51 +320,12 @@ inspect the generated files.
 
 ---
 
-## 8. Common Tasks Checklist
-
-When adding a **new block**:
-
-- [ ] `Block` subclass (or use vanilla Block with properties)
-- [ ] Register in `ModBlocks.BLOCKS`
-- [ ] Register `BlockItem` in `ModItems.ITEMS`
-- [ ] Blockstate JSON -> `assets/<modid>/blockstates/<name>.json`
-- [ ] Block model JSON -> `assets/<modid>/models/block/<name>.json`
-- [ ] Item model JSON -> `assets/<modid>/models/item/<name>.json` (or inherits from block)
-- [ ] 1.21.4+ item definition -> `assets/<modid>/items/<name>.json`, pointing at the item or block model
-- [ ] Texture PNG -> `assets/<modid>/textures/block/<name>.png`
-- [ ] Loot table JSON -> `data/<modid>/loot_table/blocks/<name>.json`
-- [ ] Tags -> `data/<modid>/tags/block/` and `tags/item/`
-- [ ] Language entry in `en_us.json`
-- [ ] Vanilla mining and tool-tier tags when `requiresCorrectToolForDrops` is set
-
-When adding a **new item**:
-
-- [ ] `Item` subclass (or use `new Item(properties)`)
-- [ ] Register in `ModItems.ITEMS`
-- [ ] Item model JSON
-- [ ] 1.21.4+ item definition -> `assets/<modid>/items/<name>.json`
-- [ ] Texture PNG
-- [ ] Language entry
-- [ ] Creative tab entry with `BuildCreativeModeTabContentsEvent`
-- [ ] Recipe JSON if craftable (`data/<modid>/recipe/` for 26.x; see the
-      version-specific recipe reference before you edit a 1.21.x project)
-
-When adding a **new entity**:
-
-- [ ] Entity class (extends a base such as `Mob`, `Animal` or `TamableAnimal`)
-- [ ] `EntityType` registration
-- [ ] Renderer and model classes loaded only on the physical client
-- [ ] Register the renderer with `EntityRenderersEvent.RegisterRenderers`;
-      register model layers separately
-- [ ] Spawn egg item (optional)
-- [ ] Spawn rules / biome modifier
-
----
-
-## 9. References
+## 7. References
 
 - NeoForge API patterns and event system (1.21.11): `./references/neoforge-api.md`
 - Blocks, items, recipes, commands, datagen: `./references/common-patterns.md`
 - Version table with sources: `./references/versions.md`
+- Project layout and checklists for new blocks, items and entities: `./references/project-layout.md`
+- Build prompt for a new mod: `./references/new-mod-prompt.md`
 - NeoForge official docs: https://docs.neoforged.net/
 - Minecraft Wiki (data formats): https://minecraft.wiki/w/Java_Edition_data_values

@@ -264,13 +264,48 @@ const checks = [
       /Identifier\.fromNamespaceAndPath/,
       /DeferredRegister\.createBlocks/,
       /GatherDataEvent\.Client/,
-      /minecraft-multiloader/
+      /minecraft-multiloader/,
+      /26\.3 is the default for new mods/,
+      /## Checkpoints/,
+      /\*\*Plan, then stop\.\*\*/,
+      /Do not chain slices together\s+without approval/,
+      /Always ask before:/,
+      /adding, removing or upgrading a dependency/,
+      /deleting or renaming files, registry ids or config keys/,
+      /changing saved-data, attachment or data-component formats/,
+      /running `runClient` or `runServer`/,
+      /anything the plan did not cover/,
+      /references\/new-mod-prompt\.md/,
+      /references\/project-layout\.md/
     ],
     forbidden: [
       /fabric-api\.md/,
       /forge-1\.20\.1-api\.md/,
       /Registries\.SCREEN_HANDLER/,
-      /ModInitializer/
+      /ModInitializer/,
+      /Julian/,
+      /~\/\.agents/,
+      /neoforge-mod-workflow/,
+      /referencing-local-repos/,
+      /^(?!.*MCP).*minecraft-modding/m
+    ]
+  },
+  {
+    file: ".agents/skills/minecraft-neoforge/references/new-mod-prompt.md",
+    required: [
+      /`minecraft-neoforge` skill/,
+      /26\.3 \(default\)/,
+      /^\| 26\.3 \/ 26\.1\.2 \| 25 \|/m,
+      /^\| 1\.21\.11 \| 21 \|.*`21\.11\.x`/m,
+      /^\| 1\.21\.1 \| 21 \|.*`21\.1\.x`/m
+    ],
+    forbidden: [
+      /Julian/,
+      /~\/\.agents/,
+      /neoforge-mod-workflow/,
+      /referencing-local-repos/,
+      /minecraft-modding/,
+      /\b26\.1 \(default\)/
     ]
   },
   {
