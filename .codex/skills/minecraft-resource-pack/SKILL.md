@@ -13,7 +13,7 @@ loader is required for those vanilla assets.
 
 ### Routing Boundaries
 - `Use when`: the deliverable is visual/audio assets (textures, models, sounds, fonts) in resource-pack format.
-- `Do not use when`: the task requires gameplay logic or runtime behavior changes (use `minecraft-datapack`, `minecraft-plugin-dev`, or `minecraft-modding`).
+- `Do not use when`: the task requires gameplay logic or runtime behavior changes (use `minecraft-datapack`, `minecraft-plugin-dev`, `minecraft-neoforge`, `minecraft-fabric`, or `minecraft-forge`).
 - `Do not use when`: the task is server infrastructure/runtime administration (`minecraft-server-admin`).
 
 ---

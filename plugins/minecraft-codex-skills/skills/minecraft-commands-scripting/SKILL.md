@@ -23,7 +23,7 @@ repeat items or `/item override` to clear unmatched slots.
 ### Routing Boundaries
 - `Use when`: the task is raw command chains, scoreboards, selector logic, or RCON command scripting.
 - `Do not use when`: creating or editing full datapack structures and registries (`minecraft-datapack`).
-- `Do not use when`: behavior depends on Java plugin or mod code (`minecraft-plugin-dev`/`minecraft-modding`).
+- `Do not use when`: behavior depends on Java plugin or mod code (`minecraft-plugin-dev`, `minecraft-neoforge`, `minecraft-fabric`, `minecraft-forge`).
 
 ## Bundled References And Examples
 

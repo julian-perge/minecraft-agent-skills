@@ -15,7 +15,7 @@ the bundled validator and test in-game when available.
 ### Routing Boundaries
 - `Use when`: the deliverable is datapack files (`pack.mcmeta`, `data/...`) and `.mcfunction`/JSON content.
 - `Do not use when`: the request is command-only snippets not tied to a datapack file tree (`minecraft-commands-scripting`).
-- `Do not use when`: the request requires loader APIs, Java code, or runtime mod behavior (`minecraft-modding`).
+- `Do not use when`: the request requires loader APIs, Java code, or runtime mod behavior (`minecraft-neoforge`, `minecraft-fabric`, `minecraft-forge`).
 
 ---
 

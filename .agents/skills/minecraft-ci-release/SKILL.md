@@ -7,7 +7,7 @@ description: "Set up and review CI, artifact publishing, versioning, and release
 
 ## Routing Boundaries
 - `Use when`: the task is CI/CD pipelines, artifact publishing, versioning, or release management.
-- `Do not use when`: the task is gameplay or plugin implementation (`minecraft-modding`, `minecraft-plugin-dev`, or `minecraft-datapack`).
+- `Do not use when`: the task is gameplay or plugin implementation (`minecraft-neoforge`, `minecraft-fabric`, `minecraft-forge`, `minecraft-plugin-dev`, or `minecraft-datapack`).
 - `Do not use when`: the task is server runtime operations or infrastructure tuning (`minecraft-server-admin`).
 
 ---

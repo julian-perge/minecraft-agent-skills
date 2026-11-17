@@ -19,7 +19,7 @@ description: "Create, modify, and debug server plugins for current Paper 26.x on
 
 ### Routing Boundaries
 - `Use when`: the target is server-side Paper/Bukkit/Spigot plugin behavior with JavaPlugin APIs.
-- `Do not use when`: the task requires client-side installable mods or loader APIs (`minecraft-modding` / `minecraft-multiloader`).
+- `Do not use when`: the task requires client-side installable mods or loader APIs (`minecraft-neoforge`, `minecraft-fabric`, `minecraft-forge`, `minecraft-multiloader`).
 - `Do not use when`: the task is pure vanilla datapack/command content (`minecraft-datapack` / `minecraft-commands-scripting`).
 
 ## Bundled References
