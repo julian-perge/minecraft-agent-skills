@@ -91,13 +91,12 @@ if (marketplace) {
 }
 
 if (claudeMarketplace) {
-  const claudePluginName = claudeManifest?.name ?? PLUGIN_NAME;
   const pluginEntry = Array.isArray(claudeMarketplace.plugins)
-    ? claudeMarketplace.plugins.find((entry) => entry?.name === claudePluginName)
+    ? claudeMarketplace.plugins.find((entry) => entry?.name === PLUGIN_NAME)
     : null;
 
   if (!pluginEntry) {
-    addError(CLAUDE_MARKETPLACE, `missing plugin entry for \`${claudePluginName}\``);
+    addError(CLAUDE_MARKETPLACE, `missing plugin entry for \`${PLUGIN_NAME}\``);
   } else if (pluginEntry.source !== CLAUDE_PLUGIN_SOURCE) {
     addError(CLAUDE_MARKETPLACE, `expected plugin source \`${CLAUDE_PLUGIN_SOURCE}\``);
   }
