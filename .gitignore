@@ -32,6 +32,10 @@ tasks/
 !/.claude/
 !/.claude/**
 
+# Local Claude Code settings, such as the line that enables a plugin for this repo, stay out of git.
+# This rule comes after the mirror rules, because a later rule wins and the mirror rules would include the file again.
+/.claude/settings.local.json
+
 # OS
 # These rules come after the mirror rules, because a later rule wins and the mirror rules would include these files again.
 .DS_Store
