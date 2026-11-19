@@ -7,8 +7,10 @@ This reference keeps 1.21.11 examples next to examples for 26.1.2 and 26.3. A
 heading that names 26.1.2 and 26.3 uses an API that the NeoForge `26.1.x` and
 `26.3.x` branches both have, with official Mojang names. Treat all other
 examples as 1.21.11 examples unless their exact API is verified for the
-project. For 26.3 loot data, use entry `condition` / `modifier`
-and predicate/function `type`; the older loot JSON below needs migration.
+project. 26.3 loot data uses one `condition` on a pool or entry in place of a
+`conditions` list, a `modifier` list in place of `functions`, and `type` in
+place of the `condition` key of a predicate. The block loot table below shows
+both forms.
 See the [26.3 migration primer](https://docs.neoforged.net/primer/docs/26.3/).
 
 ---
@@ -65,7 +67,24 @@ a model distinct from the block model. For that case:
 }
 ```
 
-`data/mymod/loot_table/blocks/my_block.json`:
+`data/mymod/loot_table/blocks/my_block.json` for 26.3:
+```json
+{
+  "type": "minecraft:block",
+  "pools": [{
+    "rolls": 1,
+    "entries": [{
+      "type": "minecraft:item",
+      "name": "mymod:my_block"
+    }],
+    "condition": {
+      "type": "minecraft:survives_explosion"
+    }
+  }]
+}
+```
+
+The same file for 1.21.1, 1.21.11 and 26.1.2:
 ```json
 {
   "type": "minecraft:block",
