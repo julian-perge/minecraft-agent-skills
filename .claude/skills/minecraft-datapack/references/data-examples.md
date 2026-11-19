@@ -57,7 +57,8 @@ version; copying pack metadata alone does not port older data.
 ## Custom Recipes
 
 These ingredients use the string/tag/list format introduced in 1.21.2 and
-retained in 26.x. Preserve the older ingredient-object schema for 1.21/1.21.1.
+retained in 1.21.11, 26.1.2 and 26.3. Preserve the older ingredient-object
+schema for 1.21/1.21.1.
 
 ### Shaped crafting (`data/<namespace>/recipe/shaped.json`)
 ```json

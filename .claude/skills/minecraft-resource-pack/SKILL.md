@@ -1,6 +1,6 @@
 ---
 name: minecraft-resource-pack
-description: "Create and debug Minecraft 26.x and 1.21.x resource packs, including pack metadata, textures, models, blockstates, item definitions, sounds, fonts, animations, and shaders. Use for client-side visual or audio assets without gameplay code."
+description: "Create and debug Minecraft 1.21.11, 26.1.2 and 26.3 resource packs, including pack metadata, textures, models, blockstates, item definitions, sounds, fonts, animations, and shaders. Use for client-side visual or audio assets without gameplay code."
 ---
 
 # Minecraft Resource Pack Skill
@@ -30,7 +30,7 @@ loader is required for those vanilla assets.
 | 1.21.7 / 1.21.8   | `pack_format: 64` |
 | 1.21.9 / 1.21.10  | `min_format: [69, 0]`, `max_format: [69, 0]` |
 | 1.21.11           | `min_format: [75, 0]`, `max_format: [75, 0]` |
-| 26.1              | `min_format: [84, 0]`, `max_format: [84, 0]` |
+| 26.1 / 26.1.2     | `min_format: [84, 0]`, `max_format: [84, 0]` |
 | 26.2              | `min_format: [88, 0]`, `max_format: [88, 0]` |
 | 26.3              | `min_format: [97, 1]`, `max_format: [97, 1]` |
 
@@ -92,28 +92,9 @@ adding them.
 
 ## `pack.mcmeta`
 
-### 1.21.8 and earlier
-
-```json
-{
-  "pack": {
-    "pack_format": 64,
-    "description": "My Custom Resource Pack v1.0"
-  }
-}
-```
-
-### 1.21.9 / 1.21.10
-
-```json
-{
-  "pack": {
-    "min_format": [69, 0],
-    "max_format": [69, 0],
-    "description": "My Custom Resource Pack v1.0"
-  }
-}
-```
+The examples cover the supported versions: 1.21.11, 26.1.2 and 26.3. For a pack
+that targets an older version, keep its existing metadata; the table and rules
+above describe the older formats.
 
 ### 1.21.11
 
@@ -122,6 +103,18 @@ adding them.
   "pack": {
     "min_format": [75, 0],
     "max_format": [75, 0],
+    "description": "My Custom Resource Pack v1.0"
+  }
+}
+```
+
+### 26.1.2
+
+```json
+{
+  "pack": {
+    "min_format": [84, 0],
+    "max_format": [84, 0],
     "description": "My Custom Resource Pack v1.0"
   }
 }
@@ -308,8 +301,8 @@ If `frames` is omitted, all frames play sequentially. `frametime` is in game tic
 Place sprites at `assets/minecraft/textures/gui/sprites/<category>/<name>.png`.
 Reference them with `<category>/<name>` in code/JSON.
 
-### 26.1 block-model texture entries
-For 26.1, a block-model `textures` entry may remain a sprite string or use an
+### Block-model texture entries (26.1 and later)
+From 26.1, a block-model `textures` entry may remain a sprite string or use an
 object. The object must have a string `sprite`; `force_translucent`, when set,
 must be a boolean.
 
