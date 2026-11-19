@@ -54,6 +54,10 @@ fi
 
 if [[ -n "$MINECRAFT_VERSION" ]]; then
     echo "$PASS Platform: $PLATFORM (Minecraft $MINECRAFT_VERSION)"
+    case "$MINECRAFT_VERSION" in
+        1.21.11|26.1.2|26.3) ;;
+        *) echo "$WARN Minecraft $MINECRAFT_VERSION is not a version this skill supports (1.21.11, 26.1.2 and 26.3). Check its pins and Java version yourself." ;;
+    esac
 else
     echo "$PASS Platform: $PLATFORM"
 fi

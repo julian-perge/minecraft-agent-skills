@@ -336,7 +336,9 @@ The examples in this reference use Yarn/Fabric-named classes such as
 `Identifier`, `ServerPlayerEntity`, and `AbstractBlock.Settings`. Use Yarn
 mappings for Fabric-only projects. Use official Mojang mappings only when a
 shared project intentionally standardizes on Mojmap and the snippets have been
-translated.
+translated. The 1.21.11 branch of the Fabric example mod uses
+`loom.officialMojangMappings()`, so read the project's `build.gradle` before
+you use these snippets: they do not compile against Mojang names.
 
 ```properties
 org.gradle.jvmargs=-Xmx2G
