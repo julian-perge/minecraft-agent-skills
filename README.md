@@ -1,7 +1,7 @@
 # Minecraft Agent Skills
 
 15 skills for Minecraft mods, plugins, datapacks, art, and server administration.
-Supports Minecraft 26.x, with examples for 1.21.x and Forge 1.20.1.
+Supports Minecraft 1.21.11, 26.1.2 and 26.3, and Forge 1.20.1.
 Install the skills with the skills CLI, copy the skill folders, or install the
 Codex or Claude Code plugin.
 
@@ -153,7 +153,7 @@ codex mcp add minecraft-modding -- npx -y @adhisang/minecraft-modding-mcp
 | Skill | Use it for |
 | --- | --- |
 | `minecraft-neoforge` | NeoForge mods for 1.21.1, 1.21.11, 26.1.2, and 26.3 |
-| `minecraft-fabric` | Fabric mods for 26.x and 1.21.x |
+| `minecraft-fabric` | Fabric mods for 1.21.11, 26.1.2, and 26.3 |
 | `minecraft-forge` | Forge 1.20.1 mods |
 | `minecraft-plugin-dev` | Paper, Bukkit, and Spigot plugins |
 | `minecraft-datapack` | Vanilla datapacks, functions, loot, and advancements |

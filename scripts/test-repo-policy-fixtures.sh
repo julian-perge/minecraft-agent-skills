@@ -56,4 +56,11 @@ expect_fail_contains "workflow pins invalid" "action must be pinned to a full co
   node ./scripts/check-workflow-action-pins.mjs \
   --root tests/fixtures/workflow-pins/invalid
 
+expect_pass "skill descriptions exact" \
+  node ./scripts/check-version-drift.mjs --descriptions-only \
+  --root tests/fixtures/version-drift/valid
+expect_fail_contains "skill descriptions loose" "description matches loose version pattern" \
+  node ./scripts/check-version-drift.mjs --descriptions-only \
+  --root tests/fixtures/version-drift/loose
+
 echo "$PASS repo policy fixture checks completed"
