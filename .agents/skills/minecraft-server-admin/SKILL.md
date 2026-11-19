@@ -46,7 +46,8 @@ stack and version first and preserve them unless migration is requested.
 - Paper and Purpur: Minecraft 26.1.2 and 26.3 need Java 25. Minecraft 1.21.11
   needs Java 21. Verify the exact Paper/Purpur build and installed plugins before a
   version change.
-- Velocity 4.3.1 needs Java 25. It accepts 1.21.11, 26.1.2 and 26.3 clients.
+- Velocity 4.3.1 needs Java 25. It accepts clients up to 26.3, including
+  1.21.11 and 26.1.2.
   For an older proxy release, keep the Java version that release needs. Do not
   change it to Java 25 by default.
 
