@@ -123,8 +123,12 @@ At `data/<namespace>/dimension_type/my_type.json`:
 }
 ```
 
-This example follows the vanilla 1.21.11 `overworld.json`. The overworld omits
-`skybox`, `cardinal_light` and `has_fixed_time`, so it uses their defaults.
+This example takes its fields from the vanilla 1.21.11 `overworld.json`, but it
+leaves out the `minecraft:audio/ambient_sounds`, `minecraft:audio/background_music`
+and `minecraft:visual/cloud_color` attributes. Without them, the dimension has no
+cave sounds or music and uses the default cloud color. Copy them from
+`overworld.json` when the dimension needs them. The overworld omits `skybox`,
+`cardinal_light` and `has_fixed_time`, so it uses their defaults.
 The vanilla `the_nether.json` sets `"skybox": "none"`, `"cardinal_light":
 "nether"` and `"has_fixed_time": true`. The vanilla `the_end.json` sets
 `"skybox": "end"` and `"has_fixed_time": true`.
