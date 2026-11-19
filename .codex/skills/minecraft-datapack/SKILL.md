@@ -1,6 +1,6 @@
 ---
 name: minecraft-datapack
-description: "Create, edit, and debug vanilla Minecraft 26.x and 1.21.x datapacks, including functions, advancements, recipes, loot tables, predicates, tags, and pack metadata. Use when the deliverable is a datapack file tree without Java or loader APIs."
+description: "Create, edit, and debug vanilla Minecraft 1.21.11, 26.1.2 and 26.3 datapacks, including functions, advancements, recipes, loot tables, predicates, tags, and pack metadata. Use when the deliverable is a datapack file tree without Java or loader APIs."
 ---
 
 # Minecraft Datapack Skill
@@ -31,7 +31,7 @@ the bundled validator and test in-game when available.
 | 1.21.7 / 1.21.8   | `pack_format: 81` |
 | 1.21.9 / 1.21.10  | `min_format: [88, 0]`, `max_format: [88, 0]` |
 | 1.21.11           | `min_format: [94, 1]`, `max_format: [94, 1]` |
-| 26.1              | `min_format: [101, 1]`, `max_format: [101, 1]` |
+| 26.1 / 26.1.2     | `min_format: [101, 1]`, `max_format: [101, 1]` |
 | 26.2              | `min_format: [107, 1]`, `max_format: [107, 1]` |
 | 26.3              | `min_format: [121, 0]`, `max_format: [121, 0]` |
 
@@ -91,45 +91,9 @@ my-datapack/
 
 ## `pack.mcmeta`
 
-### 1.21.8 and earlier
-
-```json
-{
-  "pack": {
-    "pack_format": 81,
-    "description": "My Custom Datapack v1.0"
-  }
-}
-```
-
-### Deliberate legacy-to-modern compatibility range
-
-Use this form only when the pack actually supports both sides of the format-82
-boundary. Mojang requires the retained legacy fields for this range.
-
-```json
-{
-  "pack": {
-    "pack_format": 81,
-    "supported_formats": [81, 88],
-    "min_format": [81],
-    "max_format": [88],
-    "description": "My compatible datapack"
-  }
-}
-```
-
-### 1.21.9 / 1.21.10
-
-```json
-{
-  "pack": {
-    "min_format": [88, 0],
-    "max_format": [88, 0],
-    "description": "My Custom Datapack v1.0"
-  }
-}
-```
+The examples cover the supported versions: 1.21.11, 26.1.2 and 26.3. For a pack
+that targets an older version, keep its existing metadata; the table and rules
+above describe the older formats.
 
 ### 1.21.11
 
@@ -138,6 +102,18 @@ boundary. Mojang requires the retained legacy fields for this range.
   "pack": {
     "min_format": [94, 1],
     "max_format": [94, 1],
+    "description": "My Custom Datapack v1.0"
+  }
+}
+```
+
+### 26.1.2
+
+```json
+{
+  "pack": {
+    "min_format": [101, 1],
+    "max_format": [101, 1],
     "description": "My Custom Datapack v1.0"
   }
 }

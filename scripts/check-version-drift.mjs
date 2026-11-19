@@ -107,15 +107,19 @@ const checks = [
     required: [
       /1\.21\.11\s+\| `min_format: \[94, 1\]`, `max_format: \[94, 1\]`/,
       /1\.21\.9 \/ 1\.21\.10\s+\| `min_format: \[88, 0\]`, `max_format: \[88, 0\]`/,
+      /26\.1 \/ 26\.1\.2\s+\| `min_format: \[101, 1\]`, `max_format: \[101, 1\]`/,
       /26\.3\s+\| `min_format: \[121, 0\]`, `max_format: \[121, 0\]`/,
       /"min_format": \[94, 1\]/,
+      /"min_format": \[101, 1\]/,
       /"max_format": \[94, 1\]/,
       /"min_format": \[121, 0\]/,
       /"max_format": \[121, 0\]/
     ],
     forbidden: [
       /"min_format": 94\.1/,
-      /"max_format": 94\.1/
+      /"max_format": 94\.1/,
+      /### 1\.21\.8 and earlier/,
+      /### 1\.21\.9 \/ 1\.21\.10/
     ]
   },
   {
@@ -123,15 +127,19 @@ const checks = [
     required: [
       /1\.21\.9 \/ 1\.21\.10\s+\| `min_format: \[69, 0\]`, `max_format: \[69, 0\]`/,
       /1\.21\.11\s+\| `min_format: \[75, 0\]`, `max_format: \[75, 0\]`/,
+      /26\.1 \/ 26\.1\.2\s+\| `min_format: \[84, 0\]`, `max_format: \[84, 0\]`/,
       /26\.3\s+\| `min_format: \[97, 1\]`, `max_format: \[97, 1\]`/,
       /"min_format": \[75, 0\]/,
+      /"min_format": \[84, 0\]/,
       /"max_format": \[75, 0\]/,
       /"min_format": \[97, 1\]/,
       /"max_format": \[97, 1\]/
     ],
     forbidden: [
       /"min_format": 75\.0/,
-      /"max_format": 75\.0/
+      /"max_format": 75\.0/,
+      /### 1\.21\.8 and earlier/,
+      /### 1\.21\.9 \/ 1\.21\.10/
     ]
   },
   {
