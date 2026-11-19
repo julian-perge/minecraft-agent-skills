@@ -59,7 +59,7 @@ expect_fail_contains "workflow pins invalid" "action must be pinned to a full co
 expect_pass "skill descriptions exact" \
   node ./scripts/check-version-drift.mjs --descriptions-only \
   --root tests/fixtures/version-drift/valid
-expect_fail_contains "skill descriptions loose" "description matches loose version pattern" \
+expect_fail_contains "skill descriptions loose" "version drift check failed with 5 issue(s)" \
   node ./scripts/check-version-drift.mjs --descriptions-only \
   --root tests/fixtures/version-drift/loose
 

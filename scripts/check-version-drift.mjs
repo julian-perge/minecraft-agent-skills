@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
+import * as yaml from "js-yaml";
 
 const args = process.argv.slice(2);
 const rootIndex = args.indexOf("--root");
@@ -417,7 +418,8 @@ const skillsDir = path.join(repoRoot, ".agents", "skills");
 for (const name of fs.readdirSync(skillsDir).sort()) {
   const skillFile = path.join(skillsDir, name, "SKILL.md");
   if (!fs.existsSync(skillFile)) continue;
-  const description = fs.readFileSync(skillFile, "utf8").match(/^---\r?\n[\s\S]*?^description:\s*(.*)$/m)?.[1] ?? "";
+  const frontmatter = fs.readFileSync(skillFile, "utf8").match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? "";
+  const description = String(yaml.load(frontmatter)?.description ?? "");
   for (const pattern of LOOSE_DESCRIPTION_PATTERNS) {
     if (pattern.test(description)) {
       console.error(`[FAIL] .agents/skills/${name}/SKILL.md description matches loose version pattern: ${pattern}`);
