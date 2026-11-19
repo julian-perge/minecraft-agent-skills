@@ -16,7 +16,7 @@ the bundled validator and test in-game when available.
 - `Use when`: the deliverable is datapack files (`pack.mcmeta`, `data/...`) and `.mcfunction`/JSON content.
 - `Do not use when`: the request is command-only snippets not tied to a datapack file tree (`minecraft-commands-scripting`).
 - `Do not use when`: the request requires loader APIs, Java code, or runtime mod behavior (`minecraft-neoforge`, `minecraft-fabric`, `minecraft-forge`).
-- `Do not use when`: the request changes biomes, dimensions, noise settings, features or structures (`minecraft-world-generation`). The Worldgen Overrides section below covers only the datapack file rules that every override shares.
+- `Do not use when`: the request changes biomes, dimensions, noise settings, features or structures (`minecraft-world-generation`).
 
 ---
 
@@ -234,8 +234,9 @@ section and keep existing namespaces and version targets.
 
 ## Worldgen Overrides
 
-For biome, dimension, feature or structure work beyond these overrides, use
-`minecraft-world-generation`.
+`minecraft-world-generation` owns biome, dimension, noise settings, feature and
+structure work. The notes below are short reminders for a datapack that already
+holds such overrides.
 
 ### Override biome noise (`data/minecraft/worldgen/noise_settings/overworld.json`)
 Edit inside an existing copy — do NOT create from scratch without the full JSON.
