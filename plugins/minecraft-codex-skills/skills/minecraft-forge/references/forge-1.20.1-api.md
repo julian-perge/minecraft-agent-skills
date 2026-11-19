@@ -51,6 +51,10 @@ Use the current Forge 1.20.1 `47.4.x` patch from the Forge files page when
 scaffolding a new project. Keep `minecraft_version` and the left side of the
 Forge artifact coordinate paired as `1.20.1-${forge_version}`.
 
+The MDK download for Forge `47.4.29` and later uses ForgeGradle 7 and the
+`net.minecraftforge.renamer` plugin, not `reobfJar`. This reference covers the
+ForgeGradle 6 build of the `47.4.28` MDK.
+
 ## build.gradle Essentials
 
 ```gradle
