@@ -325,8 +325,9 @@ the geometry must render in the translucent pass despite its sprite pixels.
 ## Sounds
 
 An event's namespace comes from the namespace containing `sounds.json`; a
-sound entry's `name` identifies the sound-file namespace. Sound files are Vorbis
-`.ogg` under `assets/<namespace>/sounds/`. Read
+sound entry's `name` identifies the sound-file namespace. A `name` with no
+namespace means `minecraft:`, not the namespace of the `sounds.json` file.
+Sound files are Vorbis `.ogg` under `assets/<namespace>/sounds/`. Read
 [conditional assets](references/conditional-assets.md) for a correct event
 example, aliases, sound-source selection, and replacement behavior.
 
@@ -401,12 +402,16 @@ require-resource-pack=true
 
 Use the bundled validator script before shipping a resource-pack update:
 
-The client supplies `minecraft:` models, textures, sounds and bitmap font
-textures, so a `minecraft:` reference that the pack does not ship neither fails
-nor warns. Unbundled references to another namespace's models, textures, sounds,
-or fonts are warnings requiring runtime verification with the dependency present.
-Missing files in the current namespace fail; strict mode also fails unresolved
-warnings.
+A reference with no namespace means `minecraft:`, as in the game, not the
+namespace of the file that holds it. The client supplies `minecraft:` models,
+textures, sounds and bitmap font textures, so a `minecraft:` reference that the
+pack does not ship neither fails nor warns. Vanilla ships no `.ttf` file, so a
+missing `minecraft:` ttf font fails. An unprefixed reference whose path the
+pack ships only in the file's own namespace warns, because the prefix is
+probably missing. Unbundled references to another namespace's models,
+textures, sounds, or fonts are warnings requiring runtime verification with the
+dependency present. Missing files that a reference names with the current
+namespace prefix fail; strict mode also fails unresolved warnings.
 
 ```bash
 # Run from the installed skill directory (for example `.claude/skills/minecraft-resource-pack`):
@@ -422,7 +427,8 @@ What it checks:
 - Model/blockstate/font/sounds references resolve to real files: bitmap font
   files under `textures/`, `ttf` font files under `font/`
 - Current `custom_model_data` select cases use strings; 26.1 texture objects use a string `sprite` and optional boolean `force_translucent`
-- Same-namespace `type: "event"` sound aliases name an event in that `sounds.json`
+- Same-namespace `type: "event"` sound aliases (with an explicit namespace
+  prefix) name an event in that `sounds.json`
 - Every `*.png.mcmeta` has a matching `*.png`
 
 The validator cannot resolve a sound event owned by another namespace, or prove

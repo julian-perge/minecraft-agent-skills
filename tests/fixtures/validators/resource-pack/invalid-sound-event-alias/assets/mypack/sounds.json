@@ -2,7 +2,7 @@
   "ui.alias": {
     "sounds": [
       {
-        "name": "ui.missing",
+        "name": "mypack:ui.missing",
         "type": "event"
       }
     ]
