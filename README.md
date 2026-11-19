@@ -30,11 +30,8 @@ Use `npx skills add` with the same arguments when bun is not installed. Use
 select. In the tested run, the CLI copied each skill into `.agents/skills/`,
 linked it into `.claude/skills/` and wrote `skills-lock.json`. Add
 `-a claude-code` to install for Claude Code only, and `-y` to skip the
-prompts.
-
-The `julian-perge/minecraft-agent-skills` source is `unverified`. The same
-commands with the path of a local clone install exactly one copy of each
-selected skill (tested with skills 1.9.0, Bun 1.4.4 and Node 26).
+prompts. The same command accepts the path of a local clone instead of
+`julian-perge/minecraft-agent-skills`.
 
 ### 2. Claude Code marketplace
 
@@ -42,8 +39,6 @@ selected skill (tested with skills 1.9.0, Bun 1.4.4 and Node 26).
 claude plugin marketplace add julian-perge/minecraft-agent-skills
 claude plugin install minecraft-codex-skills@minecraft-agent-skills
 ```
-
-These commands are `unverified`.
 
 ### 3. Manual copy
 
