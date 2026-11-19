@@ -74,8 +74,8 @@ plugin.getServer().getAsyncScheduler().runNow(plugin, task -> {
 
 Folia refuses to load a plugin that does not declare Folia support. Add
 `folia-supported: true` to the active descriptor, `plugin.yml` or
-`paper-plugin.yml`. Without it, the server logs `Could not load plugin '<name>' as it
-is not marked as supporting Folia!`. Paper ignores the key, so the same jar
+`paper-plugin.yml`. Without it, the server logs `Could not load plugin '<name> v<version>'
+as it is not marked as supporting Folia!`. Paper ignores the key, so the same jar
 still loads on Paper. Declare it only when every scheduler call in the plugin uses
 the region-aware schedulers above.
 
@@ -88,9 +88,9 @@ api-version: '26.3'
 folia-supported: true
 ```
 
-Source: the Folia patch "Require plugins to be explicitly marked as Folia
-supported" on the `ver/1.21.11`, `ver/26.1.x` and `ver/26.3.x` branches of
-PaperMC/Folia.
+Source: the Folia patches "Require plugins to be explicitly marked as Folia
+supported" (the key) and "Region Threading Base" (the load error) on the
+`ver/1.21.11`, `ver/26.1.x` and `ver/26.3.x` branches of PaperMC/Folia.
 
 Folia [disables `save-all`](https://docs.papermc.io/folia/faq/); use a clean stop
 or a verified platform snapshot for backups.
