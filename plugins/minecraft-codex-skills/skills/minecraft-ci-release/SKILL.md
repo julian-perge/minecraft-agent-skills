@@ -266,9 +266,10 @@ jobs:
 ## Publishing and Changelog Details
 
 Read [the publishing reference](references/publishing-gradle.md) only when the
-project publishes to Modrinth or CurseForge. It includes the publisher plugin versions,
-`jar` selection for 26.1.2 and 26.3, explicit 1.21.11 Loom `remapJar` guidance, version verification,
-and a parser that fails when the expected changelog heading is missing.
+project publishes to Modrinth or CurseForge. It includes the publisher plugin
+versions, `jar` selection for 26.1.2 and 26.3, explicit 1.21.11 Loom `remapJar`
+guidance, version verification, and a parser that fails when the expected
+changelog heading is missing.
 
 ---
 

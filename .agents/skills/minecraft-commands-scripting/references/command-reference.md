@@ -278,8 +278,9 @@ data remove storage mypack:data temp
 
 ## Item and Inventory Commands
 
-Component values below target 1.21.5 and later, including 1.21.11, 26.1.2 and 26.3. Earlier 1.21 releases use a
-`levels` wrapper for enchantments and JSON-encoded strings for text components.
+Component values below target 1.21.5 and later, including 1.21.11, 26.1.2 and
+26.3. Earlier 1.21 releases use a `levels` wrapper for enchantments and
+JSON-encoded strings for text components.
 
 ```mcfunction
 # Give items
@@ -415,8 +416,9 @@ schedule clear mypack:delayed_grant
 
 ## Attribute Commands
 
-These names target 1.21.2 and later, including 1.21.11, 26.1.2 and 26.3. Minecraft 1.21/1.21.1 still uses the
-`generic.` attribute prefix; namespaced modifier IDs apply throughout 1.21+.
+These names target 1.21.2 and later, including 1.21.11, 26.1.2 and 26.3.
+Minecraft 1.21/1.21.1 still uses the `generic.` attribute prefix; namespaced
+modifier IDs apply throughout 1.21+.
 
 ```mcfunction
 # Get base/current value
@@ -471,8 +473,9 @@ stopsound @s
 
 ## World and Environment Commands
 
-For 26.1.2 and 26.3, `/time` operates on a world clock. Select it explicitly when the
-execution dimension is not enough; `set` and `add` return total clock ticks.
+For 26.1.2 and 26.3, `/time` operates on a world clock. Select it explicitly
+when the execution dimension is not enough; `set` and `add` return total
+clock ticks.
 
 ```mcfunction
 time of minecraft:overworld set noon
