@@ -1,6 +1,6 @@
 ---
 name: minecraft-world-generation
-description: "Create and debug Minecraft 26.x and legacy 1.21.x world generation for datapacks, NeoForge, or Fabric, including biomes, dimensions, features, structures, and biome modifiers. Use for worldgen data or registration, not general gameplay systems."
+description: "Create and debug Minecraft 1.21.11, 26.1.2 and 26.3 world generation for datapacks, NeoForge, or Fabric, including biomes, dimensions, features, structures, and biome modifiers. Use for worldgen data or registration, not general gameplay systems."
 ---
 
 # Minecraft World Generation
@@ -32,12 +32,12 @@ mod-specific registry path.
 
 ## Version boundary
 
-Use Minecraft 26.x for new work. Use Java 25 and start
-each JSON schema from the exact target's vanilla data or generated output. Do
-not copy a 1.21 shape into a 26.x pack merely because it parses as JSON.
+For new work, target Minecraft 26.1.2 or 26.3 on Java 25. Start each JSON
+schema from the exact target's vanilla data or generated output. Do not copy a
+1.21.11 shape into a 26.1.2 or 26.3 pack only because it parses as JSON.
 
-Preserve an established 1.21.x project on Java 21 and its matching schema unless
-the task explicitly includes an upgrade. Keep examples matched to the project version.
+Keep an existing 1.21.11 project on Java 21 and its schema unless the task
+includes an upgrade. Keep examples matched to the project version.
 
 The [26.1 migration primer](https://docs.neoforged.net/primer/docs/26.1/)
 removes `minecraft:random_patch` and `minecraft:no_bonemeal_flower`. It replaces
@@ -45,9 +45,9 @@ the random-patch pattern with a separate `minecraft:simple_block` configured
 feature and placements for count, random offset, and block-predicate filtering.
 Inspect the relevant primer section before migrating code or data.
 
-Read [legacy 1.21 JSON patterns](references/legacy-1.21-worldgen-json.md) only
-when the project targets that version. Those examples are not
-release artifacts for 26.x.
+Read [1.21.11 JSON patterns](references/legacy-1.21-worldgen-json.md) only
+when the project targets Minecraft 1.21.11. Do not use those examples for 26.1.2
+or 26.3.
 
 ---
 
@@ -112,14 +112,15 @@ verify the target exists.
 
 ## Biomes and dimensions
 
-For 26.x biome and dimension data, use the exact target's vanilla data or
-datagen output as the schema source. The older `effects` and dimension-type
-fields do not model newer environment behavior. The 11 decoration steps still
+For 1.21.11, 26.1.2 and 26.3 biome and dimension data, use the exact target's
+vanilla data or datagen output as the schema source. In 1.21.11, many biome
+`effects` fields and dimension-type fields moved to environment attributes, and
+26.1.2 and 26.3 change these registries again. The 11 decoration steps still
 organize placed features; choose the semantically appropriate step and keep ore
 placement in `underground_ores`.
 
-The version-labeled 1.21.5 biome and dimension examples are in
-[legacy 1.21 JSON patterns](references/legacy-1.21-worldgen-json.md).
+The 1.21.11 biome and dimension examples are in
+[1.21.11 JSON patterns](references/legacy-1.21-worldgen-json.md).
 
 ## 26.3 feature pattern
 
@@ -171,9 +172,10 @@ At `data/<namespace>/worldgen/placed_feature/my_plant.json`:
 
 Biome modifiers load from
 `data/<modid>/neoforge/biome_modifier/<path>.json`. They can target a biome id
-or tag and add or remove placed features, among other changes. The current
+or tag and add or remove placed features, among other changes. The
 [Biome Modifiers guide](https://docs.neoforged.net/docs/worldgen/biomemodifier/)
-documents their schemas, decoration steps, and datagen.
+documents their schemas, decoration steps, and datagen. Select the docs version
+that matches the project's Minecraft version.
 
 For `neoforge:add_features`, `features` accepts a placed-feature id, list, or
 tag. Vanilla placed features may be referenced in biome JSON or added with a
@@ -189,7 +191,7 @@ the pack load when the dependency is absent.
 
 ## Structures and dimensions
 
-For any current release, derive structure, template-pool, dimension, and
+For 1.21.11, 26.1.2 and 26.3, derive structure, template-pool, dimension, and
 dimension-type JSON from that release's vanilla data or datagen output. Confirm
 the reference graph before launching a test world:
 
@@ -200,10 +202,10 @@ the reference graph before launching a test world:
   `settings` references `worldgen/noise_settings`.
 
 For Fabric registration or mod datagen, use the exact loader and API version's
-documentation rather than copying 1.21 code into a 26.x project.
+documentation rather than copying 1.21.11 code into a 26.1.2 or 26.3 project.
 
-The detailed 1.21 structure and dimension examples are in
-[legacy 1.21 JSON patterns](references/legacy-1.21-worldgen-json.md).
+The 1.21.11 structure and dimension examples are in
+[1.21.11 JSON patterns](references/legacy-1.21-worldgen-json.md).
 
 ---
 
@@ -219,7 +221,7 @@ The detailed 1.21 structure and dimension examples are in
    Omit `--feature-registry feature` for packs through 26.2.
 3. Fix any reported errors and re-validate until clean. The validator checks:
    - JSON validity for `worldgen/**` and `neoforge/biome_modifier/**`
-   - Cross-reference integrity for `placed_feature -> feature` (or legacy `configured_feature`)
+   - Cross-reference integrity for `placed_feature -> feature` (or `configured_feature` through 26.2)
    - Cross-reference integrity for `structure_set -> structure` and biome/biome_modifier feature targets
    - Cross-reference integrity for `jigsaw structure -> start_pool` and `template_pool -> structure template / processor_list`
 4. Compare biome and dimension-type JSON against the exact target's vanilla
