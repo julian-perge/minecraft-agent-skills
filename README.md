@@ -97,8 +97,6 @@ bun add -g @adhisang/minecraft-modding-mcp
 claude mcp add minecraft-modding -- minecraft-modding-mcp
 ```
 
-Use `npm install -g @adhisang/minecraft-modding-mcp` when bun is not installed.
-
 To share the server with a project, put one of these in the project's
 `.mcp.json` instead. With `bunx`:
 
@@ -189,15 +187,13 @@ Reviewed against Minecraft 26.3 / Java 25 on October 29, 2026. See the
 
 ## Maintaining the bundle
 
-Use Node 22 or newer, Bun and Bash (Git Bash works on Windows). Edit
+Use Node 22 or newer, Bun 1.4.4 or newer, and Bash (Git Bash works on Windows). Edit
 `.agents/skills/`, then run:
 
 ```bash
 bun run sync:skills
 bun run check
 ```
-
-When bun is not installed, run `npm run sync:skills` and `npm run check`.
 
 The sync command refreshes `.codex/skills/`, `.claude/skills/`, and the plugin
 bundle. The copied skill directories do not need the repository's Node tooling.

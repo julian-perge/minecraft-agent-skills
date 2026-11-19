@@ -27,6 +27,5 @@ See [usage examples](../../README.md#usage).
 
 ## Maintain
 
-Edit `.agents/skills/` in the repository root, then run `bun run sync:skills`
-(fallback: `npm run sync:skills`).
+Edit `.agents/skills/` in the repository root, then run `bun run sync:skills`.
 Do not edit this plugin's `skills/` directory directly.

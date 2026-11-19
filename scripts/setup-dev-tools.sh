@@ -23,9 +23,9 @@ install_with_brew() {
   brew install jq rsync
 }
 
-if ! need_cmd node || ! need_cmd npm; then
-  echo "$FAIL Node 22+ and npm are required but were not found on PATH."
-  echo "$WARN Install Node 22+ with nvm, fnm, Volta, Homebrew, or NodeSource, then rerun."
+if ! need_cmd node || ! need_cmd bun; then
+  echo "$FAIL Node 22+ and bun 1.4.4+ are required but were not found on PATH."
+  echo "$WARN Install Node 22+ with nvm, fnm, Volta, Homebrew, or NodeSource, install bun 1.4.4 or later from https://bun.sh, then rerun."
   exit 1
 fi
 
@@ -52,13 +52,13 @@ else
       ;;
     *)
       echo "$FAIL Unsupported OS: $OS"
-      echo "$WARN Install manually: jq, rsync, node, npm"
+      echo "$WARN Install manually: jq, rsync, node, bun"
       exit 1
       ;;
   esac
 fi
 
-for cmd in jq rsync node npm; do
+for cmd in jq rsync node bun; do
   if need_cmd "$cmd"; then
     ver="$($cmd --version 2>/dev/null | head -n 1 || true)"
     echo "$PASS $cmd ${ver}"

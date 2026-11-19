@@ -11,19 +11,16 @@ set positional-arguments
 default:
     @just --list --unsorted
 
-# Each recipe that wraps a package.json script runs it through this. It uses bun when bun is on PATH and npm otherwise.
+# Each recipe that wraps a package.json script runs it through this with bun, the only package manager (docs/adr/0001-bun-is-the-only-package-manager.md).
 [private]
 run script:
     #!/usr/bin/env bash
     set -euo pipefail
-    if command -v bun >/dev/null; then
-        bun run "$1"
-    elif command -v npm >/dev/null; then
-        npm run "$1"
-    else
-        echo "error: missing bun and npm. Install bun, or Node 22 or later with npm." >&2
+    if ! command -v bun >/dev/null; then
+        echo "error: missing bun. Install bun 1.4.4 or later, then run the recipe again." >&2
         exit 1
     fi
+    bun run "$1"
 
 [doc('Run the full gate that CI runs: sync, bundle, audit, drift, docs, validators, policy, pins and markdown lint')]
 [group('check')]

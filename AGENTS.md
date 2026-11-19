@@ -5,14 +5,13 @@ This repository contains 15 Minecraft skills and a plugin for Codex and Claude C
 ## Editing
 
 - Treat `.agents/skills/` as canonical.
-- After canonical changes, run `bun run sync:skills` (fallback:
-  `npm run sync:skills`) to refresh `.codex/skills/`, `.claude/skills/`, and
+- After canonical changes, run `bun run sync:skills` to refresh
+  `.codex/skills/`, `.claude/skills/`, and
   `plugins/minecraft-codex-skills/skills/`.
 - Do not hand-edit mirrored skill trees.
-- Run `bun run check` (fallback: `npm run check`) before publishing changes.
+- Run `bun run check` before publishing changes.
 - The root `justfile` has one recipe for each `package.json` script, plus
-  `bash-n`, `install` and `clean`. Run `just` to list them. The recipes use bun
-  when it is on PATH and npm otherwise.
+  `bash-n`, `install` and `clean`. Run `just` to list them. The recipes use bun.
 - `bun.lock` is the only lockfile. CI installs from it with
   `bun install --frozen-lockfile` and runs `bun run check`.
 
@@ -40,7 +39,7 @@ This repository contains 15 Minecraft skills and a plugin for Codex and Claude C
 
 ## Every task
 
-- Run `bun run check` (fallback: `npm run check`) before each commit.
+- Run `bun run check` before each commit.
 
 ## Workflow
 
