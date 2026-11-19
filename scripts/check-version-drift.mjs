@@ -21,7 +21,7 @@ const checks = [
       /ForgeRegistries\.BLOCKS/,
       /FMLJavaModLoadingContext/,
       /Forge\*\* \| 1\.20\.1 legacy lane/,
-      /Loot table JSON -> 1\.21\.x: `data\/<modid>\/loot_table\/blocks\/<name>\.json`; Forge 1\.20\.1: `data\/<modid>\/loot_tables\/blocks\/<name>\.json`/
+      /Loot table JSON -> Minecraft 1\.21 and later: `data\/<modid>\/loot_table\/blocks\/<name>\.json`; Forge 1\.20\.1: `data\/<modid>\/loot_tables\/blocks\/<name>\.json`/
     ]
   },
   {

@@ -1,7 +1,8 @@
 # Minecraft Agent Skills
 
 15 skills for Minecraft mods, plugins, datapacks, art, and server administration.
-Supports Minecraft 1.21.11, 26.1.2 and 26.3, and Forge 1.20.1.
+Supports Minecraft 1.21.11, 26.1.2 and 26.3, and Forge 1.20.1 on Java 17 with
+ForgeGradle 6.
 Install the skills with the skills CLI, copy the skill folders, or install the
 Codex or Claude Code plugin.
 

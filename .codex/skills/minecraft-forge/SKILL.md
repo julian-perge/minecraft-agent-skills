@@ -226,11 +226,11 @@ When adding a **new block**:
 - [ ] Block model JSON -> `assets/<modid>/models/block/<name>.json`
 - [ ] Item model JSON -> `assets/<modid>/models/item/<name>.json` (or inherits from block)
 - [ ] Texture PNG -> `assets/<modid>/textures/block/<name>.png`
-- [ ] Loot table JSON -> 1.21.x: `data/<modid>/loot_table/blocks/<name>.json`; Forge 1.20.1: `data/<modid>/loot_tables/blocks/<name>.json`
+- [ ] Loot table JSON -> Minecraft 1.21 and later: `data/<modid>/loot_table/blocks/<name>.json`; Forge 1.20.1: `data/<modid>/loot_tables/blocks/<name>.json`
 - [ ] Tags -> Forge 1.20.1: `data/<modid>/tags/blocks/` and `tags/items/`
 - [ ] Language entry in `assets/<modid>/lang/en_us.json`
 - [ ] Vanilla mining and tool-tier tags when `requiresCorrectToolForDrops` is set
-- [ ] Do not rewrite Forge 1.20.1 plural server-data paths to 1.21.x singular paths
+- [ ] Do not rewrite Forge 1.20.1 plural server-data paths to the singular paths of Minecraft 1.21 and later
 
 When adding a **new item**:
 
