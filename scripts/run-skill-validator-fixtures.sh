@@ -422,6 +422,27 @@ else
 fi
 rm -rf "$imagegen_workspace" "$imagegen_install_root"
 
+imagegen_out="$(mktemp -d)"
+imagegen_script="$PWD/.agents/skills/minecraft-imagegen/scripts/scaffold-asset-brief.sh"
+expect_pass_contains "imagegen scaffold writes a brief to an absolute --out" "Wrote $imagegen_out/briefs/starforge-asset-brief.md" \
+  bash "$imagegen_script" --type pack-icon --name Starforge --out "$imagegen_out/briefs"
+expect_path "$imagegen_out/briefs/starforge-asset-brief.md"
+expect_fail_contains "imagegen scaffold rejects an unknown --type" "Unknown --type: poster" \
+  bash "$imagegen_script" --type poster --name starforge --out "$imagegen_out/other"
+if [[ -e "$imagegen_out/other/starforge-asset-brief.md" ]]; then
+  echo "$FAIL imagegen scaffold wrote a brief for an unknown --type" >&2
+  exit 1
+fi
+expect_fail_contains "imagegen scaffold refuses an existing brief without --overwrite" "Refusing to overwrite existing file" \
+  bash "$imagegen_script" --type pack-icon --name starforge --out "$imagegen_out/briefs"
+expect_pass "imagegen scaffold replaces an existing brief with --overwrite" \
+  bash "$imagegen_script" --type release-banner --name starforge --out "$imagegen_out/briefs" --overwrite
+if ! grep -Fqx -- "- Asset type: release-banner" "$imagegen_out/briefs/starforge-asset-brief.md"; then
+  echo "$FAIL imagegen scaffold --overwrite did not replace the brief" >&2
+  exit 1
+fi
+rm -rf "$imagegen_out"
+
 for surface in .agents .codex .claude; do
   imagegen_home="$(mktemp -d)"
   imagegen_skill_dir="$imagegen_home/$surface/skills/minecraft-imagegen"
@@ -627,6 +648,76 @@ expect_pass "worldgen tags only strict" \
 expect_fail_contains "worldgen legacy path" "legacy path detected" \
   ./.agents/skills/minecraft-world-generation/scripts/validate-worldgen-json.sh \
   --root tests/fixtures/validators/worldgen/legacy
+
+# The datapack, resource-pack and worldgen validators fall back to their skill's jq-shim.mjs when jq is not on PATH.
+# CI installs jq, so these cases run the validators again with a PATH folder that has a link to every command on PATH except jq.
+# The validators run jq with its errors hidden, so a filter that jq-shim.mjs does not support only changes a check result.
+# Each case therefore expects the same output and exit code with and without jq.
+make_no_jq_path() {
+  local dir path_dir candidate name
+  local -a path_dirs targets=()
+  local -A seen=()
+  dir="$(mktemp -d)"
+  IFS=: read -r -a path_dirs <<<"$PATH"
+  for path_dir in "${path_dirs[@]}"; do
+    [[ -n "$path_dir" && -d "$path_dir" ]] || continue
+    for candidate in "$path_dir"/*; do
+      name="${candidate##*/}"
+      if [[ "$name" == "jq" || -n "${seen[$name]:-}" || -d "$candidate" || ! -x "$candidate" ]]; then
+        continue
+      fi
+      seen[$name]=1
+      targets+=("$candidate")
+    done
+  done
+  ln -s "${targets[@]}" "$dir"
+  echo "$dir"
+}
+
+no_jq_path="$(make_no_jq_path)"
+if (PATH="$no_jq_path" command -v jq >/dev/null 2>&1); then
+  echo "$FAIL the no-jq PATH still has jq" >&2
+  exit 1
+fi
+if ! (PATH="$no_jq_path" command -v node >/dev/null 2>&1); then
+  echo "$FAIL the no-jq PATH has no node, so the jq-shim.mjs fallback cannot run" >&2
+  exit 1
+fi
+
+expect_same_without_jq() {
+  local name="$1"
+  shift
+  local with_jq_output without_jq_output with_jq_status=0 without_jq_status=0
+  with_jq_output="$("$@" 2>&1)" || with_jq_status=$?
+  without_jq_output="$(PATH="$no_jq_path" "$@" 2>&1)" || without_jq_status=$?
+  if [[ "$with_jq_status" != "$without_jq_status" || "$with_jq_output" != "$without_jq_output" ]]; then
+    echo "$FAIL $name (exit $with_jq_status with jq, exit $without_jq_status without jq)" >&2
+    diff <(printf '%s\n' "$with_jq_output") <(printf '%s\n' "$without_jq_output") >&2 || true
+    exit 1
+  fi
+  printf '%s\n' "$without_jq_output"
+  echo "$PASS $name"
+}
+
+expect_same_without_jq "datapack valid without jq" \
+  ./.agents/skills/minecraft-datapack/scripts/validate-datapack.sh \
+  --root tests/fixtures/validators/datapack/valid
+expect_same_without_jq "datapack invalid pack version without jq" \
+  ./.agents/skills/minecraft-datapack/scripts/validate-datapack.sh \
+  --root tests/fixtures/validators/datapack/invalid-pack-version
+expect_same_without_jq "resource-pack valid without jq" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/valid
+expect_same_without_jq "resource-pack invalid without jq" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/invalid
+expect_same_without_jq "worldgen valid without jq" \
+  ./.agents/skills/minecraft-world-generation/scripts/validate-worldgen-json.sh \
+  --root tests/fixtures/validators/worldgen/valid
+expect_same_without_jq "worldgen invalid without jq" \
+  ./.agents/skills/minecraft-world-generation/scripts/validate-worldgen-json.sh \
+  --root tests/fixtures/validators/worldgen/invalid
+rm -rf "$no_jq_path"
 
 neoforge_jars_script="$PWD/.agents/skills/minecraft-neoforge/scripts/neoforge-jars.sh"
 neoforge_jars_fixtures="$PWD/tests/fixtures/validators/neoforge-jars"
