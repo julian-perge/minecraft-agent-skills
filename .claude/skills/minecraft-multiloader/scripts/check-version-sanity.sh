@@ -27,6 +27,7 @@ Performs static Architectury multiloader version-alignment preflight:
 - gradle.properties declares the local mod_version convention used by this helper
 - enabled_platforms includes fabric and neoforge
 - no snapshot-only toolchain pins unless you accept warnings
+- minecraft_version is 1.21.11, 26.1.2 or 26.3 (other versions warn)
 - NeoForge version family matches the Minecraft release line
 - Fabric API suffix matches the Minecraft patch line
 
@@ -113,6 +114,16 @@ for version_name in ARCHITECTURY_VERSION FABRIC_LOADER_VERSION NEOFORGE_VERSION 
   fi
 done
 
+SUPPORTED_VERSIONS='1.21.11, 26.1.2 or 26.3'
+case "$MINECRAFT_VERSION" in
+  1.21.11|26.1.2|26.3)
+    pass "minecraft_version is supported: $MINECRAFT_VERSION"
+    ;;
+  *)
+    warn "minecraft_version $MINECRAFT_VERSION is not a supported version (use $SUPPORTED_VERSIONS)"
+    ;;
+esac
+
 if [[ "$MINECRAFT_VERSION" =~ ^1\.21(\.([0-9]+))?$ ]]; then
   patch="${BASH_REMATCH[2]:-1}"
   expected_prefix="21.${patch}."
@@ -128,8 +139,6 @@ elif [[ "$MINECRAFT_VERSION" =~ ^(26|[3-9][0-9])\.([0-9]+)(\.[0-9]+)?$ ]]; then
   else
     fail "neoforge_version should start with $expected_prefix for minecraft_version=$MINECRAFT_VERSION"
   fi
-else
-  warn "minecraft_version is outside the documented 26.x / 1.21.x scope: $MINECRAFT_VERSION"
 fi
 
 if [[ -n "$FABRIC_API_VERSION" && "$FABRIC_API_VERSION" == *+"$MINECRAFT_VERSION" ]]; then

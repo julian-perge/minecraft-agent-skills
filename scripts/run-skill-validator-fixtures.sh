@@ -437,7 +437,9 @@ expect_fail_contains "testing fabric missing entrypoint" "fabric.mod.json is mis
   --root tests/fixtures/validators/testing/fabric-missing-entrypoint
 
 expect_path "tests/fixtures/validators/multiloader/valid"
-expect_path "tests/fixtures/validators/multiloader/valid-26.2"
+expect_path "tests/fixtures/validators/multiloader/valid-26.3"
+expect_path "tests/fixtures/validators/multiloader/warn-26.2"
+expect_path "tests/fixtures/validators/multiloader/warn-1.21.10"
 expect_path "tests/fixtures/validators/multiloader/invalid"
 expect_path "tests/fixtures/validators/multiloader/invalid-missing-mod-version"
 expect_pass "multiloader valid" \
@@ -446,9 +448,18 @@ expect_pass "multiloader valid" \
 expect_pass "multiloader valid properties separators" \
   ./.agents/skills/minecraft-multiloader/scripts/check-version-sanity.sh \
   --root tests/fixtures/validators/multiloader/valid-properties-format --strict
-expect_pass "multiloader valid 26.2" \
+expect_pass_contains "multiloader valid 26.3" "minecraft_version is supported: 26.3" \
   ./.agents/skills/minecraft-multiloader/scripts/check-version-sanity.sh \
-  --root tests/fixtures/validators/multiloader/valid-26.2
+  --root tests/fixtures/validators/multiloader/valid-26.3
+expect_pass_contains "multiloader 26.2 warns" "minecraft_version 26.2 is not a supported version (use 1.21.11, 26.1.2 or 26.3)" \
+  ./.agents/skills/minecraft-multiloader/scripts/check-version-sanity.sh \
+  --root tests/fixtures/validators/multiloader/warn-26.2
+expect_fail_contains "multiloader 26.2 fails in strict mode" "strict mode failed" \
+  ./.agents/skills/minecraft-multiloader/scripts/check-version-sanity.sh \
+  --root tests/fixtures/validators/multiloader/warn-26.2 --strict
+expect_pass_contains "multiloader 1.21.10 warns" "minecraft_version 1.21.10 is not a supported version (use 1.21.11, 26.1.2 or 26.3)" \
+  ./.agents/skills/minecraft-multiloader/scripts/check-version-sanity.sh \
+  --root tests/fixtures/validators/multiloader/warn-1.21.10
 expect_fail_contains "multiloader invalid" "enabled_platforms must include fabric and neoforge" \
   ./.agents/skills/minecraft-multiloader/scripts/check-version-sanity.sh \
   --root tests/fixtures/validators/multiloader/invalid

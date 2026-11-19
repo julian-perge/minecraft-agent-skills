@@ -1,6 +1,6 @@
 ---
 name: minecraft-multiloader
-description: "Build and maintain Architectury-based Minecraft 26.x or 1.21.x mods that share one codebase across NeoForge and Fabric. Use only when both loaders are required; use minecraft-neoforge, minecraft-fabric or minecraft-forge for a single-loader project."
+description: "Build and maintain Architectury-based Minecraft 1.21.11, 26.1.2 and 26.3 mods that share one codebase across NeoForge and Fabric. Use only when both loaders are required; use minecraft-neoforge, minecraft-fabric or minecraft-forge for a single-loader project."
 ---
 
 # Minecraft Multiloader Skill (Architectury)
@@ -45,21 +45,39 @@ loom_version=<project pin>
 ```
 
 Pin `architectury_version`, the Architectury plugin version, and `loom_version`
-from the same generated or known-working project line. This skill deliberately
-does not publish a copyable dependency matrix: its static helper cannot resolve
-whether a particular set of versions is compatible.
+from the same generated or known-working project line. The table below names
+the Architectury versions that upstream builds with. It is not a full pin set,
+because the static helper cannot resolve whether a set of versions is compatible.
 
-For Minecraft 26.x / Java 25, use the official
+## Architectury API And Loom By Version
+
+These are the values that the upstream Architectury API branch for each
+version builds with. Use them to check a project.
+
+| Minecraft | Java | Architectury API | Architectury Loom plugin | API branch |
+|-----------|------|------------------|--------------------------|------------|
+| 1.21.11 | 21 | `dev.architectury:architectury:19.0.1` | `dev.architectury.loom` `1.13-SNAPSHOT` | [`1.21.11`](https://github.com/architectury/architectury-api/tree/1.21.11) |
+| 26.1.2 | 25 | `dev.architectury:architectury:20.1.18` | `dev.architectury.loom-no-remap` `1.17-SNAPSHOT` | [`26.1`](https://github.com/architectury/architectury-api/tree/26.1) |
+| 26.3 | 25 | `dev.architectury:architectury:22.0.6` | `dev.architectury.loom-no-remap` `1.17-SNAPSHOT` | [`26.3`](https://github.com/architectury/architectury-api/tree/26.3) |
+
+The `26.1` branch targets Minecraft 26.1.2. Fabric and NeoForge artifacts use
+the `architectury-fabric` and `architectury-neoforge` names with the same
+version. 26.2 is not a supported target.
+
+For Minecraft 26.1.2 and 26.3 on Java 25, use the official
 [Architectury Template Generator](https://generate.architectury.dev/) only when
 its version selector offers the exact target. Generate a **Multiplatform**
 project with Fabric and NeoForge, then preserve the generated Gradle layout and
 pins as one set. If the generator does not offer the target, begin with an
 already working project on that exact line and inspect its resolved build; do
-not relabel a 1.21.11 template as 26.x. The published template downloads are
+not relabel a 1.21.11 template as 26.1.2 or 26.3. The published template downloads are
 not a substitute for an exact-current scaffold.
 
-Do not mechanically change only `minecraft_version` in the retained example:
-26.x is unobfuscated and its Loom/remapping setup differs from 1.21.11.
+Do not mechanically change only `minecraft_version` in the retained example.
+Minecraft 26.1.2 and 26.3 are unobfuscated. Their builds apply
+`dev.architectury.loom-no-remap` and have no
+`mappings loom.officialMojangMappings()` line. The 1.21.11 build applies
+`dev.architectury.loom` with Mojang mappings.
 
 ## Bundled References And Helpers
 
@@ -68,7 +86,9 @@ Do not mechanically change only `minecraft_version` in the retained example:
 
 Run the sanity checker after editing `gradle.properties`. It is a static
 syntax-and-version-family preflight: it catches missing keys, snapshot pins,
-missing `fabric` / `neoforge` platforms, and obvious version-family drift. It
+missing `fabric` / `neoforge` platforms, a `minecraft_version` other than
+1.21.11, 26.1.2 or 26.3, and obvious version-family drift. The Loom
+`-SNAPSHOT` pins in the table above give a snapshot warning. It
 does not resolve dependencies, prove loader compatibility, or replace the
 project's Fabric and NeoForge build and smoke tests.
 
@@ -116,7 +136,7 @@ my-mod/
 ## Legacy Build Template
 
 The old fixed Gradle scripts were a 1.21.11 snapshot and are intentionally not
-presented as a current scaffold. For either supported version, read
+presented as a current scaffold. For 1.21.11, 26.1.2 or 26.3, read
 [`references/legacy-1.21.11-template.md`](references/legacy-1.21.11-template.md)
 or [`references/architectury-reference.md`](references/architectury-reference.md)
 before changing generated build files. They preserve version anchors and
@@ -348,7 +368,7 @@ find fabric/build/libs neoforge/build/libs -maxdepth 1 -type f -name '*.jar' \
 |---------|----------|
 | Using `net.neoforged.*` / `net.fabricmc.*` in `common/` | Only use vanilla MC and Architectury APIs in common |
 | Direct field access on `DeferredRegister` (NeoForge style) in common | Use Architectury's `DeferredRegister` |
-| Constructing a 26.x item without a registry key | Create its `ResourceKey<Item>` and call `Item.Properties#setId` before `new Item` |
+| Constructing an item without a registry key | Create its `ResourceKey<Item>` and call `Item.Properties#setId` before `new Item` |
 | `@ExpectPlatform` throws `AssertionError` at runtime | Check the `*Impl` class name, platform package suffix, and transformer wiring in both builds |
 | Assets duplicated in fabric/ and neoforge/ | Keep assets in `common/src/main/resources/assets/` |
 | A common Mixin imports a loader API or targets one loader's side | Put it in that platform subproject; loader-neutral Mixins may be common when both generated platform configurations include them |
@@ -359,7 +379,8 @@ find fabric/build/libs neoforge/build/libs -maxdepth 1 -type f -name '*.jar' \
 ## References
 
 - Architectury API GitHub: https://github.com/architectury/architectury-api
-- Architectury API 26.2 source branch: https://github.com/architectury/architectury-api/tree/26.2
+- Architectury API 26.3 source branch: https://github.com/architectury/architectury-api/tree/26.3
+- Architectury API 26.1.2 source branch: https://github.com/architectury/architectury-api/tree/26.1
 - Architectury API 1.21.11 source branch: https://github.com/architectury/architectury-api/tree/1.21.11
 - Architectury Loom: https://github.com/architectury/architectury-loom
 - Architectury templates: https://github.com/architectury/architectury-templates

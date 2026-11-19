@@ -13,13 +13,21 @@ Use this file together with `SKILL.md` when you need the quick alignment rules.
 
 ## Version Alignment Rules
 
-### Minecraft 1.21.x
+### Minecraft 1.21.11
 
-- Keep `minecraft_version` on one explicit 1.21.x patch line across the whole repo
-- Keep `neoforge_version` on the matching `21.<patch>.x` family for that same patch
-- Keep Fabric API on the exact Minecraft patch suffix you target, for example `+1.21.11` for `minecraft_version=1.21.11`
+- Keep `minecraft_version=1.21.11` across the whole repo
+- Keep `neoforge_version` in the `21.11.x` family
+- Keep Fabric API on the `+1.21.11` suffix
+- The upstream `1.21.11` branch builds Architectury API 19.0.1 with the
+  `dev.architectury.loom` plugin `1.13-SNAPSHOT` and Mojang mappings
 
-### Minecraft 26.x
+### Minecraft 26.1.2 and 26.3
+
+- Keep `neoforge_version` in the `26.1.` family for 26.1.2 and the `26.3.`
+  family for 26.3, and keep Fabric API on the `+26.1.2` or `+26.3` suffix
+- The upstream `26.1` branch builds Architectury API 20.1.18 for 26.1.2. The
+  upstream `26.3` branch builds Architectury API 22.0.6 for 26.3. Both apply the
+  `dev.architectury.loom-no-remap` plugin `1.17-SNAPSHOT` and have no mappings line
 
 - Use the official [Architectury Template Generator](https://generate.architectury.dev/)
   only when it offers the exact target release with Fabric and NeoForge. Preserve
@@ -30,9 +38,12 @@ Use this file together with `SKILL.md` when you need the quick alignment rules.
   before changing pins; do not manufacture a current matrix from a 1.21.11
   example or an older template download.
 
-For both versions, keep `enabled_platforms=fabric,neoforge`, avoid snapshot-only
+For 1.21.11, 26.1.2 and 26.3, keep `enabled_platforms=fabric,neoforge`, avoid snapshot-only
 pins unless intentionally testing a prerelease, and use the split Architectury
 artifacts (`architectury`, `architectury-fabric`, and `architectury-neoforge`).
+The upstream branches pin the Architectury Loom plugin as a `-SNAPSHOT`
+version. The sanity checker warns on that pin, so `--strict` fails on a
+project that keeps it.
 
 ## Sanity Check Workflow
 
@@ -46,7 +57,9 @@ The checker performs a static preflight and validates:
 - required keys exist in `gradle.properties`
 - `enabled_platforms` contains both `fabric` and `neoforge`
 - snapshot versions are flagged
-- NeoForge version family matches the Minecraft patch line for Minecraft 1.21.x
+- `minecraft_version` is 1.21.11, 26.1.2 or 26.3. Any other version, 26.2
+  included, gives a warning
+- NeoForge version family matches the Minecraft release line
 
 It does not download or resolve dependencies, compile the project, or establish
 that a specific Architectury, Fabric API, NeoForge, and Loom combination is
