@@ -232,7 +232,7 @@ scoreboard players set #config.difficulty points 2
 
 ## NBT Path Syntax
 
-These item/effect paths target 1.21.x and later; the `CustomName` compound form
+These item/effect paths target 1.21 and later; the `CustomName` compound form
 targets 1.21.5+. Entity writes require a non-player target. Use `/item`, `/effect`,
 or the appropriate command for player state instead of editing player NBT.
 
@@ -278,7 +278,7 @@ data remove storage mypack:data temp
 
 ## Item and Inventory Commands
 
-Component values below target 1.21.5+ and 26.x. Earlier 1.21 releases use a
+Component values below target 1.21.5 and later, including 1.21.11, 26.1.2 and 26.3. Earlier 1.21 releases use a
 `levels` wrapper for enchantments and JSON-encoded strings for text components.
 
 ```mcfunction
@@ -358,7 +358,7 @@ tellraw @a [{"text":"Hello ","color":"white"},{"selector":"@s","color":"gold"},{
 tellraw @a {"translate":"block.minecraft.diamond_block","color":"aqua"}
 tellraw @a {"translate":"commands.give.success.single","with":[{"text":"1"},{"translate":"item.minecraft.diamond"},{"selector":"@p"}]}
 
-# Clickable / hoverable (1.21.5+ and 26.x)
+# Clickable / hoverable (1.21.5 and later)
 tellraw @a {text:"Click here",color:"aqua",click_event:{action:"run_command",command:"/say hi"},hover_event:{action:"show_text",value:"Run /say hi"}}
 
 # Keybind display
@@ -415,7 +415,7 @@ schedule clear mypack:delayed_grant
 
 ## Attribute Commands
 
-These names target 1.21.2+ and 26.x. Minecraft 1.21/1.21.1 still uses the
+These names target 1.21.2 and later, including 1.21.11, 26.1.2 and 26.3. Minecraft 1.21/1.21.1 still uses the
 `generic.` attribute prefix; namespaced modifier IDs apply throughout 1.21+.
 
 ```mcfunction
@@ -471,7 +471,7 @@ stopsound @s
 
 ## World and Environment Commands
 
-For 26.x, `/time` operates on a world clock. Select it explicitly when the
+For 26.1.2 and 26.3, `/time` operates on a world clock. Select it explicitly when the
 execution dimension is not enough; `set` and `add` return total clock ticks.
 
 ```mcfunction
@@ -482,10 +482,10 @@ time query gametime
 ```
 
 See the [26.1 release notes](https://www.minecraft.net/en-us/article/minecraft-java-edition-26-1)
-for clock/timeline query semantics. The following time examples are for 1.21.x:
+for clock/timeline query semantics. The following time examples are for 1.21.11:
 
 ```mcfunction
-# Time (legacy 1.21.x)
+# Time (1.21.11)
 time set day
 # 6000
 time set noon

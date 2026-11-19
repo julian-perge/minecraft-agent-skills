@@ -1,6 +1,6 @@
 ---
 name: minecraft-worldedit-ops
-description: "Operate WorldEdit safely for Minecraft 26.x and 1.21.x selections, region edits, masks, schematics, brushes, terrain shaping, and rollback. Use for command-driven world editing, not plugin development or general server administration."
+description: "Operate WorldEdit safely for Minecraft 1.21.11, 26.1.2 and 26.3 selections, region edits, masks, schematics, brushes, terrain shaping, and rollback. Use for command-driven world editing, not plugin development or general server administration."
 ---
 
 # Minecraft WorldEdit Operations Skill

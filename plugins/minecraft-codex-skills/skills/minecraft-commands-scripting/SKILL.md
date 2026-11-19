@@ -1,13 +1,13 @@
 ---
 name: minecraft-commands-scripting
-description: "Write and debug Minecraft Java 26.x and 1.21.x commands, selectors, execute chains, scoreboards, NBT, and RCON scripts. Use for command-only work; use minecraft-datapack for complete datapack structures."
+description: "Write and debug Minecraft Java 1.21.11, 26.1.2 and 26.3 commands, selectors, execute chains, scoreboards, NBT, and RCON scripts. Use for command-only work; use minecraft-datapack for complete datapack structures."
 ---
 
 # Minecraft Commands & Scripting Skill
 
 Before editing, inspect the exact Minecraft version and execution context
 (chat, function, command block, or RCON). Keep the requested scope and use only
-the relevant examples. Check current release notes for version-sensitive syntax.
+the relevant examples. Check the release notes of the target version for version-sensitive syntax.
 In [26.3](https://www.minecraft.net/en-us/article/minecraft-java-edition-26-3),
 `/item replace` maps source slots to destinations once; use `/item fill` to
 repeat items or `/item override` to clear unmatched slots.
@@ -40,7 +40,7 @@ skill file. Copy and adapt the example scripts as needed.
 
 Use [references/command-reference.md](references/command-reference.md) for the
 relevant command family. It includes version boundaries for item components,
-attributes, text events, gamerules, and 26.x world clocks. Do not run example
+attributes, text events, gamerules, and the 26.1.2 and 26.3 world clocks. Do not run example
 blocks as a batch; each demonstrates a separate operation.
 
 ## RCON Scripting

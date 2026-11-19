@@ -2,7 +2,8 @@
 
 Use these snippets only for a project that has chosen the relevant publisher. Keep
 its existing project IDs, artifact tasks, loader metadata, and release approval flow.
-The examples target Minecraft 26.x on Java 25.
+The examples target Minecraft 26.3 on Java 25. A 26.1.2 project uses the same
+Java 25 setup.
 
 ## Release Version and Changelog
 
@@ -51,8 +52,9 @@ file. Skip the heading line so a date alone cannot pass the empty-section check.
 ## Modrinth with Minotaur
 
 The current Gradle Plugin Portal release is `com.modrinth.minotaur` `2.10.0`. For a
-Minecraft 26.x Fabric project, upload the primary `jar` task. Current Minecraft is
-unobfuscated, so a new 26.x Fabric build should not assume `remapJar` exists.
+Minecraft 26.1.2 or 26.3 Fabric project, upload the primary `jar` task. Minecraft
+26.1 and later is unobfuscated, so a 26.1.2 or 26.3 Fabric build should not assume
+`remapJar` exists.
 Give release artifacts loader-distinct classifiers when Fabric and NeoForge could
 otherwise produce the same basename.
 
@@ -82,14 +84,14 @@ tasks.named("modrinth") {
 }
 ```
 
-For a retained legacy Fabric Loom project that produces the distributable
-`remapJar`, select that task explicitly instead:
+For a 1.21.11 Fabric project on `net.fabricmc.fabric-loom-remap`, which produces
+the distributable `remapJar`, select that task explicitly instead:
 
 ```kotlin
 uploadFile.set(tasks.named("remapJar"))
 ```
 
-Confirm the task name and the produced file in that legacy project before changing
+Confirm the task name and the produced file in that 1.21.11 project before changing
 the selection. NeoForge and multi-loader builds can have different platform tasks;
 configure each output independently. For a named NeoForge output, use its actual
 archive task and set `archiveClassifier` to `neoforge`; do not assume either loader

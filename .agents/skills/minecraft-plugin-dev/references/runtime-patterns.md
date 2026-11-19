@@ -1,7 +1,7 @@
 # Runtime Patterns for Paper Plugins
 
 Use these examples when implementing runtime behavior for Paper/Bukkit plugins.
-All snippets target Java 21 and Paper API 1.21.x unless noted.
+All snippets target Paper API 1.21.11 on Java 21 unless noted.
 
 ## Schedulers
 
