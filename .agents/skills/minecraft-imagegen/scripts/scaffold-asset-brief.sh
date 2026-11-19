@@ -6,6 +6,9 @@ usage() {
 Usage:
   bash ./scripts/scaffold-asset-brief.sh --type <asset-type> --name <slug> [--out <dir>] [--overwrite]
 
+Asset types:
+  pack-icon, release-banner, thumbnail, texture-concept, server-banner, ui-mockup, promo-art
+
 Examples:
   bash ./scripts/scaffold-asset-brief.sh --type pack-icon --name starforge
   bash ./scripts/scaffold-asset-brief.sh --type release-banner --name skylands --out docs/briefs
@@ -150,6 +153,16 @@ if [[ -z "$TYPE" || -z "$NAME" ]]; then
   usage >&2
   exit 1
 fi
+
+case "$TYPE" in
+  pack-icon|release-banner|thumbnail|texture-concept|server-banner|ui-mockup|promo-art)
+    ;;
+  *)
+    echo "Unknown --type: $TYPE" >&2
+    usage >&2
+    exit 1
+    ;;
+esac
 
 slug="$(printf '%s' "$NAME" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//')"
 if [[ -z "$slug" ]]; then
