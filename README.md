@@ -76,6 +76,81 @@ claude --plugin-dir ./plugins/minecraft-codex-skills
 </p>
 <!-- markdownlint-enable MD033 -->
 
+## Optional MCP server
+
+The skills work without an MCP server, but their source, mapping and registry
+lookups are weaker. For stronger lookups, add
+[`adhi-jp/minecraft-modding-mcp`](https://github.com/adhi-jp/minecraft-modding-mcp)
+(npm package `@adhisang/minecraft-modding-mcp`). It needs Node.js 22.13 or
+newer, and Java 17 or newer for its decompile and remap tools.
+
+For Claude Code, register it with one of these runners:
+
+```bash
+claude mcp add minecraft-modding -- bunx @adhisang/minecraft-modding-mcp
+claude mcp add minecraft-modding -- npx -y @adhisang/minecraft-modding-mcp
+```
+
+For a global install, install the package once, then register its command:
+
+```bash
+bun add -g @adhisang/minecraft-modding-mcp
+claude mcp add minecraft-modding -- minecraft-modding-mcp
+```
+
+Use `npm install -g @adhisang/minecraft-modding-mcp` when bun is not installed.
+
+To share the server with a project, put one of these in the project's
+`.mcp.json` instead. With `bunx`:
+
+```json
+{
+  "mcpServers": {
+    "minecraft-modding": {
+      "command": "bunx",
+      "args": [
+        "@adhisang/minecraft-modding-mcp"
+      ]
+    }
+  }
+}
+```
+
+With `npx`:
+
+```json
+{
+  "mcpServers": {
+    "minecraft-modding": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@adhisang/minecraft-modding-mcp"
+      ]
+    }
+  }
+}
+```
+
+With a global install:
+
+```json
+{
+  "mcpServers": {
+    "minecraft-modding": {
+      "command": "minecraft-modding-mcp",
+      "args": []
+    }
+  }
+}
+```
+
+For Codex, run:
+
+```bash
+codex mcp add minecraft-modding -- npx -y @adhisang/minecraft-modding-mcp
+```
+
 ## Skills
 
 | Skill | Use it for |
