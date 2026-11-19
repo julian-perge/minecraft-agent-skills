@@ -31,21 +31,23 @@ platform-specific behavior behind the `@ExpectPlatform` abstraction.
 ## Versions (Minecraft 1.21.11)
 
 ```properties
-# gradle.properties property names used by this skill's static helper.
-# Get every tool version from the exact generated or known-working project.
+# gradle.properties keys that the Architectury template generator writes and
+# that this skill's static helper reads. Get every version from the exact
+# generated or known-working project.
 mod_version=1.0.0
 minecraft_version=1.21.11
 enabled_platforms=fabric,neoforge
 
-architectury_version=<project pin>
+architectury_api_version=<project pin, only with the Architectury API>
 fabric_loader_version=<project pin>
 fabric_api_version=<project pin ending in +1.21.11>
 neoforge_version=<project pin in the 21.11.x family>
-loom_version=<project pin>
 ```
 
-Pin `architectury_version`, the Architectury plugin version, and `loom_version`
-from the same generated or known-working project line. The table below names
+The template pins the Architectury plugin and Loom in `build.gradle`, not in
+`gradle.properties`. The helper also accepts the older `architectury_version`
+key and an optional `loom_version`. Pin the Architectury API, the Architectury
+plugin and Loom from the same generated or known-working project line. The table below names
 the Architectury versions that upstream builds with. It is not a full pin set,
 because the static helper cannot resolve whether a set of versions is compatible.
 

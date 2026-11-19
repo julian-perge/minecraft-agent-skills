@@ -124,8 +124,9 @@ The 1.21.11 biome and dimension examples are in
 
 ## 26.3 feature pattern
 
-This berry-bush example follows the 26.3 vanilla data. Keep older packs on
-their original schema; do not port them by changing metadata alone.
+This berry-bush example follows the 26.3 vanilla `berry_bush` feature and
+`patch_berry_common` placed feature. Keep older packs on their original schema;
+do not port them by changing metadata alone.
 
 At `data/<namespace>/worldgen/feature/my_plant.json`:
 
@@ -145,6 +146,10 @@ At `data/<namespace>/worldgen/placed_feature/my_plant.json`:
 {
   "feature": "<namespace>:my_plant",
   "placement": [
+    { "type": "minecraft:rarity_filter", "chance": 32 },
+    { "type": "minecraft:in_square" },
+    { "type": "minecraft:heightmap", "heightmap": "WORLD_SURFACE_WG" },
+    { "type": "minecraft:biome" },
     { "type": "minecraft:count", "count": 96 },
     {
       "type": "minecraft:offset",
@@ -165,6 +170,11 @@ At `data/<namespace>/worldgen/placed_feature/my_plant.json`:
   ]
 }
 ```
+
+The first four placements pick a random column in the chunk, move to the
+surface and keep the patch in biomes that list it. Vanilla's inner
+`patch_berry_bush` has only the last three placements, so do not add that
+form to a biome on its own.
 
 ---
 
