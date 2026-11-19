@@ -36,11 +36,18 @@ const checks = [
       /ForgeRegistries\.BLOCKS/,
       /RegistryObject<Block>/,
       /NetworkRegistry\.newSimpleChannel/,
+      /PacketDistributor\.PLAYER\.with\(\(\) -> serverPlayer\)/,
+      /tasks\.named\('processResources', ProcessResources\)/,
+      /filesMatching\(\['META-INF\/mods\.toml', 'pack\.mcmeta'\]\) \{\n\s+expand replaceProperties \+ \[project: project\]/,
+      /finalizedBy 'reobfJar'/,
       /modEventBus\.addListener\(ModDataGen::gatherData\)/,
       /class ModBlockStateProvider extends BlockStateProvider/,
       /class ModRecipeProvider extends RecipeProvider/,
       /class ModItemTagsProvider extends ItemTagsProvider/,
       /data\/<modid>\/loot_tables\/blocks\/<block>\.json/
+    ],
+    forbidden: [
+      /PacketDistributor\.PLAYER\.with\(serverPlayer\)/
     ]
   },
   {
