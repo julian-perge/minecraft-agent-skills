@@ -248,25 +248,33 @@ public record MyPayload(int value) implements CustomPacketPayload {
     public Type<? extends CustomPacketPayload> type() { return TYPE; }
 }
 
-// Register on MOD bus
+// Register on MOD bus, in common code: the server handler only
 @SubscribeEvent
 public static void registerPayloads(RegisterPayloadHandlersEvent event) {
     PayloadRegistrar registrar = event.registrar("1");
-    registrar.playToClient(MyPayload.TYPE, MyPayload.STREAM_CODEC,
-        (payload, ctx) -> {
-            // handle on client — ctx.enqueueWork() for thread safety
-            ctx.enqueueWork(() -> handleOnClient(payload));
-        });
-    registrar.playToServer(MyPayload.TYPE, MyPayload.STREAM_CODEC,
-        (payload, ctx) -> ctx.enqueueWork(() -> handleOnServer(payload, ctx.player())));
+    registrar.playBidirectional(MyPayload.TYPE, MyPayload.STREAM_CODEC,
+        (payload, ctx) -> handleOnServer(payload, ctx.player()));
+}
+
+// Register on MOD bus, in a client-only class: the client handler
+@SubscribeEvent
+public static void registerClientPayloads(RegisterClientPayloadHandlersEvent event) {
+    event.register(MyPayload.TYPE, (payload, ctx) -> handleOnClient(payload));
 }
 
 // Send from server to client
 PacketDistributor.sendToPlayer(serverPlayer, new MyPayload(42));
 
-// Send from client to server
-PacketDistributor.sendToServer(new MyPayload(42));
+// Send from client to server (client code only)
+ClientPacketDistributor.sendToServer(new MyPayload(42));
 ```
+
+`PayloadRegistrar` runs handlers on the main thread by default, so they do not
+need `ctx.enqueueWork`. Register a payload type once: use `playToClient` or
+`playToServer` for one direction and `playBidirectional` for both. The client
+handler goes in `RegisterClientPayloadHandlersEvent`, in a class that only the
+client loads, so a dedicated server never loads client classes.
+`ClientPacketDistributor` is in `net.neoforged.neoforge.client.network`.
 
 ---
 
