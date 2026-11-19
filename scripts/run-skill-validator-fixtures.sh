@@ -127,7 +127,10 @@ run_check_build() {
   local java_major="$3"
   local java_dir
   java_dir="$(fake_java_dir "$java_major")"
-  (cd "tests/fixtures/validators/check-build/$fixture" && PATH="$java_dir:$PATH" bash "$ROOT_DIR/.agents/skills/$skill/scripts/check-build.sh" --check-only)
+  local status=0
+  (cd "tests/fixtures/validators/check-build/$fixture" && PATH="$java_dir:$PATH" bash "$ROOT_DIR/.agents/skills/$skill/scripts/check-build.sh" --check-only) || status=$?
+  rm -rf "$java_dir"
+  return "$status"
 }
 
 ROOT_DIR="$(pwd)"
@@ -141,8 +144,12 @@ expect_pass_contains "check-build neoforge 1.21.1" "Checks done. --check-only sk
   run_check_build minecraft-neoforge neoforge-1.21.1 21
 expect_fail_contains "check-build neoforge rejects a fabric project" "This script checks NeoForge projects only" \
   run_check_build minecraft-neoforge fabric-26.3 25
+expect_pass_contains "check-build neoforge 26.2 warns" "Minecraft 26.2 is not a version this skill supports" \
+  run_check_build minecraft-neoforge neoforge-26.2 25
 expect_pass_contains "check-build forge 1.20.1" "Checks done. --check-only skips" \
   run_check_build minecraft-forge forge-1.20.1 17
+expect_fail_contains "check-build forge 1.20.1 needs Java 17" "Forge 1.20.1 requires Java 17+" \
+  run_check_build minecraft-forge forge-1.20.1 11
 
 expect_path "tests/fixtures/validators/datapack/valid"
 expect_path "tests/fixtures/validators/datapack/legacy-pack-metadata"
