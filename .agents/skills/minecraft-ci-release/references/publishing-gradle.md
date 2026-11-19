@@ -77,7 +77,9 @@ Minotaur 2.10.0 reads its `changelog` property, and CurseForgeGradle reads the
 
 ## Jar Classifier
 
-Set the loader classifier once, for both publishers:
+Give release artifacts loader-distinct classifiers when Fabric and NeoForge could
+otherwise produce the same basename. Set the loader classifier once, for both
+publishers:
 
 ```kotlin
 tasks.named<Jar>("jar") {
@@ -91,8 +93,6 @@ The current Gradle Plugin Portal release is `com.modrinth.minotaur` `2.10.0`. Fo
 Minecraft 26.1.2 or 26.3 Fabric project, upload the primary `jar` task. Minecraft
 26.1 and later is unobfuscated, so a 26.1.2 or 26.3 Fabric build should not assume
 `remapJar` exists.
-Give release artifacts loader-distinct classifiers when Fabric and NeoForge could
-otherwise produce the same basename.
 
 ```kotlin
 modrinth {
