@@ -1,6 +1,6 @@
 # Local shortcuts for checking and syncing the skills. `just` lists them, and `just <recipe>` runs one.
 #
-# CI does not call just. The workflows in .github/workflows run `npm run check` directly.
+# CI does not call just. The workflows in .github/workflows run `bun run check` directly.
 
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
@@ -74,7 +74,7 @@ bash-n:
 [group('edit')]
 sync: (run "sync:skills")
 
-# bun.lock is the lockfile for local work. CI still runs npm ci against package-lock.json, so a dependency change must update both files.
+# bun.lock is the only lockfile. CI installs from it with `bun install --frozen-lockfile` and runs `bun run check`.
 [doc('Install the dev dependencies from bun.lock')]
 [group('setup')]
 install: (require "bun")

@@ -13,8 +13,8 @@ This repository contains 15 Minecraft skills and a plugin for Codex and Claude C
 - The root `justfile` has one recipe for each `package.json` script, plus
   `bash-n`, `install` and `clean`. Run `just` to list them. The recipes use bun
   when it is on PATH and npm otherwise.
-- `bun.lock` is the local lockfile. CI still installs from `package-lock.json`
-  until #14, so a dependency change updates both lockfiles.
+- `bun.lock` is the only lockfile. CI installs from it with
+  `bun install --frozen-lockfile` and runs `bun run check`.
 
 ## Skill standards
 
