@@ -67,6 +67,17 @@ lint-md: (run "lint:md")
 bash-n:
     find .agents/skills scripts -name '*.sh' -print0 | xargs -0 -n1 bash -n
 
+[doc('Run the prek hooks in prek.toml on every file, and show the diff of any file they fix')]
+[group('lint')]
+lint: (require "prek")
+    prek run --all-files --show-diff-on-failure
+
+# A fixer hook exits 1 when it changes a file, so the second run fails only when a problem is left that no hook can fix.
+[doc('Run the prek hooks and keep the fixes they make')]
+[group('lint')]
+fmt: (require "prek")
+    prek run --all-files || prek run --all-files
+
 [doc('Copy .agents/skills into the .codex, .claude and plugin mirrors')]
 [group('edit')]
 sync: (run "sync:skills")

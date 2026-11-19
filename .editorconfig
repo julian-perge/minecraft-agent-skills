@@ -1,0 +1,24 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{json,yml,yaml,mjs,cjs,js,toml}]
+indent_style = space
+indent_size = 2
+
+# Two trailing spaces in Markdown are a line break.
+[*.md]
+trim_trailing_whitespace = false
+
+# The validator fixtures are broken on purpose, and vendor/ holds js-yaml exactly as it ships.
+[{tests/fixtures/**,**/vendor/**}]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+indent_style = unset
+indent_size = unset

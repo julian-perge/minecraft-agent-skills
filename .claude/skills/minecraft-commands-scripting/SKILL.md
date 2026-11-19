@@ -96,7 +96,7 @@ with MCRcon("localhost", os.environ["MCRCON_PASS"], port=25575) as mcr:
     response = mcr.command("list")
     print(response)
     # "There are 3 of a max of 20 players online: Steve, Alex, Notch"
-    
+
     players = response.split(": ")[1].split(", ") if ": " in response else []
     print(f"Online players: {players}")
 ```
