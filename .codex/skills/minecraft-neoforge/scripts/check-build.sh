@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 # Verifies the NeoForge mod build environment and runs the project's build task.
 # Run from the root of a NeoForge mod project.
+# Pass --check-only to run the checks and stop before ./gradlew build.
 
 set -euo pipefail
+
+CHECK_ONLY=false
+if [[ "${1:-}" == "--check-only" ]]; then
+    CHECK_ONLY=true
+fi
 
 PASS="[PASS]"
 FAIL="[FAIL]"
@@ -114,6 +120,12 @@ done
 [[ -f "build.gradle" || -f "build.gradle.kts" ]] && echo "$PASS build script found" || echo "$WARN build script not found"
 
 # Run Gradle build
+
+if [[ "$CHECK_ONLY" == true ]]; then
+    echo ""
+    echo "$PASS Checks done. --check-only skips ./gradlew build."
+    exit 0
+fi
 
 echo ""
 echo "Running ./gradlew build..."

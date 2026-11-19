@@ -111,6 +111,39 @@ expect_temp_skill_pass() {
 
 echo "=== Running Skill Validator Fixtures ==="
 
+# The check-build scripts read `java -version`, so each case puts a fake java first on PATH and the result does not depend on the machine's JDK.
+fake_java_dir() {
+  local major="$1"
+  local dir
+  dir="$(mktemp -d)"
+  printf '#!/usr/bin/env bash\necho "openjdk version \\"%s.0.1\\" 2026-10-21" >&2\n' "$major" >"$dir/java"
+  chmod +x "$dir/java"
+  echo "$dir"
+}
+
+run_check_build() {
+  local skill="$1"
+  local fixture="$2"
+  local java_major="$3"
+  local java_dir
+  java_dir="$(fake_java_dir "$java_major")"
+  (cd "tests/fixtures/validators/check-build/$fixture" && PATH="$java_dir:$PATH" bash "$ROOT_DIR/.agents/skills/$skill/scripts/check-build.sh" --check-only)
+}
+
+ROOT_DIR="$(pwd)"
+expect_pass_contains "check-build fabric 26.3" "Checks done. --check-only skips" \
+  run_check_build minecraft-fabric fabric-26.3 25
+expect_pass_contains "check-build fabric 26.2 warns" "Minecraft 26.2 is not a version this skill supports" \
+  run_check_build minecraft-fabric fabric-26.2 25
+expect_fail_contains "check-build fabric 26.3 needs Java 25" "Minecraft 26.1.2 and 26.3 require Java 25" \
+  run_check_build minecraft-fabric fabric-26.3 21
+expect_pass_contains "check-build neoforge 1.21.1" "Checks done. --check-only skips" \
+  run_check_build minecraft-neoforge neoforge-1.21.1 21
+expect_fail_contains "check-build neoforge rejects a fabric project" "This script checks NeoForge projects only" \
+  run_check_build minecraft-neoforge fabric-26.3 25
+expect_pass_contains "check-build forge 1.20.1" "Checks done. --check-only skips" \
+  run_check_build minecraft-forge forge-1.20.1 17
+
 expect_path "tests/fixtures/validators/datapack/valid"
 expect_path "tests/fixtures/validators/datapack/legacy-pack-metadata"
 expect_path "tests/fixtures/validators/datapack/legacy-function-paths"
