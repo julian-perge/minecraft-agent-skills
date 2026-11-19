@@ -20,12 +20,14 @@ mod_version=1.0.0
 minecraft_version=1.21.11
 enabled_platforms=fabric,neoforge
 
-architectury_version=<project pin>
+architectury_api_version=<project pin, only with the Architectury API>
 fabric_loader_version=<project pin>
 fabric_api_version=<project pin ending in +1.21.11>
 neoforge_version=<project pin in the 21.11.x family>
-loom_version=<project pin>
 ```
+
+The template pins the Architectury plugin and Loom in `build.gradle`, not in
+`gradle.properties`.
 
 The generated layout should keep `common/`, `fabric/`, and `neoforge/` as
 separate source sets. Put shared resources in `common/src/main/resources`; keep

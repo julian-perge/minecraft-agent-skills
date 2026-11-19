@@ -85,7 +85,8 @@ read_prop() {
 
 MINECRAFT_VERSION="$(read_prop minecraft_version)"
 ENABLED_PLATFORMS="$(read_prop enabled_platforms)"
-# The Architectury template generator writes architectury_api_version, and only when the project uses the Architectury API. Older projects use architectury_version.
+# The Architectury template generator writes architectury_api_version, and only
+# when the project uses the Architectury API. Older projects use architectury_version.
 ARCHITECTURY_VERSION="$(read_prop architectury_api_version)"
 if [[ -z "$ARCHITECTURY_VERSION" ]]; then
   ARCHITECTURY_VERSION="$(read_prop architectury_version)"
