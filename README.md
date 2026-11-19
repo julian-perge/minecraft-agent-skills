@@ -32,18 +32,12 @@ linked it into `.claude/skills/` and wrote `skills-lock.json`. Add
 `-a claude-code` to install for Claude Code only, and `-y` to skip the
 prompts.
 
-The `julian-perge/minecraft-agent-skills` source is `unverified`. The same
-commands with the path of a local clone install exactly one copy of each
-selected skill (tested with skills 1.9.0, Bun 1.4.4 and Node 26).
-
 ### 2. Claude Code marketplace
 
 ```bash
 claude plugin marketplace add julian-perge/minecraft-agent-skills
 claude plugin install minecraft-codex-skills@minecraft-agent-skills
 ```
-
-These commands are `unverified`.
 
 ### 3. Manual copy
 
