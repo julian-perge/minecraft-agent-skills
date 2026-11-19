@@ -157,7 +157,7 @@ execute store result block 0 64 0 SuccessCount int 1 run data get entity @p Heal
 execute store result storage mypack:data player_count int 1 run execute if entity @a
 
 # Store into entity NBT (the target must not be a player)
-execute as @e[type=minecraft:zombie,limit=1,sort=nearest] store result entity @s Air short 1 run data get entity @s Air
+execute as @e[type=minecraft:zombie,limit=1,sort=nearest] store result entity @s Air short 1 run scoreboard players get #air_value vars
 
 # Store into bossbar
 execute store result bossbar minecraft:health value run data get entity @s Health
