@@ -25,7 +25,8 @@ Usage: validate-resource-pack.sh [--root <path>] [--strict]
 Checks resource pack integrity:
 - JSON validity for assets/** and pack.mcmeta
 - model/blockstate/item-definition/font/sounds references point to existing files
-  (minecraft: models, textures, sounds and bitmap font textures come from the client)
+  (a reference with no namespace means minecraft:, and minecraft: models, textures,
+  sounds and bitmap font textures come from the client)
 - every .png.mcmeta has a matching .png
 USAGE
       exit 0
@@ -175,7 +176,7 @@ resolve_texture() {
     ns="${ref%%:*}"
     path="${ref#*:}"
   else
-    ns="$current_ns"
+    ns="minecraft"
     path="$ref"
   fi
 
@@ -201,7 +202,7 @@ resolve_model() {
     ns="${ref%%:*}"
     path="${ref#*:}"
   else
-    ns="$current_ns"
+    ns="minecraft"
     path="$ref"
   fi
 
@@ -235,7 +236,7 @@ resolve_sound() {
       ns="${ref%%:*}"
       event="${ref#*:}"
     else
-      ns="$current_ns"
+      ns="minecraft"
       event="$ref"
     fi
     if [[ "$ns" == "$current_ns" ]] && jq -r 'keys[]' "$sounds_file" 2>/dev/null | grep -Fqx "$event"; then
@@ -257,7 +258,7 @@ resolve_sound() {
     ns="${ref%%:*}"
     path="${ref#*:}"
   else
-    ns="$current_ns"
+    ns="minecraft"
     path="$ref"
   fi
 
@@ -367,7 +368,7 @@ while IFS= read -r -d '' font_file; do
       target_ns="${font_ref%%:*}"
       target_path="${font_ref#*:}"
     else
-      target_ns="$ns"
+      target_ns="minecraft"
       target_path="$font_ref"
     fi
 

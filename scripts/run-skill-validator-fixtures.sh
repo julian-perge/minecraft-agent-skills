@@ -286,6 +286,18 @@ expect_fail_contains "resource-pack missing ttf font" "missing font file: mypack
 expect_fail_contains "resource-pack missing minecraft ttf font" "missing font file: minecraft:missing.ttf" \
   ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
   --root tests/fixtures/validators/resource-pack/missing-minecraft-ttf-font
+expect_pass "resource-pack unprefixed vanilla references strict" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/default-namespace --strict
+expect_pass_contains "resource-pack unprefixed shipped minecraft texture" "texture exists: minecraft:item/shipped_texture" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/default-namespace
+expect_pass_contains "resource-pack unprefixed shipped minecraft sound" "sound exists: minecraft:custom/shipped_sound" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/default-namespace
+expect_pass_contains "resource-pack unprefixed shipped minecraft ttf font" "font file exists: minecraft:shipped.ttf" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/default-namespace
 
 expect_path "tests/fixtures/validators/ci-release/valid/SKILL.md"
 expect_path "tests/fixtures/validators/ci-release/invalid/SKILL.md"
@@ -735,6 +747,9 @@ expect_same_without_jq "resource-pack ttf font without jq" \
 expect_same_without_jq "resource-pack missing ttf font without jq" \
   ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
   --root tests/fixtures/validators/resource-pack/missing-ttf-font
+expect_same_without_jq "resource-pack unprefixed references without jq" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/default-namespace --strict
 expect_same_without_jq "worldgen valid without jq" \
   ./.agents/skills/minecraft-world-generation/scripts/validate-worldgen-json.sh \
   --root tests/fixtures/validators/worldgen/valid

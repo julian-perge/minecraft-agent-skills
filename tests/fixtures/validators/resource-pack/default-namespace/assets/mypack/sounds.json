@@ -1,0 +1,12 @@
+{
+  "ui.oink": {
+    "sounds": [
+      "mob/pig/say1",
+      {
+        "name": "entity.pig.ambient",
+        "type": "event"
+      },
+      "custom/shipped_sound"
+    ]
+  }
+}
