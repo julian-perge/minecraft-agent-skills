@@ -181,8 +181,9 @@ class so dedicated servers do not load rendering classes. See the
 
 For datagen, use `GatherDataEvent.Client` or `.Server` and
 `event.createProvider(...)`. The 1.21.11 MDK configures its `data` run with
-`clientData()`, so `runData` generates the providers registered from `.Client`. Keep the registry lookup, model
-provider, and recipe runner wiring from the
+`clientData()`, so `runData` generates the providers registered from
+`.Client`. Keep the registry lookup, model provider, and recipe runner wiring
+from the
 [1.21.11 resource guide](https://docs.neoforged.net/docs/1.21.11/resources/);
 older `ExistingFileHelper` constructors and `includeClient()` flags do not
 belong in this version.
