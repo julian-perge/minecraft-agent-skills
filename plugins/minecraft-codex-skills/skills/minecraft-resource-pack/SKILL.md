@@ -327,8 +327,7 @@ the geometry must render in the translucent pass despite its sprite pixels.
 An event's namespace comes from the namespace containing `sounds.json`; a
 sound entry's `name` identifies the sound-file namespace. A `name` with no
 namespace means `minecraft:`, not the namespace of the `sounds.json` file.
-Sound files are Vorbis
-`.ogg` under `assets/<namespace>/sounds/`. Read
+Sound files are Vorbis `.ogg` under `assets/<namespace>/sounds/`. Read
 [conditional assets](references/conditional-assets.md) for a correct event
 example, aliases, sound-source selection, and replacement behavior.
 
@@ -406,8 +405,9 @@ Use the bundled validator script before shipping a resource-pack update:
 A reference with no namespace means `minecraft:`, as in the game, not the
 namespace of the file that holds it. The client supplies `minecraft:` models,
 textures, sounds and bitmap font textures, so a `minecraft:` reference that the
-pack does not ship neither fails nor warns. Unbundled references to another namespace's models, textures, sounds,
-or fonts are warnings requiring runtime verification with the dependency present.
+pack does not ship neither fails nor warns. Unbundled references to another
+namespace's models, textures, sounds, or fonts are warnings requiring runtime
+verification with the dependency present.
 Missing files in the current namespace fail; strict mode also fails unresolved
 warnings.
 
