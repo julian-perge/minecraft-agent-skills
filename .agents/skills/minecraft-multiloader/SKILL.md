@@ -86,7 +86,9 @@ Minecraft 26.1.2 and 26.3 are unobfuscated. Their builds apply
 
 Run the sanity checker after editing `gradle.properties`. It is a static
 syntax-and-version-family preflight: it catches missing keys, snapshot pins,
-missing `fabric` / `neoforge` platforms, and obvious version-family drift. It
+missing `fabric` / `neoforge` platforms, a `minecraft_version` other than
+1.21.11, 26.1.2 or 26.3, and obvious version-family drift. The Loom
+`-SNAPSHOT` pins in the table above give a snapshot warning. It
 does not resolve dependencies, prove loader compatibility, or replace the
 project's Fabric and NeoForge build and smoke tests.
 

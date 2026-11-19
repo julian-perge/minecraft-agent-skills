@@ -53,7 +53,10 @@ const checks = [
   },
   {
     file: ".agents/skills/minecraft-multiloader/SKILL.md",
-    references: [".agents/skills/minecraft-multiloader/references/legacy-1.21.11-template.md"],
+    references: [
+      ".agents/skills/minecraft-multiloader/references/legacy-1.21.11-template.md",
+      ".agents/skills/minecraft-multiloader/references/architectury-reference.md"
+    ],
     required: [
       /mod_version=1\.0\.0/,
       /minecraft_version=1\.21\.11/,

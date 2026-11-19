@@ -41,6 +41,9 @@ Use this file together with `SKILL.md` when you need the quick alignment rules.
 For 1.21.11, 26.1.2 and 26.3, keep `enabled_platforms=fabric,neoforge`, avoid snapshot-only
 pins unless intentionally testing a prerelease, and use the split Architectury
 artifacts (`architectury`, `architectury-fabric`, and `architectury-neoforge`).
+The upstream branches pin the Architectury Loom plugin as a `-SNAPSHOT`
+version. The sanity checker warns on that pin, so `--strict` fails on a
+project that keeps it.
 
 ## Sanity Check Workflow
 
