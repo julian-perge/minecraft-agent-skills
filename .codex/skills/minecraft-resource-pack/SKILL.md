@@ -401,9 +401,12 @@ require-resource-pack=true
 
 Use the bundled validator script before shipping a resource-pack update:
 
-Unbundled references to another namespace's models, textures, sounds, or fonts
-are warnings requiring runtime verification with the dependency present. Missing
-files in the current namespace fail; strict mode also fails unresolved warnings.
+The client supplies `minecraft:` models, textures, sounds and bitmap font
+textures, so a `minecraft:` reference that the pack does not ship neither fails
+nor warns. Unbundled references to another namespace's models, textures, sounds,
+or fonts are warnings requiring runtime verification with the dependency present.
+Missing files in the current namespace fail; strict mode also fails unresolved
+warnings.
 
 ```bash
 # Run from the installed skill directory (for example `.claude/skills/minecraft-resource-pack`):
@@ -416,7 +419,8 @@ files in the current namespace fail; strict mode also fails unresolved warnings.
 What it checks:
 - JSON validity for `pack.mcmeta` and `assets/**/*.json`
 - Legacy versus modern `pack.mcmeta` field shape, including integer, `[major]`, and `[major, minor]` versions
-- Model/blockstate/font/sounds references resolve to real files
+- Model/blockstate/font/sounds references resolve to real files: bitmap font
+  files under `textures/`, `ttf` font files under `font/`
 - Current `custom_model_data` select cases use strings; 26.1 texture objects use a string `sprite` and optional boolean `force_translucent`
 - Same-namespace `type: "event"` sound aliases name an event in that `sounds.json`
 - Every `*.png.mcmeta` has a matching `*.png`

@@ -194,6 +194,13 @@ function collectCustomModelDataSelectCases(input) {
   return results;
 }
 
+function collectFontProviderFiles(input) {
+  if (!Array.isArray(input?.providers)) return [];
+  return input.providers
+    .filter((entry) => isObject(entry) && typeof entry.file === "string")
+    .map((entry) => `${present(entry.type) && entry.type !== false ? entry.type : "none"}\t${entry.file}`);
+}
+
 function evaluateFilter(input, filter) {
   switch (normalizeFilter(filter)) {
     case "empty":
@@ -254,8 +261,8 @@ function evaluateFilter(input, filter) {
       return collectSounds(input);
     case "..|objects|select(has(\"sounds\"))|.sounds[]?|iftype==\"string\"then[\"file\",.]else[(.type//\"file\"),(.name//empty)]end|@tsv":
       return collectSoundEntries(input);
-    case ".providers[]?|.file?//empty":
-      return Array.isArray(input?.providers) ? input.providers.map((entry) => entry?.file).filter(present) : [];
+    case ".providers[]?|select(.file?!=null)|[(.type//\"none\"),.file]|@tsv":
+      return collectFontProviderFiles(input);
     case "keys[]":
       return isObject(input) ? Object.keys(input) : [];
     case ".type?//empty":
