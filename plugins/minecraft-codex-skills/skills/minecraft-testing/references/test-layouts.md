@@ -22,7 +22,7 @@ Checklist:
 - `build.gradle(.kts)` declares compatible JUnit Jupiter and MockBukkit versions
 - `tasks.test { useJUnitPlatform() }` is enabled
 
-## Current Fabric 26.x
+## Fabric 1.21.11, 26.1.2 and 26.3
 
 Fabric Loom's recommended Game Test layout uses a separate source set.
 
@@ -49,7 +49,7 @@ tests in `src/gametest/resources/fabric.mod.json` under `fabric-gametest`, and
 client tests under `fabric-client-gametest`. The current Fabric API annotation
 is `net.fabricmc.fabric.api.gametest.v1.GameTest`.
 
-## Current NeoForge 26.x
+## NeoForge 1.21.11, 26.1.2 and 26.3
 
 ```text
 src/
@@ -76,9 +76,10 @@ Register custom test functions with a `DeferredRegister` for
 `BuiltInRegistries.TEST_FUNCTION` and attach it to the mod event bus. Use
 `RegisterGameTestsEvent` to register environments and instances in code.
 
-## Legacy NeoForge 1.21.3
+## NeoForge 1.21.1 (annotation API)
 
-Only use the annotation route for a clearly labelled 1.21.3 project.
+Only use the annotation route for a clearly labelled NeoForge 1.21.1 project.
+NeoForge 1.21.11, 26.1.2 and 26.3 do not have `@GameTestHolder`.
 
 ```text
 src/

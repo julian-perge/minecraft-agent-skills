@@ -145,12 +145,20 @@ const checks = [
   {
     file: ".agents/skills/minecraft-testing/SKILL.md",
     required: [
-      /mockbukkit-v26\.2:4\.116\.1/,
+      /paper-api:26\.3\.build\.\+/,
+      /mockbukkit-v26\.3:4\.122\.0/,
+      /mockbukkit-v26\.1\.2:4\.115\.0/,
+      /mockbukkit-v1\.21:4\.116\.3/,
+      /junit-jupiter:6\.1\.3/,
+      /NeoForge 1\.21\.1 Game Tests \(annotation API\)/,
       /data\/<namespace>\/structure\/<path>\.nbt/,
-      /25 for 26\.x, 21 for 1\.21\.x/
+      /25 for 26\.1\.2 and 26\.3, 21 for\n1\.21\.11 and NeoForge 1\.21\.1/
     ],
     forbidden: [
-      /data\/mymod\/structures\/empty\.nbt/
+      /data\/mymod\/structures\/empty\.nbt/,
+      /mockbukkit-v26\.2/,
+      /paper-api:26\.2/,
+      /1\.21\.3 only/
     ]
   },
   {

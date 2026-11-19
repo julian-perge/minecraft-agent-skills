@@ -426,7 +426,7 @@ expect_pass "testing neoforge valid" \
 expect_fail_contains "testing neoforge missing template" "GameTest template fixture missing: mymod:missing_template" \
   ./.agents/skills/minecraft-testing/scripts/validate-test-layout.sh \
   --root tests/fixtures/validators/testing/neoforge-missing-template
-expect_fail_contains "testing neoforge missing registration" "legacy NeoForge GameTest class needs @GameTestHolder or RegisterGameTestsEvent registration" \
+expect_fail_contains "testing neoforge missing registration" "NeoForge 1.21.1 annotation GameTest class needs @GameTestHolder or RegisterGameTestsEvent registration" \
   ./.agents/skills/minecraft-testing/scripts/validate-test-layout.sh \
   --root tests/fixtures/validators/testing/neoforge-missing-registration
 expect_pass "testing fabric valid" \
