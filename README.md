@@ -2,34 +2,73 @@
 
 15 skills for Minecraft mods, plugins, datapacks, art, and server administration.
 Supports Minecraft 26.x, with examples for 1.21.x and Forge 1.20.1.
-Use the skill folders directly or install the Codex or Claude Code plugin.
+Install the skills with the skills CLI, copy the skill folders, or install the
+Codex or Claude Code plugin.
 
 ## Install
 
 Install one copy of each skill for the host you use. Preserve unrelated local
-skills when a target already exists. Copy only the selected skill folders if
-you do not need the whole bundle; do not copy this repository's `AGENTS.md`
-into a Minecraft project.
+skills when a target already exists. Do not copy this repository's `AGENTS.md`
+into a Minecraft project. Pick one of the five paths below.
 
-| Host | Copy or install |
+The paths are alternatives. The skills CLI and the manual copy put skill
+folders in your project, and the plugin paths load the same skills again, so
+using both kinds can expose duplicate skills. `minecraft-imagegen` needs an
+image-generation tool supplied by the host or an already connected integration;
+installing this bundle or selecting a model does not add that tool.
+
+### 1. Skills CLI
+
+Run this in the root of your Minecraft project:
+
+```bash
+bunx skills add julian-perge/minecraft-agent-skills --skill minecraft-neoforge
+```
+
+Use `npx skills add` with the same arguments when bun is not installed. Use
+`--skill '*'` to install all 15 skills. The folders depend on the agents you
+select. In the tested run, the CLI copied each skill into `.agents/skills/`,
+linked it into `.claude/skills/` and wrote `skills-lock.json`. Add
+`-a claude-code` to install for Claude Code only, and `-y` to skip the
+prompts.
+
+The `julian-perge/minecraft-agent-skills` source is `unverified`. The same
+commands with the path of a local clone install exactly one copy of each
+selected skill (tested with skills 1.9.0, Bun 1.4.4 and Node 26).
+
+### 2. Claude Code marketplace
+
+```bash
+claude plugin marketplace add julian-perge/minecraft-agent-skills
+claude plugin install minecraft-codex-skills@minecraft-agent-skills
+```
+
+These commands are `unverified`.
+
+### 3. Manual copy
+
+Clone this repository, then copy the skill folders for your host. Copy only
+the skills you need if you do not want the whole bundle.
+
+| Host | Copy |
 | --- | --- |
 | Codex | `.agents/skills/` into the project's `.agents/skills/` |
 | Older Codex hosts | `.codex/skills/` only if that host uses the legacy location |
 | Claude Code | `.claude/skills/` into the project's `.claude/skills/` |
-| Plugin | `.agents/plugins/marketplace.json` and `plugins/minecraft-codex-skills/` |
 
-For a Codex plugin install, keep the marketplace file and plugin directory under
-the same project root, open the plugins surface, and install
-`minecraft-codex-skills`. For Claude Code, run:
+### 4. Codex plugin
+
+Copy `.agents/plugins/marketplace.json` and `plugins/minecraft-codex-skills/`
+under the same project root, open the plugins surface, and install
+`minecraft-codex-skills`.
+
+### 5. Claude Code plugin folder
+
+From a clone of this repository, run:
 
 ```bash
 claude --plugin-dir ./plugins/minecraft-codex-skills
 ```
-
-The raw folders and plugin are alternative installation methods. Loading both
-can expose duplicate skills. `minecraft-imagegen` needs an image-generation
-tool supplied by the host or an already connected integration; installing this
-bundle or selecting a model does not add that tool.
 
 <!-- markdownlint-disable MD033 -->
 <p align="center">
