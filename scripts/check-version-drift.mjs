@@ -304,23 +304,32 @@ const checks = [
     file: ".agents/skills/minecraft-fabric/references/fabric-api.md",
     required: [
       /minecraft_version=1\.21\.11/,
-      /loader_version=0\.19\.3/,
-      /fabric_version=0\.141\.4\+1\.21\.11/,
+      /loader_version=0\.20\.1/,
+      /loom_version=1\.19-SNAPSHOT/,
+      /net\.fabricmc\.fabric-loom-remap/,
+      /fabric_version=0\.141\.6\+1\.21\.11/,
       /yarn_mappings=1\.21\.11\+build\.6/,
-      /"fabric-api": ">=0\.141\.4\+1\.21\.11"/
+      /"fabricloader": ">=0\.20\.1"/,
+      /"fabric-api": ">=0\.141\.6\+1\.21\.11"/
     ],
     forbidden: [
       /0\.114\.0\+1\.21\.1/,
       /0\.116\.10\+1\.21\.1/,
       /loader_version=0\.17\.3/,
       /yarn_mappings=1\.21\.1\+build\.3/,
-      /"fabric-api": "\*"/
+      /"fabric-api": "\*"/,
+      /0\.19\.3/,
+      /0\.141\.4/,
+      /26\.x|1\.21\.x/
     ]
   },
   {
     file: ".agents/skills/minecraft-fabric/SKILL.md",
     required: [
-      /Fabric\*\* \| 26\.x current; 1\.21\.11 examples retained \| Java 25 current; Java 21 on 1\.21\.x \| Gradle \+ Fabric Loom/,
+      /Fabric\*\* \| 1\.21\.11, 26\.1\.2 and 26\.3 \| Java 25 for 26\.1\.2 and 26\.3, Java 21 for 1\.21\.11 \| Gradle \+ Fabric Loom 1\.19/,
+      /\| 1\.21\.11 \| 0\.20\.1 \| 0\.141\.6\+1\.21\.11 \| `net\.fabricmc\.fabric-loom-remap` 1\.19-SNAPSHOT \|/,
+      /\| 26\.1\.2 \| 0\.20\.1 \| 0\.155\.3\+26\.1\.2 \| `net\.fabricmc\.fabric-loom` 1\.19-SNAPSHOT \|/,
+      /\| 26\.3 \| 0\.20\.1 \| 0\.166\.2\+26\.3 \| `net\.fabricmc\.fabric-loom` 1\.19-SNAPSHOT \|/,
       /Fabric project signature/,
       /references\/fabric-api\.md/,
       /Identifier\.fromNamespaceAndPath/,
@@ -332,7 +341,10 @@ const checks = [
     forbidden: [
       /common-patterns\.md/,
       /neoforge-api\.md/,
-      /forge-1\.20\.1-api\.md/
+      /forge-1\.20\.1-api\.md/,
+      /0\.19\.3/,
+      /0\.141\.4/,
+      /26\.x|1\.21\.x/
     ]
   },
   {
@@ -342,11 +354,14 @@ const checks = [
       /parse_java_major/,
       /REQUIRED_JAVA=21/,
       /REQUIRED_JAVA=25/,
+      /Minecraft 1\.21\.11 requires Java 21/,
+      /Minecraft 26\.1\.2 and 26\.3 require Java 25/,
       /src\/main\/resources\/fabric\.mod\.json/
     ],
     forbidden: [
       /forge/i,
-      /architectury/i
+      /architectury/i,
+      /26\.x|1\.21\.x/
     ]
   },
   {

@@ -1,6 +1,6 @@
 ---
 name: minecraft-fabric
-description: "Create, modify, or debug Fabric mods for current Minecraft 26.x and legacy 1.21.x. Use for Fabric gameplay code, registries, events, mixins, assets and data generation; not for NeoForge or Forge projects. Use minecraft-multiloader when one codebase must target NeoForge and Fabric."
+description: "Create, modify, or debug Fabric mods for Minecraft 1.21.11, 26.1.2 and 26.3. Use for Fabric gameplay code, registries, events, mixins, assets and data generation; not for NeoForge or Forge projects. Use minecraft-multiloader when one codebase must target NeoForge and Fabric."
 ---
 
 # Minecraft Fabric Skill
@@ -11,17 +11,26 @@ Supported platform:
 
 | Platform | MC Version | Java | Build System |
 |---|---|---|---|
-| **Fabric** | 26.x current; 1.21.11 examples retained | Java 25 current; Java 21 on 1.21.x | Gradle + Fabric Loom |
+| **Fabric** | 1.21.11, 26.1.2 and 26.3 | Java 25 for 26.1.2 and 26.3, Java 21 for 1.21.11 | Gradle + Fabric Loom 1.19 |
 
 Always confirm the Minecraft version and the mappings from `gradle.properties`
 or `build.gradle` before you write mod code.
 
-Minecraft 26.1 introduced Java 25 and unobfuscated game executables. For 26.x
-projects, start from the current Fabric generator or example mod and preserve
-its build layout. Fabric 26.x uses the non-remapping Loom path and official
-names. Do not copy the 1.21.11 Yarn mappings, Loom plugin, remapping task or
-Java 21 snippets of this skill into a 26.x project. `references/fabric-api.md`
-covers legacy 1.21.11 examples only.
+Pins from the Fabric example mod branches `1.21.11`, `26.1.2` and `26.3`:
+
+| Minecraft | Fabric Loader | Fabric API | Loom plugin |
+|---|---|---|---|
+| 1.21.11 | 0.20.1 | 0.141.6+1.21.11 | `net.fabricmc.fabric-loom-remap` 1.19-SNAPSHOT |
+| 26.1.2 | 0.20.1 | 0.155.3+26.1.2 | `net.fabricmc.fabric-loom` 1.19-SNAPSHOT |
+| 26.3 | 0.20.1 | 0.166.2+26.3 | `net.fabricmc.fabric-loom` 1.19-SNAPSHOT |
+
+Minecraft 26.1 introduced Java 25 and unobfuscated game executables. For 26.1.2
+and 26.3 projects, start from the Fabric generator or the example mod branch
+for that version and preserve its build layout. Fabric on 26.1.2 and 26.3 uses
+the non-remapping `net.fabricmc.fabric-loom` plugin and official names. Do not
+copy the 1.21.11 Yarn mappings, `net.fabricmc.fabric-loom-remap` plugin,
+remapping task or Java 21 snippets of this skill into a 26.1.2 or 26.3 project.
+`references/fabric-api.md` covers 1.21.11 examples only.
 
 ### Routing Boundaries
 
@@ -108,7 +117,7 @@ src/
         lang/
           en_us.json           <- translation strings
       data/<modid>/
-        recipe/                <- crafting recipe JSON (26.x)
+        recipe/                <- crafting recipe JSON
         loot_table/
           blocks/              <- per-block loot table JSON
         tags/
@@ -137,8 +146,8 @@ Everything in Minecraft lives in a registry. Always register objects. Do not
 construct them at field initializer time outside a registry call. Use the
 registry constants for the project's mappings:
 
-| Type | Fabric 26.x official names | Fabric / Yarn mappings (1.21.11) |
-|------|----------------------------|----------------------------------|
+| Type | Fabric 26.1.2 and 26.3 official names | Fabric / Yarn mappings (1.21.11) |
+|------|---------------------------------------|----------------------------------|
 | Blocks | `BuiltInRegistries.BLOCK` | `Registries.BLOCK` |
 | Items | `BuiltInRegistries.ITEM` | `Registries.ITEM` |
 | Entity types | `BuiltInRegistries.ENTITY_TYPE` | `Registries.ENTITY_TYPE` |
@@ -147,7 +156,7 @@ registry constants for the project's mappings:
 | Sound events | `BuiltInRegistries.SOUND_EVENT` | `Registries.SOUND_EVENT` |
 | Biomes | `Registries.BIOME` registry keys | `RegistryKeys.BIOME` registry keys |
 
-Do not copy older `Registry.BLOCK` / `Registry.ITEM` constants into 1.21.x
+Do not copy older `Registry.BLOCK` / `Registry.ITEM` constants into 1.21.11
 code. Those names are stale for the examples in this skill.
 
 ### Identifier
@@ -155,10 +164,10 @@ code. Those names are stale for the examples in this skill.
 Every registry entry needs a namespaced ID:
 
 ```java
-// 26.x official names
+// 26.1.2 and 26.3 official names
 Identifier id = Identifier.fromNamespaceAndPath("mymod", "my_block");
 
-// Legacy Fabric with Yarn mappings
+// 1.21.11 with Yarn mappings
 Identifier id = Identifier.of("mymod", "my_block");
 ```
 
@@ -168,7 +177,7 @@ Identifier id = Identifier.of("mymod", "my_block");
 
 Match the project's Minecraft version and mappings in the
 [Fabric documentation](https://docs.fabricmc.net/develop/).
-`references/fabric-api.md` contains legacy 1.21.x / Java 21 patterns only.
+`references/fabric-api.md` contains 1.21.11 / Java 21 patterns only.
 
 ```java
 // Main mod class
@@ -185,8 +194,8 @@ public class MyMod implements ModInitializer {
 ```
 
 ```java
-// Fabric 26.x with official Mojang mappings. Create the key before the object
-// so its properties receive the required id during construction.
+// Fabric 26.1.2 and 26.3 with official Mojang mappings. Create the key before
+// the object so its properties receive the required id during construction.
 public final class ModBlocks {
     public static final ResourceKey<Block> MY_BLOCK_KEY = ResourceKey.create(
         Registries.BLOCK,
@@ -216,7 +225,7 @@ public final class ModBlocks {
 
 Call `ModBlocks.initialize()` from the Fabric initializer. The Yarn-named
 1.21.11 examples remain in `references/fabric-api.md`. Do not mix those names
-with this 26.x pattern.
+with this 26.1.2 and 26.3 pattern.
 
 ---
 
@@ -243,8 +252,8 @@ project's exact version before you wire providers.
 When adding a **new block**:
 
 - [ ] `Block` subclass (or use vanilla Block with properties)
-- [ ] Register the block in `BuiltInRegistries.BLOCK` (26.x) or `Registries.BLOCK` (Yarn)
-- [ ] Register its `BlockItem` in `BuiltInRegistries.ITEM` (26.x) or `Registries.ITEM` (Yarn)
+- [ ] Register the block in `BuiltInRegistries.BLOCK` (26.1.2 and 26.3) or `Registries.BLOCK` (Yarn)
+- [ ] Register its `BlockItem` in `BuiltInRegistries.ITEM` (26.1.2 and 26.3) or `Registries.ITEM` (Yarn)
 - [ ] Blockstate JSON -> `assets/<modid>/blockstates/<name>.json`
 - [ ] Block model JSON -> `assets/<modid>/models/block/<name>.json`
 - [ ] Item model JSON -> `assets/<modid>/models/item/<name>.json` (or inherits from block)
@@ -258,15 +267,15 @@ When adding a **new block**:
 When adding a **new item**:
 
 - [ ] `Item` subclass (or use `new Item(properties)`)
-- [ ] Register in `ModItems` with `BuiltInRegistries.ITEM` (26.x) or `Registries.ITEM` (Yarn)
+- [ ] Register in `ModItems` with `BuiltInRegistries.ITEM` (26.1.2 and 26.3) or `Registries.ITEM` (Yarn)
 - [ ] Item model JSON
 - [ ] 1.21.4+ item definition -> `assets/<modid>/items/<name>.json`
 - [ ] Texture PNG
 - [ ] Language entry
-- [ ] Creative tab entry with `CreativeModeTabEvents` (26.x) or
+- [ ] Creative tab entry with `CreativeModeTabEvents` (26.1.2 and 26.3) or
       `ItemGroupEvents` (1.21.11)
-- [ ] Recipe JSON if craftable (`data/<modid>/recipe/` for 26.x; check the
-      exact version's data format before you edit a 1.21.x project)
+- [ ] Recipe JSON if craftable (`data/<modid>/recipe/`; check the exact
+      version's recipe format before you edit it)
 
 When adding a **new entity**:
 
@@ -278,7 +287,7 @@ When adding a **new entity**:
 - [ ] Spawn egg item (optional)
 - [ ] Natural spawns with Fabric API `BiomeModifications.addSpawn`
 - [ ] Spawn placement on the `FabricEntityTypeBuilder.Mob` builder:
-      `spawnPlacement` on 26.x, `spawnRestriction` on 1.21.11
+      `spawnPlacement` on 26.1.2 and 26.3, `spawnRestriction` on 1.21.11
 
 ---
 
