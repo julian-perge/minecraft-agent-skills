@@ -1,8 +1,15 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
+import * as yaml from "js-yaml";
 
-const repoRoot = process.cwd();
+const args = process.argv.slice(2);
+const rootIndex = args.indexOf("--root");
+const repoRoot = rootIndex >= 0 ? path.resolve(args[rootIndex + 1]) : process.cwd();
+const descriptionsOnly = args.includes("--descriptions-only");
+
+// ADR-0002: a SKILL.md description names its exact Minecraft versions, so an agent never reads a loose range or a skipped version as supported.
+const LOOSE_DESCRIPTION_PATTERNS = [/\b26\.x\b/i, /\b1\.21\.x\b/i, /\bcurrent\b/i, /\blegacy\b/i, /\b26\.2\b/];
 
 const checks = [
   {
@@ -14,7 +21,7 @@ const checks = [
       /ForgeRegistries\.BLOCKS/,
       /FMLJavaModLoadingContext/,
       /Forge\*\* \| 1\.20\.1 legacy lane/,
-      /Loot table JSON -> 1\.21\.x: `data\/<modid>\/loot_table\/blocks\/<name>\.json`; Forge 1\.20\.1: `data\/<modid>\/loot_tables\/blocks\/<name>\.json`/
+      /Loot table JSON -> Minecraft 1\.21 and later: `data\/<modid>\/loot_table\/blocks\/<name>\.json`; Forge 1\.20\.1: `data\/<modid>\/loot_tables\/blocks\/<name>\.json`/
     ]
   },
   {
@@ -407,7 +414,21 @@ const checks = [
 
 let failures = 0;
 
-for (const check of checks) {
+const skillsDir = path.join(repoRoot, ".agents", "skills");
+for (const name of fs.readdirSync(skillsDir).sort()) {
+  const skillFile = path.join(skillsDir, name, "SKILL.md");
+  if (!fs.existsSync(skillFile)) continue;
+  const frontmatter = fs.readFileSync(skillFile, "utf8").match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? "";
+  const description = String(yaml.load(frontmatter)?.description ?? "");
+  for (const pattern of LOOSE_DESCRIPTION_PATTERNS) {
+    if (pattern.test(description)) {
+      console.error(`[FAIL] .agents/skills/${name}/SKILL.md description matches loose version pattern: ${pattern}`);
+      failures += 1;
+    }
+  }
+}
+
+for (const check of descriptionsOnly ? [] : checks) {
   const target = path.join(repoRoot, check.file);
   const text = [target, ...(check.references ?? []).map((file) => path.join(repoRoot, file))]
     .map((file) => fs.readFileSync(file, "utf8"))
