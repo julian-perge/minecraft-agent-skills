@@ -9,7 +9,7 @@ every surface if the user asked for a fast concept pass.
 Use this template when translating a loose request into a structured prompt:
 
 ```text
-Use case: <pack-icon | texture-concept | promo-art | server-banner | ui-mockup>
+Use case: <pack-icon | texture-concept | promo-art | server-banner | release-banner | thumbnail | ui-mockup>
 Asset target: <where the image will ship>
 Minecraft context: <vanilla-faithful | modded industrial | fantasy server | etc.>
 Primary subject: <main thing to show>
