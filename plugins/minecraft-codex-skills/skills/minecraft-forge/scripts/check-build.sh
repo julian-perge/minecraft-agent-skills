@@ -6,9 +6,15 @@
 set -euo pipefail
 
 CHECK_ONLY=false
-if [[ "${1:-}" == "--check-only" ]]; then
-    CHECK_ONLY=true
-fi
+for arg in "$@"; do
+    case "$arg" in
+        --check-only) CHECK_ONLY=true ;;
+        *)
+            echo "Usage: check-build.sh [--check-only]" >&2
+            exit 2
+            ;;
+    esac
+done
 
 PASS="[PASS]"
 FAIL="[FAIL]"

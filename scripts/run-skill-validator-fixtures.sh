@@ -3,6 +3,7 @@ set -euo pipefail
 
 PASS='[PASS]'
 FAIL='[FAIL]'
+ROOT_DIR="$(pwd)"
 
 expect_path() {
   local path="$1"
@@ -133,11 +134,14 @@ run_check_build() {
   return "$status"
 }
 
-ROOT_DIR="$(pwd)"
 expect_pass_contains "check-build fabric 26.3" "Checks done. --check-only skips" \
   run_check_build minecraft-fabric fabric-26.3 25
 expect_pass_contains "check-build fabric 26.2 warns" "Minecraft 26.2 is not a version this skill supports" \
   run_check_build minecraft-fabric fabric-26.2 25
+expect_pass_contains "check-build fabric 1.21.11" "Checks done. --check-only skips" \
+  run_check_build minecraft-fabric fabric-1.21.11 21
+expect_fail_contains "check-build rejects an unknown argument" "Usage: check-build.sh [--check-only]" \
+  bash .agents/skills/minecraft-fabric/scripts/check-build.sh --checkonly
 expect_fail_contains "check-build fabric 26.3 needs Java 25" "Minecraft 26.1.2 and 26.3 require Java 25" \
   run_check_build minecraft-fabric fabric-26.3 21
 expect_pass_contains "check-build neoforge 1.21.1" "Checks done. --check-only skips" \

@@ -59,6 +59,7 @@ Key files:
 
 `scripts/check-build.sh` checks the Fabric signature, the Java version for the
 project's Minecraft version and the key files, then runs `./gradlew build`.
+Pass `--check-only` to run the checks without the build.
 
 ---
 

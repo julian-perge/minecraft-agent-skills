@@ -49,7 +49,8 @@ Key files:
 - `@Mod` main class that accepts `FMLJavaModLoadingContext`
 
 `scripts/check-build.sh` checks the Forge signature, Java 17 and the key files,
-then runs `./gradlew build`.
+then runs `./gradlew build`. Pass `--check-only` to run the checks without the
+build.
 
 ---
 
