@@ -1,0 +1,9 @@
+{
+  "providers": [
+    {
+      "type": "ttf",
+      "file": "missing.ttf",
+      "size": 11
+    }
+  ]
+}

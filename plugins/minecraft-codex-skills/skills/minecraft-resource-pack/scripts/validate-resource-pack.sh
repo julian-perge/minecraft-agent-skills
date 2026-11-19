@@ -166,6 +166,17 @@ check_pack_metadata() {
   fail "pack.mcmeta must define legacy integer .pack.pack_format or both .pack.min_format and .pack.max_format"
 }
 
+# The game reads a reference with no namespace as minecraft:. When the pack ships the same path only in the file's own namespace, the author most likely left out the prefix, so this warns.
+hint_missing_prefix() {
+  local current_ns="$1"
+  local ref="$2"
+  local own_file="$3"
+  [[ "$ref" == *:* || "$current_ns" == "minecraft" ]] && return
+  if [[ -f "$own_file" ]]; then
+    warn "unprefixed reference $ref means minecraft:$ref; the pack ships $current_ns:$ref (add the $current_ns: prefix)"
+  fi
+}
+
 resolve_texture() {
   local current_ns="$1"
   local ref="$2"
@@ -184,6 +195,7 @@ resolve_texture() {
   if [[ -f "$target" ]]; then
     pass "texture exists: $ns:$path"
   elif [[ "$ns" == "minecraft" ]]; then
+    hint_missing_prefix "$current_ns" "$ref" "$ROOT/assets/$current_ns/textures/$path.png"
     return
   elif [[ "$ns" != "$current_ns" ]]; then
     warn "external texture not locally verifiable: $ns:$path"
@@ -207,6 +219,7 @@ resolve_model() {
   fi
 
   if [[ "$ns" == "minecraft" ]]; then
+    hint_missing_prefix "$current_ns" "$ref" "$ROOT/assets/$current_ns/models/$path.json"
     return
   fi
 
@@ -266,6 +279,7 @@ resolve_sound() {
   if [[ -f "$target" ]]; then
     pass "sound exists: $ns:$path"
   elif [[ "$ns" == "minecraft" ]]; then
+    hint_missing_prefix "$current_ns" "$ref" "$ROOT/assets/$current_ns/sounds/$path.ogg"
     return
   elif [[ "$ns" != "$current_ns" ]]; then
     warn "external sound not locally verifiable: $ns:$path"
@@ -382,7 +396,11 @@ while IFS= read -r -d '' font_file; do
     fi
     if [[ -f "$target" ]]; then
       pass "$font_kind exists: $target_ns:$target_path"
-    elif [[ "$target_ns" == "minecraft" && "$font_type" != "ttf" ]]; then
+    elif [[ "$target_ns" == "minecraft" && "$font_type" == "ttf" ]]; then
+      # Vanilla ships no .ttf file, so a missing minecraft: ttf font is always an error.
+      fail "missing $font_kind: $target_ns:$target_path (expected ${target#$ROOT/})"
+    elif [[ "$target_ns" == "minecraft" ]]; then
+      hint_missing_prefix "$ns" "$font_ref" "$ROOT/assets/$ns/textures/$target_path"
       continue
     elif [[ "$target_ns" != "$ns" ]]; then
       warn "external $font_kind not locally verifiable: $target_ns:$target_path"

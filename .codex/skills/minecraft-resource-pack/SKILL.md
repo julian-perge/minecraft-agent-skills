@@ -405,11 +405,13 @@ Use the bundled validator script before shipping a resource-pack update:
 A reference with no namespace means `minecraft:`, as in the game, not the
 namespace of the file that holds it. The client supplies `minecraft:` models,
 textures, sounds and bitmap font textures, so a `minecraft:` reference that the
-pack does not ship neither fails nor warns. Unbundled references to another
-namespace's models, textures, sounds, or fonts are warnings requiring runtime
-verification with the dependency present.
-Missing files in the current namespace fail; strict mode also fails unresolved
-warnings.
+pack does not ship neither fails nor warns. Vanilla ships no `.ttf` file, so a
+missing `minecraft:` ttf font fails. An unprefixed reference whose path the
+pack ships only in the file's own namespace warns, because the prefix is
+probably missing. Unbundled references to another namespace's models,
+textures, sounds, or fonts are warnings requiring runtime verification with the
+dependency present. Missing files that a reference names with the current
+namespace prefix fail; strict mode also fails unresolved warnings.
 
 ```bash
 # Run from the installed skill directory (for example `.claude/skills/minecraft-resource-pack`):

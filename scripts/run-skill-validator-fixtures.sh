@@ -286,6 +286,12 @@ expect_fail_contains "resource-pack missing ttf font" "missing font file: mypack
 expect_fail_contains "resource-pack missing minecraft ttf font" "missing font file: minecraft:missing.ttf" \
   ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
   --root tests/fixtures/validators/resource-pack/missing-minecraft-ttf-font
+expect_fail_contains "resource-pack missing unprefixed ttf font" "missing font file: minecraft:missing.ttf" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/missing-unprefixed-ttf-font
+expect_pass_contains "resource-pack missing prefix hint" "the pack ships mypack:item/my_item (add the mypack: prefix)" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/missing-prefix-hint
 expect_pass "resource-pack unprefixed vanilla references strict" \
   ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
   --root tests/fixtures/validators/resource-pack/default-namespace --strict
