@@ -187,12 +187,12 @@ append_legacy_neoforge_implicit_templates() {
       if [[ "$annotation" =~ template[[:space:]]*=[[:space:]]*\"([^\"]+)\" ]]; then
         template_name="${BASH_REMATCH[1]}"
       else
-        warn "legacy NeoForge GameTest has a non-literal template name; fixture path not verified: ${source_file#$ROOT/}"
+        warn "NeoForge 1.21.1 annotation GameTest has a non-literal template name; fixture path not verified: ${source_file#$ROOT/}"
         continue
       fi
     fi
     if [[ "$template_name" == *:* ]]; then
-      warn "legacy NeoForge GameTest template must be an un-namespaced name; configure its namespace with templateNamespace or @GameTestHolder: ${source_file#$ROOT/}"
+      warn "NeoForge 1.21.1 annotation GameTest template must be an un-namespaced name; configure its namespace with templateNamespace or @GameTestHolder: ${source_file#$ROOT/}"
       continue
     fi
 
@@ -201,11 +201,11 @@ append_legacy_neoforge_implicit_templates() {
       if [[ "$annotation" =~ templateNamespace[[:space:]]*=[[:space:]]*\"([^\"]+)\" ]]; then
         namespace="${BASH_REMATCH[1]}"
       else
-        warn "legacy NeoForge GameTest has a non-literal templateNamespace; fixture path not verified: ${source_file#$ROOT/}"
+        warn "NeoForge 1.21.1 annotation GameTest has a non-literal templateNamespace; fixture path not verified: ${source_file#$ROOT/}"
         continue
       fi
     elif [[ "$holder_present" -eq 1 && -z "$namespace" ]]; then
-      warn "legacy NeoForge GameTest has a non-literal @GameTestHolder value; fixture path not verified: ${source_file#$ROOT/}"
+      warn "NeoForge 1.21.1 annotation GameTest has a non-literal @GameTestHolder value; fixture path not verified: ${source_file#$ROOT/}"
       continue
     elif [[ -z "$namespace" ]]; then
       namespace='minecraft'
@@ -304,9 +304,10 @@ if [[ "${#SOURCE_SCAN_ROOTS[@]}" -gt 0 ]]; then
       GAME_TEST_FILES+=("$source_file")
       fqcn="$(extract_fqcn "$source_file" || true)"
       if [[ -n "$fqcn" ]]; then
-        # Only the 1.21.3 annotation API needs holder or event registration.
-        # Current data-driven NeoForge test-function classes also use
-        # GameTestHelper, but have no @GameTest annotation to register.
+        # Only the NeoForge 1.21.1 annotation API needs holder or event
+        # registration. Data-driven test-function classes for NeoForge 1.21.11,
+        # 26.1.2 and 26.3 also use GameTestHelper, but have no @GameTest
+        # annotation to register.
         if grep -E -q '@GameTest([[:space:]]|\(|$)' "$source_file" \
           && { grep -E -q 'net\.neoforged|@GameTestHolder|PrefixGameTestTemplate' "$source_file" \
             || { [[ -f "$ROOT/src/main/resources/META-INF/neoforge.mods.toml" ]] && ! grep -E -q 'FabricGameTest|fabric\.api\.gametest' "$source_file"; }; }; then
@@ -393,9 +394,9 @@ if [[ "$HAS_GAMETESTS" -eq 1 ]]; then
     for fqcn in "${NEOFORGE_EVENT_REGISTERED_CLASSES[@]}"; do
       class_name="${fqcn##*.}"
       if legacy_neoforge_event_registers_class "$ROOT" "$class_name"; then
-        pass "legacy NeoForge GameTest class has an event registration path: $fqcn"
+        pass "NeoForge 1.21.1 annotation GameTest class has an event registration path: $fqcn"
       else
-        fail "legacy NeoForge GameTest class needs @GameTestHolder or RegisterGameTestsEvent registration: $fqcn"
+        fail "NeoForge 1.21.1 annotation GameTest class needs @GameTestHolder or RegisterGameTestsEvent registration: $fqcn"
       fi
     done
   fi

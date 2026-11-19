@@ -1,6 +1,6 @@
 ---
 name: minecraft-testing
-description: "Design and implement automated tests for current Minecraft 26.x or legacy 1.21.x mods and plugins using JUnit, MockBukkit, NeoForge Game Tests, or Fabric Game Tests. Use for test code and test execution, not release publishing or gameplay implementation."
+description: "Design and implement automated tests for Minecraft 1.21.11, 26.1.2 and 26.3 mods and plugins, and NeoForge 1.21.1 mods, using JUnit, MockBukkit, NeoForge Game Tests, or Fabric Game Tests. Use for test code and test execution, not release publishing or gameplay implementation."
 ---
 
 # Minecraft Testing Skill
@@ -15,8 +15,8 @@ description: "Design and implement automated tests for current Minecraft 26.x or
 | **Fabric GameTests** | In-game block/entity/world interaction | Yes (test environment) |
 | **Integration server** | Full plugin/mod lifecycle | Yes (dedicated test server) |
 
-Use Java 25 for current 26.x projects. Keep legacy 1.21.x examples on Java 21
-and Forge 1.20.1 on Java 17. Do not combine source layouts or APIs across versions.
+Use Java 25 for 26.1.2 and 26.3, Java 21 for 1.21.11 and NeoForge 1.21.1, and
+Java 17 for Forge 1.20.1. Do not combine source layouts or APIs across versions.
 
 ### Routing Boundaries
 - `Use when`: the task is designing or implementing automated tests (unit, mock, gametest, CI test jobs) for Minecraft projects.
@@ -90,9 +90,18 @@ class CooldownManagerTest {
 
 ## MockBukkit (Paper/Bukkit Plugin Tests)
 
-The paired dependencies below are a retained 26.2 example. For 26.3, verify
-a published MockBukkit artifact for that exact Paper line before changing either
-dependency; a 26.2 mock does not establish 26.3 server behavior.
+MockBukkit publishes one artifact for each Paper line. Pair the Paper API with
+the MockBukkit artifact for the same Minecraft version:
+
+| Minecraft | Paper API | MockBukkit |
+|-----------|-----------|------------|
+| 26.3 | `io.papermc.paper:paper-api:26.3.build.+` | `org.mockbukkit.mockbukkit:mockbukkit-v26.3:4.122.0` |
+| 26.1.2 | `io.papermc.paper:paper-api:26.1.2.build.+` | `org.mockbukkit.mockbukkit:mockbukkit-v26.1.2:4.115.0` |
+| 1.21.11 | `io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT` | `org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.116.3` |
+
+MockBukkit declares the Paper API as `compileOnly`, so the test classpath also
+needs the Paper API. The example below targets 26.3. A mock for one Paper line
+does not prove server behavior on another line.
 
 ### `build.gradle.kts`
 ```kotlin
@@ -102,9 +111,10 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:26.2.build.+")
+    compileOnly("io.papermc.paper:paper-api:26.3.build.+")
+    testImplementation("io.papermc.paper:paper-api:26.3.build.+")
     testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
-    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v26.2:4.116.1")
+    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v26.3:4.122.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -300,7 +310,7 @@ void itemPdc_roundTripsCustomId() {
 
 ---
 
-## Current NeoForge Game Tests (26.x)
+## NeoForge Game Tests (1.21.11, 26.1.2 and 26.3)
 
 NeoForge 1.21.5 and later uses data-driven test environments and test instances,
 not the old `@GameTestHolder` method-registration API. Store resources under
@@ -321,7 +331,7 @@ registered function or a block-based test.
 ```
 
 Register the `Consumer<GameTestHelper>` with a `DeferredRegister` for the
-current `BuiltInRegistries.TEST_FUNCTION` registry, then attach that register to
+`BuiltInRegistries.TEST_FUNCTION` registry, then attach that register to
 the mod event bus. The function below makes the JSON reference above usable.
 Use `RegisterGameTestsEvent` only when registering environments and test
 instances in code instead of data files. Keep the referenced structure in
@@ -363,7 +373,7 @@ failed tests. This command is for a real project, not this skills repository.
 
 ---
 
-## Current Fabric Game Tests (26.x)
+## Fabric Game Tests (1.21.11, 26.1.2 and 26.3)
 
 Use Fabric Loom's dedicated Game Test source set. Configure it in the existing
 `fabricApi` block and keep its metadata and code under `src/gametest`, separate
@@ -428,9 +438,11 @@ and headless client CI.
 
 ---
 
-## Legacy NeoForge Game Tests (1.21.3 only)
+## NeoForge 1.21.1 Game Tests (annotation API)
 
-Keep annotation-based tests isolated to Minecraft 1.21.3. The class can
+Use annotation-based tests only in a NeoForge 1.21.1 project. NeoForge 1.21.5
+replaced this API with the data-driven system above, so 1.21.11, 26.1.2 and
+26.3 do not have `@GameTestHolder` or `@PrefixGameTestTemplate`. The class can
 be registered by either `@GameTestHolder(MOD_ID)` or a
 `RegisterGameTestsEvent` listener. Do not register a `@GameTestHolder` class
 again with `modEventBus.register(MyGameTests.class)`.
@@ -452,7 +464,7 @@ public final class ExampleGameTests {
 ```
 
 For `RegisterGameTestsEvent`, register the class on the mod event bus and set
-`templateNamespace = MOD_ID` on each `@GameTest`. Legacy templates are `.nbt`
+`templateNamespace = MOD_ID` on each `@GameTest`. Templates are `.nbt`
 files under `data/<namespace>/structure/`; `@PrefixGameTestTemplate(false)`
 controls whether the class name is added to the template path. When `template`
 is omitted, the path uses the lowercase method name and, unless that prefix is
@@ -465,7 +477,8 @@ path name only; configure its namespace through `templateNamespace` or
 ## CI
 
 Keep fast unit/mock tests separate from a loader's Game Test task, and select
-the Java version for each Minecraft version: 25 for 26.x, 21 for 1.21.x, and 17 for Forge 1.20.1.
+the Java version for each Minecraft version: 25 for 26.1.2 and 26.3, 21 for
+1.21.11 and NeoForge 1.21.1, and 17 for Forge 1.20.1.
 Upload test reports when a runtime-facing job fails. Do not assume a task name
 from another loader: Fabric server Game Tests run with `build`, while NeoForge
 uses `runGameTestServer`. MockBukkit does not prove Folia thread safety or real
@@ -478,6 +491,7 @@ server bootstrap.
 - MockBukkit GitHub: https://github.com/MockBukkit/MockBukkit
 - MockBukkit docs: https://docs.mockbukkit.org/
 - Fabric automated testing: https://docs.fabricmc.net/develop/automatic-testing
-- NeoForge 26.x Game Tests: https://docs.neoforged.net/docs/misc/gametest/
-- NeoForge 1.21.3 Game Tests: https://docs.neoforged.net/docs/1.21.3/misc/gametest/
+- NeoForge 26.1 Game Tests: https://docs.neoforged.net/docs/misc/gametest/
+- NeoForge 1.21.11 Game Tests: https://docs.neoforged.net/docs/1.21.11/misc/gametest/
+- NeoForge 1.21.1 Game Tests: https://docs.neoforged.net/docs/1.21.1/misc/gametest/
 - JUnit Jupiter user guide: https://junit.org/junit5/docs/current/user-guide/
