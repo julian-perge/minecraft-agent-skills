@@ -118,6 +118,10 @@ the distributable `remapJar`, select that task explicitly instead:
 uploadFile.set(tasks.named("remapJar"))
 ```
 
+On that project, also set the classifier on `remapJar` instead of `jar`, and
+pass `tasks.named("remapJar")` to the CurseForge `upload(...)` call, so both
+publishers ship the remapped jar.
+
 Confirm the task name and the produced file in that 1.21.11 project before changing
 the selection. NeoForge and multi-loader builds can have different platform tasks;
 configure each output independently. For a named NeoForge output, use its actual
