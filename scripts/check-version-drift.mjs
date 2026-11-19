@@ -152,7 +152,7 @@ const checks = [
       /junit-jupiter:6\.1\.3/,
       /NeoForge 1\.21\.1 Game Tests \(annotation API\)/,
       /data\/<namespace>\/structure\/<path>\.nbt/,
-      /25 for 26\.1\.2 and 26\.3, 21 for\n1\.21\.11 and NeoForge 1\.21\.1/
+      /25 for 26\.1\.2 and 26\.3, 21 for\s+1\.21\.11 and NeoForge 1\.21\.1/
     ],
     forbidden: [
       /data\/mymod\/structures\/empty\.nbt/,

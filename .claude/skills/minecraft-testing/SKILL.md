@@ -331,7 +331,7 @@ registered function or a block-based test.
 ```
 
 Register the `Consumer<GameTestHelper>` with a `DeferredRegister` for the
-current `BuiltInRegistries.TEST_FUNCTION` registry, then attach that register to
+`BuiltInRegistries.TEST_FUNCTION` registry, then attach that register to
 the mod event bus. The function below makes the JSON reference above usable.
 Use `RegisterGameTestsEvent` only when registering environments and test
 instances in code instead of data files. Keep the referenced structure in

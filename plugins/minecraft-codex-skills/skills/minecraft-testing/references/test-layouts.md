@@ -46,8 +46,8 @@ src/
 
 Configure `fabricApi.configureTests { createSourceSet = true }`. Register server
 tests in `src/gametest/resources/fabric.mod.json` under `fabric-gametest`, and
-client tests under `fabric-client-gametest`. The current Fabric API annotation
-is `net.fabricmc.fabric.api.gametest.v1.GameTest`.
+client tests under `fabric-client-gametest`. The Fabric API annotation is
+`net.fabricmc.fabric.api.gametest.v1.GameTest`.
 
 ## NeoForge 1.21.11, 26.1.2 and 26.3
 
