@@ -357,9 +357,12 @@ expect_fail_contains "plugin-dev invalid yaml" "plugin.yml is not valid YAML" \
 expect_fail_contains "plugin-dev invalid api-version range" "api-version is outside the 1.21.x and 26.x release lines" \
   ./.agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh \
   --root tests/fixtures/validators/plugin-dev/invalid-api-version
-expect_fail_contains "plugin-dev invalid api-version zero patch" "release must be a positive integer without leading zeroes" \
+expect_fail_contains "plugin-dev invalid api-version zero patch" "api-version patch must be a positive integer without leading zeroes: 1.21.0" \
   ./.agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh \
   --root tests/fixtures/validators/plugin-dev/invalid-api-version-zero-patch
+expect_fail_contains "plugin-dev invalid api-version zero release" "api-version release must be a positive integer without leading zeroes: 26.0" \
+  ./.agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh \
+  --root tests/fixtures/validators/plugin-dev/invalid-api-version-zero-release
 expect_fail_contains "plugin-dev invalid paper-plugin.yml" "paper-plugin.yml missing key: api-version" \
   ./.agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh \
   --root tests/fixtures/validators/plugin-dev/invalid-paper-plugin

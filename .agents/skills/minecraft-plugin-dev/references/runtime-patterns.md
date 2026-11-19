@@ -1,7 +1,9 @@
 # Runtime Patterns for Paper Plugins
 
 Use these examples when implementing runtime behavior for Paper/Bukkit plugins.
-All snippets target Paper API 1.21.11 on Java 21 unless noted.
+The snippets fit Paper API 1.21.11 (Java 21), 26.1.2 and 26.3 (Java 25). They
+were checked against the Paper sources on the `ver/1.21.11`, `ver/26.1.2` and
+`main` (26.3) branches. A note marks a call that differs between these versions.
 
 ## Schedulers
 
@@ -23,7 +25,7 @@ plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
 plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
     String data = fetchFromDatabase();
     plugin.getServer().getScheduler().runTask(plugin, () -> {
-        Bukkit.broadcastMessage(data);
+        Bukkit.broadcast(Component.text(data));
     });
 });
 ```
@@ -69,6 +71,26 @@ plugin.getServer().getAsyncScheduler().runNow(plugin, task -> {
     writeAuditLog();
 });
 ```
+
+Folia refuses to load a plugin that does not declare Folia support. Add
+`folia-supported: true` to the active descriptor, `plugin.yml` or
+`paper-plugin.yml`. Without it, the server logs `Could not load plugin '<name>' as it
+is not marked as supporting Folia!`. Paper ignores the key, so the same jar
+still loads on Paper. Declare it only when every scheduler call in the plugin uses
+the region-aware schedulers above.
+
+```yaml
+# plugin.yml or paper-plugin.yml
+name: MyPlugin
+version: "${version}"
+main: com.example.myplugin.MyPlugin
+api-version: '26.3'
+folia-supported: true
+```
+
+Source: the Folia patch "Require plugins to be explicitly marked as Folia
+supported" on the `ver/1.21.11`, `ver/26.1.x` and `ver/26.3.x` branches of
+PaperMC/Folia.
 
 Folia [disables `save-all`](https://docs.papermc.io/folia/faq/); use a clean stop
 or a verified platform snapshot for backups.
@@ -234,13 +256,25 @@ world.getChunkAtAsync(x, z).thenAccept(chunk -> {
 });
 ```
 
+Since 1.21.4, the `minecraft:custom_model_data` select property of an item model
+reads a string from the `custom_model_data` component. `ItemMeta.setCustomModelData(int)`
+writes only a float, so a string select never matches it. Set the string with the
+data component API.
+
 ```java
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.CustomModelData;
+
 ItemStack item = new ItemStack(Material.STICK);
-ItemMeta meta = item.getItemMeta();
-meta.setCustomModelData(1001);
-meta.displayName(Component.text("Magic Wand", NamedTextColor.LIGHT_PURPLE));
-item.setItemMeta(meta);
+item.setData(DataComponentTypes.CUSTOM_MODEL_DATA,
+    CustomModelData.customModelData().addString("magic_wand"));
+item.editMeta(meta -> meta.displayName(
+    Component.text("Magic Wand", NamedTextColor.LIGHT_PURPLE)));
 ```
+
+The resource pack matches it with `"when": "magic_wand"` in a select on
+`minecraft:custom_model_data` (index 0). `ItemStack.setData` is marked
+`@ApiStatus.Experimental` on Paper 1.21.11 and 26.1.2, and is stable on 26.3.
 
 ```java
 Bukkit.createProfile(UUID.fromString("00000000-0000-0000-0000-000000000000"))

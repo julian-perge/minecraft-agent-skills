@@ -353,8 +353,8 @@ route player, entity, region, global, and async work through the matching Folia-
 scheduler. Keep scheduling behind a small project-local interface when one plugin must
 support both Paper and Folia.
 
-See `references/runtime-patterns.md` for copy-ready sync, async, cancelable, and
-Folia-safe scheduler examples.
+See `references/runtime-patterns.md` for sync, async, cancelable, and Folia-safe
+scheduler examples, and for the `folia-supported: true` key that Folia requires.
 
 ---
 
