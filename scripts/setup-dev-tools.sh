@@ -76,8 +76,14 @@ if [[ -z "$node_major" || "$node_major" -lt 22 ]]; then
 fi
 
 bun_version="$(bun --version 2>/dev/null || echo 0.0.0)"
-IFS=. read -r bun_major bun_minor bun_patch <<<"${bun_version%%-*}"
-if (( bun_major < 1 || (bun_major == 1 && bun_minor < 4) || (bun_major == 1 && bun_minor == 4 && ${bun_patch:-0} < 4) )); then
+if [[ "${bun_version%%-*}" =~ ^([0-9]+)\.([0-9]+)(\.([0-9]+))?$ ]]; then
+  bun_major="${BASH_REMATCH[1]}"
+  bun_minor="${BASH_REMATCH[2]}"
+  bun_patch="${BASH_REMATCH[4]:-0}"
+else
+  bun_major=0 bun_minor=0 bun_patch=0
+fi
+if (( bun_major < 1 || (bun_major == 1 && bun_minor < 4) || (bun_major == 1 && bun_minor == 4 && bun_patch < 4) )); then
   echo "$FAIL bun 1.4.4+ is required, but found $bun_version"
   echo "$WARN Install bun 1.4.4 or later from https://bun.sh, then rerun."
   exit 1
