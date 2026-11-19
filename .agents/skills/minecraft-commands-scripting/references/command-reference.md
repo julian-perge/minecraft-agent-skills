@@ -156,8 +156,8 @@ execute store result block 0 64 0 SuccessCount int 1 run data get entity @p Heal
 # Store into storage
 execute store result storage mypack:data player_count int 1 run execute if entity @a
 
-# Store into entity NBT
-execute store result entity @s Air short 1 run data get entity @s Air
+# Store into entity NBT (the target must not be a player)
+execute as @e[type=minecraft:zombie,limit=1,sort=nearest] store result entity @s Air short 1 run scoreboard players get #air_value vars
 
 # Store into bossbar
 execute store result bossbar minecraft:health value run data get entity @s Health
@@ -264,13 +264,14 @@ data get storage mypack:data config.difficulty
 data get storage mypack:data player_list
 
 # Modify operations
-data modify entity @s Health set value 20.0f
-data modify entity @s CustomName set value {text:"Boss"}
+# Entity writes run as a non-player entity
+execute as @e[type=minecraft:zombie,limit=1,sort=nearest] run data modify entity @s Health set value 20.0f
+execute as @e[type=minecraft:zombie,limit=1,sort=nearest] run data modify entity @s CustomName set value {text:"Boss"}
 data modify storage mypack:tmp result set from entity @s Health
 data modify storage mypack:out names append from entity @e[type=!player,limit=1,sort=nearest] CustomName
 
 # Remove NBT
-data remove entity @s active_effects
+execute as @e[type=minecraft:zombie,limit=1,sort=nearest] run data remove entity @s active_effects
 data remove storage mypack:data temp
 ```
 
