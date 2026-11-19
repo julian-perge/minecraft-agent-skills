@@ -59,10 +59,10 @@ else
 fi
 
 REQUIRED_JAVA=21
-JAVA_REASON="Minecraft 1.20.5+ / 1.21.x requires Java 21"
+JAVA_REASON="Minecraft 1.21.11 requires Java 21"
 if [[ "$MINECRAFT_VERSION" =~ ^([0-9]+)\.([0-9]+) ]] && (( BASH_REMATCH[1] >= 26 )); then
     REQUIRED_JAVA=25
-    JAVA_REASON="Minecraft 26.x requires Java 25"
+    JAVA_REASON="Minecraft 26.1.2 and 26.3 require Java 25"
 fi
 
 # Java version

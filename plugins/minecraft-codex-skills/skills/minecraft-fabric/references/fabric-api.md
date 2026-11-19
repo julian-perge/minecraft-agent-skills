@@ -2,7 +2,7 @@
 
 Reference for Fabric-specific code patterns. Fabric is a lightweight, stable
 modding platform. These examples target Minecraft 1.21.11, Yarn mappings, and Java 21.
-Use the exact version's API documentation for 26.x or an earlier 1.21 release.
+For 26.1.2 and 26.3, use the Fabric documentation for that exact version.
 
 ---
 
@@ -61,8 +61,8 @@ public class MyModClient implements ClientModInitializer {
   },
   "mixins": ["mymod.mixins.json"],
   "depends": {
-    "fabricloader": ">=0.19.3",
-    "fabric-api": ">=0.141.4+1.21.11",
+    "fabricloader": ">=0.20.1",
+    "fabric-api": ">=0.141.6+1.21.11",
     "minecraft": "~1.21.11"
   }
 }
@@ -342,10 +342,13 @@ translated.
 org.gradle.jvmargs=-Xmx2G
 
 minecraft_version=1.21.11
-loader_version=0.19.3
-fabric_version=0.141.4+1.21.11
+loader_version=0.20.1
+loom_version=1.19-SNAPSHOT
+fabric_version=0.141.6+1.21.11
 yarn_mappings=1.21.11+build.6
 
+# build.gradle on 1.21.11 applies the remapping Loom plugin:
+# id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
 # Fabric-only examples in this file expect:
 # mappings("net.fabricmc:yarn:$yarn_mappings:v2")
 # Shared multiloader examples can use loom.officialMojangMappings() instead.
@@ -357,7 +360,7 @@ archives_base_name=mymod
 
 ---
 
-## Useful Fabric Classes (1.21.x Quick Reference)
+## Useful Fabric Classes (1.21.11 Quick Reference)
 
 |Need|Class|
 |---|---|
