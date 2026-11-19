@@ -78,13 +78,17 @@ claude --plugin-dir ./plugins/minecraft-codex-skills
 
 ## Optional MCP server
 
-The skills work without an MCP server, but their source, mapping and registry
-lookups are weaker. For stronger lookups, add
+The skills work without an MCP server. `minecraft-neoforge` uses one for
+source, mapping and registry lookups, and those lookups are weaker without it.
+For stronger lookups, add
 [`adhi-jp/minecraft-modding-mcp`](https://github.com/adhi-jp/minecraft-modding-mcp)
 (npm package `@adhisang/minecraft-modding-mcp`). It needs Node.js 22.13 or
-newer, and Java 17 or newer for its decompile and remap tools.
+newer, and Java 17 or newer for its decompile and remap tools. Its registry
+tools need the Java version of the target Minecraft release.
 
-For Claude Code, register it with one of these runners:
+For Claude Code, register it with one of these runners. They register the
+server for you in the current project only. Add `-s project` to write the
+project's `.mcp.json` instead.
 
 ```bash
 claude mcp add minecraft-modding -- bunx @adhisang/minecraft-modding-mcp
