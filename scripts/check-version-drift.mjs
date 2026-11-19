@@ -38,7 +38,7 @@ const checks = [
       /NetworkRegistry\.newSimpleChannel/,
       /PacketDistributor\.PLAYER\.with\(\(\) -> serverPlayer\)/,
       /tasks\.named\('processResources', ProcessResources\)/,
-      /filesMatching\(\['META-INF\/mods\.toml', 'pack\.mcmeta'\]\) \{\n\s+expand replaceProperties \+ \[project: project\]/,
+      /filesMatching\(\['META-INF\/mods\.toml', 'pack\.mcmeta'\]\) \{\r?\n\s+expand replaceProperties \+ \[project: project\]/,
       /finalizedBy 'reobfJar'/,
       /modEventBus\.addListener\(ModDataGen::gatherData\)/,
       /class ModBlockStateProvider extends BlockStateProvider/,
