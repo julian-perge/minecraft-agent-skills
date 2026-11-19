@@ -35,6 +35,7 @@ const checks = [
       /implementation minecraft\.dependency\("net\.minecraftforge:forge:/,
       /renamer\.classes\(tasks\.named\('jar', Jar\)\)/,
       /gradle-9\.8\.2-bin\.zip/,
+      /## ForgeGradle 6 projects/,
       /java\.toolchain\.languageVersion = JavaLanguageVersion\.of\(17\)/,
       /src\/main\/resources\/META-INF\/mods\.toml/,
       /FMLJavaModLoadingContext context/,
@@ -54,7 +55,8 @@ const checks = [
     forbidden: [
       /PacketDistributor\.PLAYER\.with\(serverPlayer\)/,
       /expand replaceProperties \+ \[project: project\]/,
-      /^\s+minecraft "net\.minecraftforge:forge:/m
+      /^\s+minecraft ['"]net\.minecraftforge:forge:/m,
+      /^\s+finalizedBy 'reobfJar'/m
     ]
   },
   {

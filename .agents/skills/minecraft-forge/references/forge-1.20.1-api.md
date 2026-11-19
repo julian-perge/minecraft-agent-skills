@@ -61,9 +61,7 @@ mod_description=A Forge 1.20.1 mod.
 
 Use the current Forge 1.20.1 `47.4.x` patch from the Forge files page when
 scaffolding a new project. Keep `minecraft_version` and the left side of the
-Forge artifact coordinate paired as `1.20.1-${forge_version}`. On 2026-11-19
-the files page lists `47.4.29` as the latest 1.20.1 build and `47.4.28` as
-the recommended one.
+Forge artifact coordinate paired as `1.20.1-${forge_version}`.
 
 The MDK download for Forge `47.4.29` and later uses ForgeGradle 7 and the
 `net.minecraftforge.renamer` plugin. This reference covers that build. The

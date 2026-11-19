@@ -33,7 +33,8 @@ This repository contains 15 Minecraft skills and a plugin for Codex and Claude C
 
 - Support Minecraft 1.21.11 on Java 21, and 26.1.2 and 26.3 on Java 25. Target
   26.3 for new work. 26.2 is skipped. `minecraft-neoforge` also supports
-  1.21.1. Keep Forge 1.20.1 on Java 17 with ForgeGradle 7. Name these exact
+  1.21.1. Target ForgeGradle 7 for Forge 1.20.1 on Java 17. Keep a
+  project's ForgeGradle 6 build unless the user asks to move it. Name these exact
   versions in skills and docs, not "26.x" or "1.21.x", unless the text means
   every release of that line and says so. See
   `docs/adr/0002-supported-minecraft-versions.md`.

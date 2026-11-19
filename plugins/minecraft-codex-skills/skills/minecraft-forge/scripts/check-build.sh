@@ -138,11 +138,11 @@ echo ""
 echo "Running ./gradlew build..."
 ./gradlew build --console=plain
 
-JAR_COUNT=$(find . -type f -path "*/build/libs/*.jar" ! -name "*-sources.jar" ! -name "*-dev.jar" 2>/dev/null | wc -l)
+JAR_COUNT=$(find . -type f -path "*/build/libs/*.jar" ! -name "*-sources.jar" ! -name "*-dev.jar" ! -name "*-unobfuscated.jar" 2>/dev/null | wc -l)
 if [[ "$JAR_COUNT" -gt 0 ]]; then
     echo ""
     echo "$PASS Gradle build completed. Candidate output jar(s):"
-    find . -type f -path "*/build/libs/*.jar" ! -name "*-sources.jar" ! -name "*-dev.jar" | while read -r jar; do
+    find . -type f -path "*/build/libs/*.jar" ! -name "*-sources.jar" ! -name "*-dev.jar" ! -name "*-unobfuscated.jar" | while read -r jar; do
         echo "  -> $jar"
     done
 else
