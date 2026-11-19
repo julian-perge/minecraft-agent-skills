@@ -24,8 +24,8 @@ install_with_brew() {
 }
 
 if ! need_cmd node || ! need_cmd bun; then
-  echo "$FAIL Node 22+ and bun are required but were not found on PATH."
-  echo "$WARN Install Node 22+ with nvm, fnm, Volta, Homebrew, or NodeSource, install bun from https://bun.sh, then rerun."
+  echo "$FAIL Node 22+ and bun 1.4.4+ are required but were not found on PATH."
+  echo "$WARN Install Node 22+ with nvm, fnm, Volta, Homebrew, or NodeSource, install bun 1.4.4 or later from https://bun.sh, then rerun."
   exit 1
 fi
 

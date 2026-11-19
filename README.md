@@ -187,7 +187,7 @@ Reviewed against Minecraft 26.3 / Java 25 on October 29, 2026. See the
 
 ## Maintaining the bundle
 
-Use Node 22 or newer, Bun and Bash (Git Bash works on Windows). Edit
+Use Node 22 or newer, Bun 1.4.4 or newer, and Bash (Git Bash works on Windows). Edit
 `.agents/skills/`, then run:
 
 ```bash
