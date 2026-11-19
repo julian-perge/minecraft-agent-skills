@@ -133,6 +133,8 @@ jobs:
           java-version: "25"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
       - name: Run tests
         run: ./gradlew test --no-daemon
 ```
@@ -189,8 +191,15 @@ jobs:
           mkdir -p release-artifacts
           shopt -s nullglob
           select_primary() {
-            local loader="$1"; shift
-            local matches=( "$@" )
+            local loader="$1"
+            local matches=()
+            local jar
+            for jar in "$loader"/build/libs/*-"$loader"-*.jar; do
+              case "$jar" in
+                *-dev.jar|*-dev-shadow.jar|*-sources.jar) ;;
+                *) matches+=( "$jar" ) ;;
+              esac
+            done
             if (( ${#matches[@]} != 1 )); then
               printf 'Expected one %s primary JAR, found %s: %s\n' \
                 "$loader" "${#matches[@]}" "${matches[*]:-none}" >&2
@@ -198,8 +207,8 @@ jobs:
             fi
             cp "${matches[0]}" "release-artifacts/${loader}-${RELEASE_TAG}.jar"
           }
-          select_primary fabric fabric/build/libs/*-fabric.jar
-          select_primary neoforge neoforge/build/libs/*-neoforge.jar
+          select_primary fabric
+          select_primary neoforge
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64
@@ -213,8 +222,12 @@ jobs:
 ```
 
 This workflow creates a GitHub Release only. It expects one primary Fabric JAR and
-one primary NeoForge JAR with loader-distinct names. Configure those classifiers in
-the project build, then change both patterns together if its naming convention differs.
+one primary NeoForge JAR with loader-distinct names. The Architectury multiloader
+template sets `base.archivesName` to `<archives_name>-<platform>` and gives the
+shipped jar no classifier, so the Fabric jar is `fabric/build/libs/<archives_name>-fabric-<version>.jar`.
+The other jars in that folder end in `-dev.jar`, `-dev-shadow.jar` or `-sources.jar`,
+and the selection step skips them. If the project names its jars differently, change
+the glob and the skipped suffixes together.
 The selection step fails for zero or multiple matches and copies to distinct release
 names, preventing accidental overwrite or a partial release. Add a project-specific
 publisher after version validation only when that destination is in scope.
@@ -259,6 +272,7 @@ jobs:
           java-version: "25"
           distribution: "temurin"
       - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb
+      - run: chmod +x gradlew
       - run: ./gradlew test --no-daemon
 ```
 
