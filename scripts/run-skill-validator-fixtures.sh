@@ -271,6 +271,21 @@ expect_fail_contains "resource-pack invalid pack version" "pack.mcmeta pack.min_
 expect_fail_contains "resource-pack invalid item model" "missing model" \
   ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
   --root tests/fixtures/validators/resource-pack/invalid-item-model
+expect_pass "resource-pack vanilla override strict" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/vanilla-override --strict
+expect_pass_contains "resource-pack shipped minecraft texture" "texture exists: minecraft:block/shipped_cube" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/vanilla-override
+expect_pass_contains "resource-pack ttf font strict" "font file exists: mypack:custom.ttf" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/valid-ttf-font --strict
+expect_fail_contains "resource-pack missing ttf font" "missing font file: mypack:missing.ttf (expected assets/mypack/font/missing.ttf)" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/missing-ttf-font
+expect_fail_contains "resource-pack missing minecraft ttf font" "missing font file: minecraft:missing.ttf" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/missing-minecraft-ttf-font
 
 expect_path "tests/fixtures/validators/ci-release/valid/SKILL.md"
 expect_path "tests/fixtures/validators/ci-release/invalid/SKILL.md"
@@ -711,6 +726,15 @@ expect_same_without_jq "resource-pack valid without jq" \
 expect_same_without_jq "resource-pack invalid without jq" \
   ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
   --root tests/fixtures/validators/resource-pack/invalid
+expect_same_without_jq "resource-pack vanilla override without jq" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/vanilla-override --strict
+expect_same_without_jq "resource-pack ttf font without jq" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/valid-ttf-font --strict
+expect_same_without_jq "resource-pack missing ttf font without jq" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/missing-ttf-font
 expect_same_without_jq "worldgen valid without jq" \
   ./.agents/skills/minecraft-world-generation/scripts/validate-worldgen-json.sh \
   --root tests/fixtures/validators/worldgen/valid

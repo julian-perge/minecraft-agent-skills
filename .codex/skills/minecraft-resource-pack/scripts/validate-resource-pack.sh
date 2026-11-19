@@ -25,6 +25,7 @@ Usage: validate-resource-pack.sh [--root <path>] [--strict]
 Checks resource pack integrity:
 - JSON validity for assets/** and pack.mcmeta
 - model/blockstate/item-definition/font/sounds references point to existing files
+  (minecraft: models, textures, sounds and bitmap font textures come from the client)
 - every .png.mcmeta has a matching .png
 USAGE
       exit 0
@@ -181,6 +182,8 @@ resolve_texture() {
   target="$ROOT/assets/$ns/textures/$path.png"
   if [[ -f "$target" ]]; then
     pass "texture exists: $ns:$path"
+  elif [[ "$ns" == "minecraft" ]]; then
+    return
   elif [[ "$ns" != "$current_ns" ]]; then
     warn "external texture not locally verifiable: $ns:$path"
   else
@@ -235,10 +238,12 @@ resolve_sound() {
       ns="$current_ns"
       event="$ref"
     fi
-    if [[ "$ns" != "$current_ns" ]]; then
-      warn "external sound event not locally verifiable: $ns:$event"
-    elif jq -r 'keys[]' "$sounds_file" 2>/dev/null | grep -Fqx "$event"; then
+    if [[ "$ns" == "$current_ns" ]] && jq -r 'keys[]' "$sounds_file" 2>/dev/null | grep -Fqx "$event"; then
       pass "sound event alias exists: $ns:$event"
+    elif [[ "$ns" == "minecraft" ]]; then
+      return
+    elif [[ "$ns" != "$current_ns" ]]; then
+      warn "external sound event not locally verifiable: $ns:$event"
     else
       fail "missing sound event alias target: $ns:$event"
     fi
@@ -259,6 +264,8 @@ resolve_sound() {
   target="$ROOT/assets/$ns/sounds/$path.ogg"
   if [[ -f "$target" ]]; then
     pass "sound exists: $ns:$path"
+  elif [[ "$ns" == "minecraft" ]]; then
+    return
   elif [[ "$ns" != "$current_ns" ]]; then
     warn "external sound not locally verifiable: $ns:$path"
   else
@@ -352,7 +359,8 @@ echo "Checking font provider file references..."
 while IFS= read -r -d '' font_file; do
   rel="${font_file#"$ROOT/assets/"}"
   ns="${rel%%/*}"
-  while IFS= read -r font_ref; do
+  while IFS=$'\t' read -r font_type font_ref; do
+    font_type="$(strip_cr "$font_type")"
     font_ref="$(strip_cr "$font_ref")"
     [[ -z "$font_ref" ]] && continue
     if [[ "$font_ref" == *:* ]]; then
@@ -363,15 +371,24 @@ while IFS= read -r -d '' font_file; do
       target_path="$font_ref"
     fi
 
-    target="$ROOT/assets/$target_ns/textures/$target_path"
-    if [[ -f "$target" ]]; then
-      pass "font texture exists: $target_ns:$target_path"
-    elif [[ "$target_ns" != "$ns" ]]; then
-      warn "external font texture not locally verifiable: $target_ns:$target_path"
+    # A ttf provider loads its file from font/, and a bitmap provider loads its file from textures/.
+    if [[ "$font_type" == "ttf" ]]; then
+      font_kind='font file'
+      target="$ROOT/assets/$target_ns/font/$target_path"
     else
-      fail "missing font texture: $target_ns:$target_path (expected ${target#$ROOT/})"
+      font_kind='font texture'
+      target="$ROOT/assets/$target_ns/textures/$target_path"
     fi
-  done < <(jq -r '.providers[]? | .file? // empty' "$font_file")
+    if [[ -f "$target" ]]; then
+      pass "$font_kind exists: $target_ns:$target_path"
+    elif [[ "$target_ns" == "minecraft" && "$font_type" != "ttf" ]]; then
+      continue
+    elif [[ "$target_ns" != "$ns" ]]; then
+      warn "external $font_kind not locally verifiable: $target_ns:$target_path"
+    else
+      fail "missing $font_kind: $target_ns:$target_path (expected ${target#$ROOT/})"
+    fi
+  done < <(jq -r '.providers[]? | select(.file? != null) | [(.type // "none"), .file] | @tsv' "$font_file")
 done < <(find "$ROOT/assets" -type f -path '*/font/*.json' -print0 2>/dev/null)
 
 echo "Checking .png.mcmeta pairs..."

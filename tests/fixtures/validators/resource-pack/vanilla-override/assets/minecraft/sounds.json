@@ -1,0 +1,11 @@
+{
+  "entity.pig.ambient": {
+    "sounds": [
+      "mob/pig/say1",
+      {
+        "name": "minecraft:entity.cow.ambient",
+        "type": "event"
+      }
+    ]
+  }
+}
