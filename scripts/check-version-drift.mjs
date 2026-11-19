@@ -209,7 +209,9 @@ const checks = [
     ],
     forbidden: [
       /neo_version=21\.1\.172/,
-      /(^|\r?\n)minecraft_version=1\.21\.1(\r?\n|$)/
+      /(^|\r?\n)minecraft_version=1\.21\.1(\r?\n|$)/,
+      /\b26\.x\b/,
+      /\b1\.21\.x\b/
     ]
   },
   {
@@ -232,6 +234,8 @@ const checks = [
     file: ".agents/skills/minecraft-neoforge/SKILL.md",
     required: [
       /1\.21\.1, 1\.21\.11, 26\.1\.2 and 26\.3/,
+      /^\| \*\*NeoForge\*\* \| 1\.21\.1, 1\.21\.11, 26\.1\.2 and 26\.3 \| Java 25 for 26\.1\.2 and 26\.3, Java 21 for 1\.21\.1 and 1\.21\.11 \|/m,
+      /\.\/gradlew runData/,
       /NeoForge project signature/,
       /references\/neoforge-api\.md/,
       /references\/common-patterns\.md/,
@@ -264,7 +268,10 @@ const checks = [
       /~\/\.agents/,
       /neoforge-mod-workflow/,
       /referencing-local-repos/,
-      /^(?!.*MCP).*minecraft-modding/m
+      /^(?!.*MCP).*minecraft-modding/m,
+      /\b26\.x\b/,
+      /\b1\.21\.x\b/,
+      /[Cc]urrent NeoForge/
     ]
   },
   {
@@ -297,7 +304,9 @@ const checks = [
     forbidden: [
       /(?<!neo)forge/i,
       /fabric/i,
-      /architectury/i
+      /architectury/i,
+      /\b26\.x\b/,
+      /\b1\.21\.x\b/
     ]
   },
   {

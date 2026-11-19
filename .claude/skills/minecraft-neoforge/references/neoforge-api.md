@@ -1,7 +1,8 @@
 # NeoForge API Patterns (1.21.11)
 
-Legacy NeoForge-specific code patterns for Minecraft 1.21.11 with Java 21.
-Use the exact project's versioned documentation for current 26.x / Java 25 work.
+NeoForge-specific code patterns for Minecraft 1.21.11 with Java 21.
+For 26.1.2 and 26.3 (Java 25), use the NeoForge documentation for the project's
+exact version.
 
 ---
 
@@ -47,7 +48,7 @@ public class MyMod {
 ## neoforge.mods.toml (META-INF/neoforge.mods.toml)
 
 > File renamed from `mods.toml` to `neoforge.mods.toml` in NeoForge 1.20.5+.
-> Always use `neoforge.mods.toml` for 1.21.x projects.
+> The 1.21.1, 1.21.11, 26.1.2 and 26.3 MDKs all use `neoforge.mods.toml`.
 
 ```toml
 modLoader="javafml"
@@ -125,8 +126,8 @@ public class ModItems {
 }
 ```
 
-For 26.x tool and armor APIs, use the explicitly versioned patterns in
-`common-patterns.md`; this reference otherwise retains 1.21.x examples.
+For 26.1.2 and 26.3 tool and armor APIs, use the patterns labelled 26.1.2 and
+26.3 in `common-patterns.md`. This reference otherwise keeps 1.21.11 examples.
 
 ---
 
@@ -179,9 +180,10 @@ class so dedicated servers do not load rendering classes. See the
 [versioned event guide](https://docs.neoforged.net/docs/1.21.11/concepts/events/).
 
 For datagen, use `GatherDataEvent.Client` or `.Server` and
-`event.createProvider(...)`. The current MDK registers both kinds of providers
-from `.Client` and runs `runClientData`. Keep the registry lookup, model
-provider, and recipe runner wiring from the
+`event.createProvider(...)`. The 1.21.11 MDK configures its `data` run with
+`clientData()`, so `runData` generates the providers registered from
+`.Client`. Keep the registry lookup, model provider, and recipe runner wiring
+from the
 [1.21.11 resource guide](https://docs.neoforged.net/docs/1.21.11/resources/);
 older `ExistingFileHelper` constructors and `includeClient()` flags do not
 belong in this version.
@@ -192,7 +194,7 @@ Build from the target version's
 [menu guide](https://docs.neoforged.net/docs/1.21.11/inventories/menus/). Keep server
 slots, client slots, synchronized data, and `quickMoveStack` index ranges
 consistent. A block menu's `stillValid` must check the block and player range.
-Register its client screen separately; preserve the current rendering API
+Register its client screen separately; preserve the project's rendering API
 instead of copying an older `GuiGraphics.blit` overload.
 
 ---
@@ -314,7 +316,7 @@ mod_description=A cool Minecraft mod.
 
 ---
 
-## Useful NeoForge Classes (1.21.x Quick Reference)
+## Useful NeoForge Classes (1.21.11 Quick Reference)
 
 |Need|Class|
 |---|---|
