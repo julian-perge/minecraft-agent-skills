@@ -58,9 +58,9 @@ src/
       GameTestFunctions.java
     resources/
       META-INF/neoforge.mods.toml
-      data/mymod/structure/
-        empty.nbt
-      data/mymod/test_instance/
+      data/examplemod/structure/
+        example_structure.nbt
+      data/examplemod/test_instance/
         example_test.json
   test/                         # only when JUnit tests exist
     java/com/example/mymod/
@@ -88,7 +88,7 @@ src/
       LegacyGameTests.java
     resources/
       META-INF/neoforge.mods.toml
-      data/mymod/structure/
+      data/examplemod/structure/
         example_structure.nbt
 ```
 
