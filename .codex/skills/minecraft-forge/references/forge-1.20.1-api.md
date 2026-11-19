@@ -51,6 +51,10 @@ Use the current Forge 1.20.1 `47.4.x` patch from the Forge files page when
 scaffolding a new project. Keep `minecraft_version` and the left side of the
 Forge artifact coordinate paired as `1.20.1-${forge_version}`.
 
+The MDK download for Forge `47.4.29` and later uses ForgeGradle 7 and the
+`net.minecraftforge.renamer` plugin, not `reobfJar`. This reference covers the
+ForgeGradle 6 build of the `47.4.28` MDK.
+
 ## build.gradle Essentials
 
 ```gradle
@@ -108,7 +112,38 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 }
+
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [
+            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
+            forge_version: forge_version, forge_version_range: forge_version_range,
+            loader_version_range: loader_version_range,
+            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+            mod_authors: mod_authors, mod_description: mod_description,
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    finalizedBy 'reobfJar'
+}
 ```
+
+The `processResources` block comes from the Forge `47.4.28` MDK. It replaces
+the `${...}` placeholders in `mods.toml` with the `gradle.properties` values.
+Without it, the placeholders ship as literal text and Forge rejects the mod.
+Keep the property map in step with the placeholders that `mods.toml` uses.
+
+The MDK does not ship a `pack.mcmeta`. The `filesMatching` list names it so
+that a `pack.mcmeta` you add also gets the expanded values.
+
+`finalizedBy 'reobfJar'` makes ForgeGradle 6 remap the `jar` output from
+Mojang names to SRG names after each `jar` task. The game loads that
+reobfuscated jar outside the development environment.
 
 ## mods.toml
 
@@ -302,11 +337,11 @@ public record SyncEnergyPacket(BlockPos pos, int energy) {
 ```
 
 Send packets through the channel and Forge `PacketDistributor` helpers. In Forge
-`47.4.x`, `PacketDistributor<T>.with` takes the target object directly; for
-`PLAYER`, pass the `ServerPlayer`, not a `Supplier<ServerPlayer>`.
+`47.4.28`, `PacketDistributor<T>.with` takes a `Supplier<T>`. For `PLAYER`,
+pass `() -> serverPlayer`, not the `ServerPlayer` itself.
 
 ```java
-ModNetworking.CHANNEL.send(PacketDistributor.PLAYER.with(serverPlayer), packet);
+ModNetworking.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), packet);
 ModNetworking.CHANNEL.sendToServer(packet);
 ```
 
