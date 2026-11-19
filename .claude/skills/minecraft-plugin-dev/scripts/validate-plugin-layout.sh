@@ -82,6 +82,18 @@ validate_api_version() {
   return 1
 }
 
+api_version_zero_part() {
+  local value="$1"
+
+  if [[ "$value" =~ ^1\.21\.0[0-9]*$ ]]; then
+    echo "patch"
+  elif [[ "$value" =~ ^26\.0[0-9]*(\.[0-9]+)?$ ]]; then
+    echo "release"
+  elif [[ "$value" =~ ^26\.[1-9][0-9]*\.0[0-9]*$ ]]; then
+    echo "patch"
+  fi
+}
+
 warn_if_unsupported_api_version() {
   local value="$1"
   local label="$2"
@@ -224,8 +236,8 @@ if [[ -n "$PLUGIN_YML" ]]; then
     elif validate_api_version "$api_val"; then
       pass "plugin.yml api-version is on the 1.21.x or 26.x release line: $api_val"
       warn_if_unsupported_api_version "$api_val" "plugin.yml"
-    elif [[ "$api_val" =~ ^(1\.21\.|26\.([1-9][0-9]*\.)?)0[0-9]*$ ]]; then
-      fail "plugin.yml api-version release must be a positive integer without leading zeroes: $api_val"
+    elif zero_part="$(api_version_zero_part "$api_val")" && [[ -n "$zero_part" ]]; then
+      fail "plugin.yml api-version $zero_part must be a positive integer without leading zeroes: $api_val"
     elif [[ "$api_val" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
       fail "plugin.yml api-version is outside the 1.21.x and 26.x release lines: $api_val"
     else
@@ -260,8 +272,8 @@ if [[ -n "$PAPER_PLUGIN_YML" ]]; then
     elif validate_api_version "$paper_api_val"; then
       pass "paper-plugin.yml api-version is on the 1.21.x or 26.x release line: $paper_api_val"
       warn_if_unsupported_api_version "$paper_api_val" "paper-plugin.yml"
-    elif [[ "$paper_api_val" =~ ^(1\.21\.|26\.([1-9][0-9]*\.)?)0[0-9]*$ ]]; then
-      fail "paper-plugin.yml api-version release must be a positive integer without leading zeroes: $paper_api_val"
+    elif zero_part="$(api_version_zero_part "$paper_api_val")" && [[ -n "$zero_part" ]]; then
+      fail "paper-plugin.yml api-version $zero_part must be a positive integer without leading zeroes: $paper_api_val"
     elif [[ "$paper_api_val" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
       fail "paper-plugin.yml api-version is outside the 1.21.x and 26.x release lines: $paper_api_val"
     else

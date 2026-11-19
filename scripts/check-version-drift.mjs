@@ -169,11 +169,26 @@ const checks = [
       /1\.21\|1\.21\.11\|26\.1\|26\.1\.2\|26\.3\)/,
       /\^26\\\.\(\[1-9\]\[0-9\]\*\)\(\\\.\[1-9\]\[0-9\]\*\)\?\$/,
       /1\.21\.x or 26\.x release line/,
-      /26\.2 is skipped/
+      /26\.2 is skipped/,
+      /api-version \$zero_part must be a positive integer without leading zeroes/
     ],
     forbidden: [
       /CURRENT_API_RELEASE/,
-      /skill scope/
+      /skill scope/,
+      /api-version release must be a positive integer/
+    ]
+  },
+  {
+    file: ".agents/skills/minecraft-plugin-dev/references/runtime-patterns.md",
+    required: [
+      /Paper API 1\.21\.11 \(Java 21\), 26\.1\.2 and 26\.3 \(Java 25\)/,
+      /folia-supported: true/,
+      /CustomModelData\.customModelData\(\)\.addString\(/,
+      /Bukkit\.broadcast\(Component\.text\(/
+    ],
+    forbidden: [
+      /setCustomModelData\(\d/,
+      /broadcastMessage\(/
     ]
   },
   {
