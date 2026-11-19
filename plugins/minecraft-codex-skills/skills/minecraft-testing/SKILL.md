@@ -19,7 +19,8 @@ Use Java 25 for 26.1.2 and 26.3, Java 21 for 1.21.11 and NeoForge 1.21.1, and
 Java 17 for Forge 1.20.1. Do not combine source layouts or APIs across versions.
 
 ### Routing Boundaries
-- `Use when`: the task is designing or implementing automated tests (unit, mock, gametest, CI test jobs) for Minecraft projects.
+- `Use when`: the task is designing or implementing automated tests (unit, mock, gametest) for Minecraft projects, or choosing the test command that a CI job runs.
+- `Do not use when`: the task is adding or wiring the CI job itself, such as a workflow file, job order or caching (`minecraft-ci-release`).
 - `Do not use when`: the task is implementing gameplay features rather than testing them (`minecraft-neoforge`, `minecraft-fabric`, `minecraft-forge`, `minecraft-plugin-dev`, `minecraft-datapack`).
 - `Do not use when`: the task is release automation or publishing pipelines (`minecraft-ci-release`).
 
