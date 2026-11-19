@@ -111,6 +111,7 @@ const checks = [
       /26\.3\s+\| `min_format: \[121, 0\]`, `max_format: \[121, 0\]`/,
       /"min_format": \[94, 1\]/,
       /"min_format": \[101, 1\]/,
+      /"max_format": \[101, 1\]/,
       /"max_format": \[94, 1\]/,
       /"min_format": \[121, 0\]/,
       /"max_format": \[121, 0\]/
@@ -118,6 +119,8 @@ const checks = [
     forbidden: [
       /"min_format": 94\.1/,
       /"max_format": 94\.1/,
+      /"pack_format": 81/,
+      /"supported_formats": \[81, 88\]/,
       /### 1\.21\.8 and earlier/,
       /### 1\.21\.9 \/ 1\.21\.10/
     ]
@@ -131,6 +134,7 @@ const checks = [
       /26\.3\s+\| `min_format: \[97, 1\]`, `max_format: \[97, 1\]`/,
       /"min_format": \[75, 0\]/,
       /"min_format": \[84, 0\]/,
+      /"max_format": \[84, 0\]/,
       /"max_format": \[75, 0\]/,
       /"min_format": \[97, 1\]/,
       /"max_format": \[97, 1\]/
@@ -138,6 +142,7 @@ const checks = [
     forbidden: [
       /"min_format": 75\.0/,
       /"max_format": 75\.0/,
+      /"pack_format": 64/,
       /### 1\.21\.8 and earlier/,
       /### 1\.21\.9 \/ 1\.21\.10/
     ]
