@@ -158,9 +158,14 @@ const checks = [
   {
     file: ".agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh",
     required: [
-      /CURRENT_API_RELEASE=3/,
-      /\^26\\\.\(\[1-9\]\[0-9\]\*\)\$/,
-      /26\.x \/ 1\.21\.x skill scope/
+      /1\.21\|1\.21\.11\|26\.1\|26\.1\.2\|26\.3\)/,
+      /\^26\\\.\(\[1-9\]\[0-9\]\*\)\(\\\.\[1-9\]\[0-9\]\*\)\?\$/,
+      /1\.21\.x or 26\.x release line/,
+      /26\.2 is skipped/
+    ],
+    forbidden: [
+      /CURRENT_API_RELEASE/,
+      /skill scope/
     ]
   },
   {

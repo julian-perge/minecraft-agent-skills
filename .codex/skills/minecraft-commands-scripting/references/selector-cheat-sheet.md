@@ -1,4 +1,4 @@
-# Selector Cheat Sheet (1.21.x)
+# Selector Cheat Sheet (1.21.11, 26.1.2 and 26.3)
 
 ## High-Value Filters
 

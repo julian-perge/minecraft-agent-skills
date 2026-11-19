@@ -1,6 +1,6 @@
 ---
 name: minecraft-plugin-dev
-description: "Create, modify, and debug server plugins for current Paper 26.x on Java 25 or legacy Bukkit-derived 1.21.x servers on Java 21. Use for JavaPlugin APIs, events, commands, schedulers, configuration, PDC, and Adventure, not client mods or vanilla datapacks."
+description: "Create, modify, and debug server plugins for Paper 26.1.2 and 26.3 on Java 25, or Paper and other Bukkit-derived 1.21.11 servers on Java 21. Use for JavaPlugin APIs, events, commands, schedulers, configuration, PDC, and Adventure, not client mods or vanilla datapacks."
 ---
 
 # Minecraft Plugin Development Skill
@@ -31,9 +31,9 @@ description: "Create, modify, and debug server plugins for current Paper 26.x on
 
 ## Project Setup
 
-The examples below target current Paper 26.3 and Java 25. For an existing
-1.21.x plugin, preserve its `1.21.x-R0.1-SNAPSHOT` dependency, Java 21
-toolchain, and matching `api-version` until the project is intentionally ported.
+The examples below target Paper 26.3 and Java 25. A 26.1.2 plugin uses the same Java 25
+setup with `io.papermc.paper:paper-api:26.1.2.build.+`. An existing 1.21.11 plugin keeps its
+`1.21.11-R0.1-SNAPSHOT` dependency, Java 21 toolchain, and `api-version` until it is ported.
 
 ### `settings.gradle.kts`
 ```kotlin
@@ -81,9 +81,9 @@ must not be shaded into the plugin JAR.
 distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-bin.zip
 ```
 
-Gradle 8.8 cannot run on Java 25. Use Gradle 9.1 or newer for a current Java 25
-project. Preserve the existing wrapper and Java 21 toolchain for a legacy 1.21.x
-project unless its build is intentionally upgraded and verified.
+Gradle 8.8 cannot run on Java 25. Use Gradle 9.1 or newer for a 26.1.2 or 26.3
+project on Java 25. Preserve the existing wrapper and Java 21 toolchain for a
+1.21.11 project unless its build is intentionally upgraded and verified.
 
 ---
 
@@ -141,9 +141,9 @@ permissions:
 ```
 
 > Match `api-version` to the oldest Paper API the plugin intentionally supports.
-> Current Paper examples use `26.3`; legacy `1.21` and positive `1.21.<patch>`
-> values remain valid for older servers. A server older than the declared value
-> refuses to load the plugin.
+> The examples use `26.3`. A plugin that must also load on 26.1.2 declares `26.1`
+> or `26.1.2`, and one that must load on 1.21.11 declares `1.21` or `1.21.11`. A
+> server older than the declared value refuses to load the plugin.
 
 ### `paper-plugin.yml` (experimental Paper-only format)
 
@@ -479,7 +479,7 @@ profile lookup, and protection-plugin integration examples.
    use that project's documented dev task instead of assuming `./gradlew runServer` exists.
 
 The validator checks:
-- active `plugin.yml` or `paper-plugin.yml` required keys (`name`, `version`, `main`, `api-version`) and repo-supported current `26.<release>` or legacy `1.21` / positive `1.21.<patch>` values, with warnings for versions newer than the documented examples
+- active `plugin.yml` or `paper-plugin.yml` required keys (`name`, `version`, `main`, `api-version`) with a value on the 1.21 or 26 release line (`1.21`, `1.21.<patch>`, `26.<release>` or `26.<release>.<patch>`), with a warning for any value other than `1.21`, `1.21.11`, `26.1`, `26.1.2` or `26.3` (26.2 is skipped)
 - cross-descriptor metadata consistency when both descriptors are present; `paper-plugin.yml` is selected as active
 - Active main class path exists and extends `JavaPlugin`
 - actual server `/reload` anti-patterns such as `Bukkit.reload()` or dispatching the server reload command

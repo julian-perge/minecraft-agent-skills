@@ -1,6 +1,6 @@
 ---
 name: minecraft-server-admin
-description: "Set up, operate, tune, and troubleshoot Minecraft Java 26.x and legacy 1.21.x servers across Paper, Purpur, Folia, Velocity, Fabric, and NeoForge. Use for infrastructure, backups, proxies, and live operations, not plugin or mod development."
+description: "Set up, operate, tune, and troubleshoot Minecraft Java 1.21.11, 26.1.2 and 26.3 servers across Paper, Purpur, Folia, Velocity, Fabric, and NeoForge. Use for infrastructure, backups, proxies, and live operations, not plugin or mod development."
 ---
 
 # Minecraft Server Administration Skill
@@ -43,12 +43,13 @@ stack and version first and preserve them unless migration is requested.
 
 ### Java versions
 
-- Paper and Purpur: Minecraft 26.1+ requires Java 25; Minecraft 1.21.x uses
-  Java 21. Verify the exact Paper/Purpur build and installed plugins before a
+- Paper and Purpur: Minecraft 26.1.2 and 26.3 need Java 25. Minecraft 1.21.11
+  needs Java 21. Verify the exact Paper/Purpur build and installed plugins before a
   version change.
-- Current Velocity 4.x requires Java 25. For a legacy proxy, retain the Java
-  version required by that exact proxy release rather than applying the current
-  version by default.
+- Velocity 4.3.1 needs Java 25. It accepts clients up to 26.3, including
+  1.21.11 and 26.1.2.
+  For an older proxy release, keep the Java version that release needs. Do not
+  change it to Java 25 by default.
 
 ---
 
@@ -120,7 +121,7 @@ Do not tune everything at once. Apply one group at a time.
 
 ### Step 4: Use stable startup flags
 
-For Java 25 on current Paper/Purpur, start with a simple measured baseline:
+For Java 25 on Paper/Purpur 26.1.2 and 26.3, start with a simple measured baseline:
 
 ```bash
 java -Xms4G -Xmx4G -jar server.jar --nogui
@@ -426,7 +427,7 @@ services:
     restart: unless-stopped
 ```
 
-This Docker example targets current Paper 26.3 and Java 25. Re-check plugin
+This Docker example targets Paper 26.3 and Java 25. Re-check plugin
 compatibility and take a restorable backup before changing an existing server's
 Minecraft or Java line.
 

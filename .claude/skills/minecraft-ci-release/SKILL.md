@@ -1,6 +1,6 @@
 ---
 name: minecraft-ci-release
-description: "Set up and review CI, artifact publishing, versioning, and release management for Minecraft 26.x or legacy 1.21.x mods and Paper plugins. Use for pipelines and releases, not gameplay implementation or server operations."
+description: "Set up and review CI, artifact publishing, versioning, and release management for Minecraft 1.21.11, 26.1.2 and 26.3 mods and Paper plugins. Use for pipelines and releases, not gameplay implementation or server operations."
 ---
 
 # Minecraft CI / Release Skill
@@ -19,8 +19,8 @@ build an artifact and create a GitHub Release without publishing to Modrinth or
 CurseForge. Add a publisher only when the project already uses it or the user asks
 for it. Never add tokens to committed files.
 
-For Minecraft 26.x, use Java 25 and state that in workflow labels
-and examples. Legacy Minecraft 1.21.x projects stay on Java 21; retain their own
+For Minecraft 26.1.2 and 26.3, use Java 25 and state that in workflow labels
+and examples. Minecraft 1.21.11 projects stay on Java 21; retain their own
 loader and Gradle conventions instead of mechanically changing their version.
 
 Use an immutable GitHub Action revision in a protected workflow. The following refs
@@ -63,7 +63,7 @@ The Gradle task and safe changelog extraction are in
 
 ## Core CI Workflow (NeoForge + Fabric)
 
-This is a Minecraft 26.x / Java 25 example. Its displayed check names are
+This is a Minecraft 26.3 / Java 25 example. Its displayed check names are
 `Build / Build (fabric)`, `Build / Build (neoforge)`, and `Build / Test` after
 the test job below is added. After the first successful pull request, copy the
 exact names GitHub displays into branch protection; workflow or job renames
@@ -266,9 +266,10 @@ jobs:
 ## Publishing and Changelog Details
 
 Read [the publishing reference](references/publishing-gradle.md) only when the
-project publishes to Modrinth or CurseForge. It includes current plugin versions,
-26.x `jar` selection, explicit legacy Loom `remapJar` guidance, version verification,
-and a parser that fails when the expected changelog heading is missing.
+project publishes to Modrinth or CurseForge. It includes the publisher plugin
+versions, `jar` selection for 26.1.2 and 26.3, explicit 1.21.11 Loom `remapJar`
+guidance, version verification, and a parser that fails when the expected
+changelog heading is missing.
 
 ---
 

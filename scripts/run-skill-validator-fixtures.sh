@@ -270,15 +270,17 @@ expect_path "tests/fixtures/validators/plugin-dev/valid"
 expect_path "tests/fixtures/validators/plugin-dev/valid-paper-plugin"
 expect_path "tests/fixtures/validators/plugin-dev/valid-strict-reload-subcommand"
 expect_path "tests/fixtures/validators/plugin-dev/valid-newer-api-version"
+expect_path "tests/fixtures/validators/plugin-dev/valid-older-api-version"
+expect_path "tests/fixtures/validators/plugin-dev/valid-skipped-api-version"
 expect_path "tests/fixtures/validators/plugin-dev/invalid"
 expect_path "tests/fixtures/validators/plugin-dev/invalid-yaml"
 expect_path "tests/fixtures/validators/plugin-dev/invalid-api-version"
 expect_path "tests/fixtures/validators/plugin-dev/invalid-api-version-zero-patch"
 expect_path "tests/fixtures/validators/plugin-dev/invalid-paper-plugin"
 expect_path "tests/fixtures/validators/plugin-dev/invalid-reload-misuse"
-expect_pass "plugin-dev valid" \
+expect_pass "plugin-dev valid 26.1.2 strict" \
   ./.agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh \
-  --root tests/fixtures/validators/plugin-dev/valid
+  --root tests/fixtures/validators/plugin-dev/valid --strict
 expect_pass_contains "plugin-dev valid paper-plugin.yml only" "using paper-plugin.yml as the active descriptor" \
   ./.agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh \
   --root tests/fixtures/validators/plugin-dev/valid-paper-plugin-only --strict
@@ -289,16 +291,26 @@ expect_pass "plugin-dev valid strict reload subcommand" \
   ./.agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh \
   --root tests/fixtures/validators/plugin-dev/valid-strict-reload-subcommand \
   --strict
-expect_pass_contains "plugin-dev valid newer api-version warns" "newer than the last documented 1.21.x patch" \
+expect_pass_contains "plugin-dev valid newer api-version warns" "api-version 1.21.12 is not a supported target" \
   ./.agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh \
   --root tests/fixtures/validators/plugin-dev/valid-newer-api-version
+expect_pass_contains "plugin-dev valid older api-version warns" "api-version 1.21.4 is not a supported target" \
+  ./.agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh \
+  --root tests/fixtures/validators/plugin-dev/valid-older-api-version
+expect_pass_contains "plugin-dev valid skipped 26.2 api-version warns" "api-version 26.2 is not a supported target" \
+  ./.agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh \
+  --root tests/fixtures/validators/plugin-dev/valid-skipped-api-version
+expect_fail_contains "plugin-dev skipped 26.2 api-version strict" "strict mode failed" \
+  ./.agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh \
+  --root tests/fixtures/validators/plugin-dev/valid-skipped-api-version \
+  --strict
 expect_fail_contains "plugin-dev invalid" "api-version has invalid format" \
   ./.agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh \
   --root tests/fixtures/validators/plugin-dev/invalid
 expect_fail_contains "plugin-dev invalid yaml" "plugin.yml is not valid YAML" \
   ./.agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh \
   --root tests/fixtures/validators/plugin-dev/invalid-yaml
-expect_fail_contains "plugin-dev invalid api-version range" "api-version is outside the documented 26.x / 1.21.x skill scope" \
+expect_fail_contains "plugin-dev invalid api-version range" "api-version is outside the 1.21.x and 26.x release lines" \
   ./.agents/skills/minecraft-plugin-dev/scripts/validate-plugin-layout.sh \
   --root tests/fixtures/validators/plugin-dev/invalid-api-version
 expect_fail_contains "plugin-dev invalid api-version zero patch" "release must be a positive integer without leading zeroes" \
