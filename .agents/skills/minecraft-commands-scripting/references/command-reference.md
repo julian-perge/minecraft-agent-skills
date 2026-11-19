@@ -539,7 +539,8 @@ spawnpoint @s ~ ~ ~ 0.0
 spawnpoint @s ~ ~ ~ 0.0 0.0
 
 # forceload
-# keep chunks 0,0 to 31,31 loaded
+# The arguments are block x z positions: this keeps the chunks that hold
+# blocks x 0..31, z 0..31 loaded (chunks 0,0 to 1,1)
 forceload add 0 0 31 31
 forceload remove 0 0 31 31
 forceload query 0 0

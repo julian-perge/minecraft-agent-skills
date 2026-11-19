@@ -246,6 +246,9 @@ Get the vanilla version from the Minecraft jar: `jar xf minecraft.jar data/`.
 
 For 26.3, use the biome's `minecraft:gameplay/natural_mob_spawns` environment
 attribute instead; the old top-level `spawn_costs` field was removed.
+A file at `data/minecraft/worldgen/biome/<biome>.json` replaces the whole biome,
+so copy the full vanilla biome JSON for that version and change `spawn_costs`
+in it. The fragment below shows only the field to change:
 ```json
 {
   "spawn_costs": {

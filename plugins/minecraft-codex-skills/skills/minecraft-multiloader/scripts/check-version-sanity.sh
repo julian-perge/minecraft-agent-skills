@@ -85,13 +85,19 @@ read_prop() {
 
 MINECRAFT_VERSION="$(read_prop minecraft_version)"
 ENABLED_PLATFORMS="$(read_prop enabled_platforms)"
-ARCHITECTURY_VERSION="$(read_prop architectury_version)"
+# The Architectury template generator writes architectury_api_version, and only
+# when the project uses the Architectury API. Older projects use architectury_version.
+ARCHITECTURY_VERSION="$(read_prop architectury_api_version)"
+if [[ -z "$ARCHITECTURY_VERSION" ]]; then
+  ARCHITECTURY_VERSION="$(read_prop architectury_version)"
+fi
 FABRIC_LOADER_VERSION="$(read_prop fabric_loader_version)"
 FABRIC_API_VERSION="$(read_prop fabric_api_version)"
 NEOFORGE_VERSION="$(read_prop neoforge_version)"
 LOOM_VERSION="$(read_prop loom_version)"
 
-for key in mod_version minecraft_version enabled_platforms architectury_version fabric_loader_version fabric_api_version neoforge_version loom_version; do
+# loom_version is optional: the template pins Loom in build.gradle, not in gradle.properties.
+for key in mod_version minecraft_version enabled_platforms fabric_loader_version fabric_api_version neoforge_version; do
   value="$(read_prop "$key")"
   if [[ -n "$value" ]]; then
     pass "gradle.properties has $key"
@@ -99,6 +105,12 @@ for key in mod_version minecraft_version enabled_platforms architectury_version 
     fail "gradle.properties missing key: $key"
   fi
 done
+
+if [[ -n "$ARCHITECTURY_VERSION" ]]; then
+  pass "Architectury API version: $ARCHITECTURY_VERSION"
+else
+  pass "no Architectury API version (the project does not use the Architectury API)"
+fi
 
 NORMALIZED_PLATFORMS="${ENABLED_PLATFORMS//[[:space:]]/}"
 if [[ ",${NORMALIZED_PLATFORMS}," == *,fabric,* && ",${NORMALIZED_PLATFORMS}," == *,neoforge,* ]]; then
