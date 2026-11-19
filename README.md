@@ -194,13 +194,15 @@ Reviewed against Minecraft 26.3 / Java 25 on October 29, 2026. See the
 
 ## Maintaining the bundle
 
-Use Node 22 or newer and Bash (Git Bash works on Windows). Edit
+Use Node 22 or newer, Bun and Bash (Git Bash works on Windows). Edit
 `.agents/skills/`, then run:
 
 ```bash
-npm run sync:skills
-npm run check
+bun run sync:skills
+bun run check
 ```
+
+When bun is not installed, run `npm run sync:skills` and `npm run check`.
 
 The sync command refreshes `.codex/skills/`, `.claude/skills/`, and the plugin
 bundle. The copied skill directories do not need the repository's Node tooling.

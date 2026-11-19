@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 660" role="img" aria-labelledby="title desc">
   <title id="title">Minecraft Agent Skills workflow</title>
-  <desc id="desc">A Minecraft-themed workflow diagram showing four aligned install and routing steps plus the thirteen skills included in the bundle.</desc>
+  <desc id="desc">A Minecraft-themed workflow diagram showing four aligned install and routing steps plus the fifteen skills included in the bundle.</desc>
 
   <defs>
     <style>
@@ -47,7 +47,7 @@
   <g class="font" transform="translate(56 68)">
     <text class="eyebrow" x="0" y="0">Minecraft Agent Skills</text>
     <text class="title" x="0" y="46">Minecraft skills for your project</text>
-    <text class="body" x="0" y="78">13 skills for mods, plugins, datapacks, resource packs, testing, releases, and servers.</text>
+    <text class="body" x="0" y="78">15 skills for mods, plugins, datapacks, resource packs, testing, releases, and servers.</text>
   </g>
 
   <!-- Four aligned workflow cards -->
@@ -60,8 +60,8 @@
       <text x="48" y="57" text-anchor="middle" fill="#d8f6a5" font-size="18" font-weight="900">01</text>
       <text class="label" x="24" y="108">Choose install</text>
       <text class="label" x="24" y="135">mode</text>
-      <text class="small" x="24" y="164">Raw folders, submodule,</text>
-      <text class="small" x="24" y="185">release zip, or plugin.</text>
+      <text class="small" x="24" y="164">Skills CLI, marketplace,</text>
+      <text class="small" x="24" y="185">copied folders, or plugin.</text>
     </g>
 
     <g transform="translate(334 168)">
@@ -110,19 +110,23 @@
 
   <!-- Skill groups -->
   <g class="font" transform="translate(56 414)">
-    <text class="eyebrow" x="0" y="0">13 skills included</text>
+    <text class="eyebrow" x="0" y="0">15 skills included</text>
 
     <g transform="translate(0 28)">
       <rect class="panel" width="348" height="166" rx="12"/>
       <text class="tiny" x="24" y="34">Development</text>
-      <rect class="chip" x="24" y="54" width="142" height="34" rx="7"/>
-      <text class="code" x="95" y="76" text-anchor="middle">modding</text>
-      <rect class="chip" x="182" y="54" width="142" height="34" rx="7"/>
-      <text class="code" x="253" y="76" text-anchor="middle">plugin-dev</text>
-      <rect class="chip" x="24" y="98" width="142" height="34" rx="7"/>
-      <text class="code" x="95" y="120" text-anchor="middle">multiloader</text>
-      <rect class="chip" x="182" y="98" width="142" height="34" rx="7"/>
-      <text class="code" x="253" y="120" text-anchor="middle">testing</text>
+      <rect class="chip" x="24" y="52" width="142" height="32" rx="7"/>
+      <text class="code" x="95" y="73" text-anchor="middle">neoforge</text>
+      <rect class="chip" x="182" y="52" width="142" height="32" rx="7"/>
+      <text class="code" x="253" y="73" text-anchor="middle">fabric</text>
+      <rect class="chip" x="24" y="91" width="142" height="32" rx="7"/>
+      <text class="code" x="95" y="112" text-anchor="middle">forge</text>
+      <rect class="chip" x="182" y="91" width="142" height="32" rx="7"/>
+      <text class="code" x="253" y="112" text-anchor="middle">plugin-dev</text>
+      <rect class="chip" x="24" y="130" width="142" height="32" rx="7"/>
+      <text class="code" x="95" y="151" text-anchor="middle">multiloader</text>
+      <rect class="chip" x="182" y="130" width="142" height="32" rx="7"/>
+      <text class="code" x="253" y="151" text-anchor="middle">testing</text>
     </g>
 
     <g transform="translate(370 28)">
