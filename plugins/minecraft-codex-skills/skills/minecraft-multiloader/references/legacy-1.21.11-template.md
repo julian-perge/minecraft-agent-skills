@@ -1,7 +1,7 @@
 # Architectury 1.21.11 Template Notes
 
 Use this reference only for a project that uses
-Minecraft 1.21.11 and Java 21. It is not a 26.x migration recipe.
+Minecraft 1.21.11 and Java 21. It is not a migration recipe for 26.1.2 or 26.3.
 
 ## Source of Truth
 
@@ -50,7 +50,7 @@ The Fabric metadata must use the template's loader, Fabric API, and Minecraft
 version ranges. The NeoForge metadata belongs at
 `neoforge/src/main/resources/META-INF/neoforge.mods.toml` and its Minecraft and
 NeoForge dependency ranges must match Minecraft 1.21.11. Do not copy these
-1.21.11 values into a 26.x project.
+1.21.11 values into a 26.1.2 or 26.3 project.
 
 ## Verification
 

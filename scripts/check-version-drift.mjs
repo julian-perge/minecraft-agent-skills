@@ -64,7 +64,11 @@ const checks = [
       /loom_version=<project pin>/,
       /"fabric-api": ">=0\.139\.4\+1\.21\.11"/,
       /"minecraft": "~1\.21\.11"/,
-      /loaderVersion = "\[1,\)"/
+      /loaderVersion = "\[1,\)"/,
+      /dev\.architectury:architectury:19\.0\.1/,
+      /dev\.architectury:architectury:20\.1\.18/,
+      /dev\.architectury:architectury:22\.0\.6/,
+      /architectury-api\/tree\/26\.3/
     ],
     forbidden: [
       /1\.9-SNAPSHOT/,
@@ -74,7 +78,8 @@ const checks = [
       /loom_version=1\.7/,
       /dev\.architectury:architectury-api:/,
       /"fabric-api": "\*"/,
-      /"minecraft": "1\.21\.11"/
+      /"minecraft": "1\.21\.11"/,
+      /architectury-api\/tree\/26\.2/
     ]
   },
   {
@@ -349,7 +354,8 @@ const checks = [
       /resource-pack legacy pack metadata/,
       /testing valid/,
       /multiloader valid/,
-      /multiloader valid 26\.2/
+      /multiloader valid 26\.3/,
+      /multiloader 26\.2 warns/
     ]
   }
 ];
