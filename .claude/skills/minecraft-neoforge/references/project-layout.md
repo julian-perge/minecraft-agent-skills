@@ -35,7 +35,7 @@ src/
         lang/
           en_us.json           <- translation strings
       data/<modid>/
-        recipe/                <- crafting recipe JSON (26.x)
+        recipe/                <- crafting recipe JSON (1.21+ folder name)
         loot_table/
           blocks/              <- per-block loot table JSON
         tags/
@@ -69,8 +69,8 @@ When adding a **new item**:
 - [ ] Texture PNG
 - [ ] Language entry
 - [ ] Creative tab entry with `BuildCreativeModeTabContentsEvent`
-- [ ] Recipe JSON if craftable (`data/<modid>/recipe/` for 26.x; see the
-      version-specific recipe reference before you edit a 1.21.x project)
+- [ ] Recipe JSON if craftable (`data/<modid>/recipe/`; 1.21.1 writes keys and
+      ingredients as `{ "item": ... }` objects, see `common-patterns.md`)
 
 When adding a **new entity**:
 

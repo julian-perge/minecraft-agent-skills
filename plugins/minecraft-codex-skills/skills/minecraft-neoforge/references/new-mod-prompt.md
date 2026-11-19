@@ -41,7 +41,7 @@ Version-specific rules. Apply only the row for the version above:
 
 | Version | Java | Mappings | Notes |
 |---|---|---|---|
-| 26.3 / 26.1.2 | 25 | Mojang names, no obfuscation. The MDK has no Parchment block. | NeoForge `26.3.0.x` or `26.1.2.x` line. Start from the ModDevGradle MDK for that exact version. Do not copy 1.21.x buildscript snippets. |
+| 26.3 / 26.1.2 | 25 | Mojang names, no obfuscation. The MDK has no Parchment block. | NeoForge `26.3.0.x` or `26.1.2.x` line. Start from the ModDevGradle MDK for that exact version. Do not copy 1.21.1 or 1.21.11 buildscript snippets. |
 | 1.21.11 | 21 | Mojang names with Parchment for parameter names. | NeoForge `21.11.x` line. Start from the 1.21.11 ModDevGradle MDK. |
 | 1.21.1 | 21 | Mojang names with Parchment for parameter names. | NeoForge `21.1.x` line. Start from the 1.21.1 ModDevGradle MDK. |
 
@@ -57,7 +57,7 @@ Version-specific rules. Apply only the row for the version above:
 
 **What existing versions do.** {{EXISTING_FEATURES: bullet list of the features commonly listed for existing mods or adaptations}}
 
-**Treat the following as likely weaknesses to fix.** Verify each against current documentation and your own design judgment, and do not assume the list is complete:
+**Treat the following as likely weaknesses to fix.** Verify each against the documentation for the target version and your own design judgment, and do not assume the list is complete:
 
 - {{WEAKNESS_1}}
 - {{WEAKNESS_2}}
@@ -135,8 +135,8 @@ Before writing gameplay code, write `DESIGN_BIBLE.md` covering:
 
 - **Server-authoritative logic.** The client renders and predicts; the server decides. Never trust a client packet without validation (range checks, permission checks, rate limits).
 - **Sided code.** Client-only classes (renderers, screens, key mappings) live in a client package and are never loaded on a dedicated server. Verify by actually starting `runServer`.
-- **Networking** through the current payload API for the target version, with a registered codec per payload.
-- **Persistence** of world and player state through the current saved-data and data-attachment APIs for the target version. Item state uses data components, not raw NBT.
+- **Networking** through the payload API of the target version, with a registered codec per payload.
+- **Persistence** of world and player state through the saved-data and data-attachment APIs of the target version. Item state uses data components, not raw NBT.
 - **No blocking work on the game thread.** Anything slow (file IO, network, heavy computation) is async with a timeout and is joined back on the main thread.
 - **Bounded side effects.** Nothing the mod does can destroy large areas, corrupt a world, or soft-lock a player with no way out. Explosions, block replacement and entity spawning have caps and respect game rules and claim/protection mods where an API exists.
 

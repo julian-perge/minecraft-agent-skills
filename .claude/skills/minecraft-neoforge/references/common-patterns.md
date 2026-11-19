@@ -3,11 +3,11 @@
 Cross-platform patterns for blocks, items, entities, data generation, commands, recipes,
 and more. Code examples use NeoForge syntax unless noted; adapt field/method names for Fabric.
 
-This reference retains 1.21.11 examples alongside 26.x replacements. A heading
-that names Minecraft 26.x uses the 26.1 API and official Mojang mappings;
-verify any later 26.x API change before copying code into a pinned project.
-Treat all other examples as 1.21.11 examples unless their exact API is
-verified for the project. For 26.3 loot data, use entry `condition` / `modifier`
+This reference keeps 1.21.11 examples next to examples for 26.1.2 and 26.3. A
+heading that names 26.1.2 and 26.3 uses an API that the NeoForge `26.1.x` and
+`26.3.x` branches both have, with official Mojang names. Treat all other
+examples as 1.21.11 examples unless their exact API is verified for the
+project. For 26.3 loot data, use entry `condition` / `modifier`
 and predicate/function `type`; the older loot JSON below needs migration.
 See the [26.3 migration primer](https://docs.neoforged.net/primer/docs/26.3/).
 
@@ -22,7 +22,7 @@ Files needed:
 1. Java class (if custom behavior) or `registerSimpleBlock()` call
 2. `assets/<modid>/blockstates/<name>.json`
 3. `assets/<modid>/models/block/<name>.json`
-4. `assets/<modid>/items/<name>.json` (1.21.x item definition)
+4. `assets/<modid>/items/<name>.json` (1.21.4+ item definition; 1.21.1 has none)
 5. `assets/<modid>/models/item/<name>.json`
 6. `assets/<modid>/textures/block/<name>.png`
 7. `data/<modid>/loot_table/blocks/<name>.json`
@@ -220,7 +220,7 @@ See the [1.21.11 consumable API](https://docs.neoforged.net/docs/1.21.11/items/c
 }
 ```
 
-### Tool Item (NeoForge 26.x)
+### Tool Item (NeoForge 26.1.2 and 26.3)
 
 `Tier` and `SwordItem.createAttributes` are obsolete here. Define a
 `ToolMaterial`, then use the `Item.Properties` tool delegate during item
@@ -238,7 +238,7 @@ public static final DeferredItem<Item> MY_SWORD =
         new Item(props.sword(MY_TOOL_MATERIAL, 3, -2.4f)));
 ```
 
-### Armor Set (NeoForge 26.x)
+### Armor Set (NeoForge 26.1.2 and 26.3)
 
 `ArmorMaterial` is not a registry entry. Its equipment asset key identifies
 the corresponding equipment definition, while `humanoidArmor` applies the
@@ -271,7 +271,7 @@ public static final DeferredItem<Item> MY_HELMET =
 ## Entity Types
 
 ```java
-// ModEntityTypes.java (NeoForge 26.x)
+// ModEntityTypes.java (NeoForge 26.1.2 and 26.3)
 public class ModEntityTypes {
     public static final DeferredRegister.Entities ENTITY_TYPES =
         DeferredRegister.createEntities(MyMod.MOD_ID);
@@ -288,8 +288,8 @@ public class ModEntityTypes {
 ```
 
 For a concrete entity subclass, attributes, spawning, or renderer wiring, use
-the current NeoForge entity guide for the project's exact version. Do not copy
-the removed `EntityType.Builder#build(String)` overload into 26.x code.
+the NeoForge entity guide for the project's exact version. Do not copy the
+removed `EntityType.Builder#build(String)` overload into 26.1.2 or 26.3 code.
 
 ---
 
@@ -336,7 +336,10 @@ Keep Fabric's registration callback and mapping names separate. See the
 
 ---
 
-## Recipes (Minecraft 26.x JSON)
+## Recipes (Minecraft 1.21.11, 26.1.2 and 26.3 JSON)
+
+1.21.1 writes each recipe key and ingredient as an object, such as
+`{ "item": "minecraft:stone" }`, in place of the plain id strings below.
 
 ### Shaped Crafting Recipe
 
@@ -429,11 +432,12 @@ Extend the `minecraft` namespace's mining tags for vanilla tool behavior;
 
 ---
 
-## Data Generation (NeoForge 1.21.11 and 26.x)
+## Data Generation (NeoForge 1.21.11, 26.1.2 and 26.3)
 
 Use the target version of the [resource guide](https://docs.neoforged.net/docs/1.21.11/resources/)
 and the project's generated provider classes. `GatherDataEvent.Client` can
-register both client and server providers; the current MDK uses `runClientData`.
+register both client and server providers. The 1.21.11, 26.1.2 and 26.3 MDKs
+configure the `data` run with `clientData()`, so the task is `runData`.
 A split setup uses `.Client` and `.Server` with their matching tasks.
 
 - Use `ModelProvider` for blockstates, block models, and client item definitions.
@@ -468,4 +472,4 @@ Keep the project's configured build tasks and publication destinations.
 Fabric server Game Tests use the configured `build` integration; NeoForge uses
 `runGameTestServer`. Run only tasks present in that project. Inspect each
 loader's actual distributable before publishing; older Fabric projects may
-require `remapJar`, while 26.x uses the non-remapping build.
+require `remapJar`, while 26.1.2 and 26.3 use the non-remapping build.

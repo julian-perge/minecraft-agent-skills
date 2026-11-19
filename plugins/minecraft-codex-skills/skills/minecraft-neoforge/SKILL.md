@@ -11,7 +11,7 @@ Supported Minecraft versions: 1.21.1, 1.21.11, 26.1.2 and 26.3.
 
 | Platform | MC Version | Java | Build System |
 |---|---|---|---|
-| **NeoForge** | 26.x current; 1.21.11 examples retained | Java 25 current; Java 21 on 1.21.x | Gradle + ModDevGradle |
+| **NeoForge** | 1.21.1, 1.21.11, 26.1.2 and 26.3 | Java 25 for 26.1.2 and 26.3, Java 21 for 1.21.1 and 1.21.11 | Gradle + ModDevGradle |
 
 `references/versions.md` lists the Java version, mappings, NeoForge version
 line and MDK source for each supported version. Use a cell only when it has a
@@ -20,11 +20,11 @@ source. A cell marked `unverified` is not a fact.
 Always confirm the Minecraft version and the NeoForge version from
 `gradle.properties` or `build.gradle` before you write mod code.
 
-Minecraft 26.1 introduced Java 25 and unobfuscated game executables. For 26.x
-projects, start from the current NeoForge generator and preserve its build
-layout. Do not copy the 1.21.11 dependency pins or Java 21 snippets of this
-skill into a 26.x project. `references/neoforge-api.md` covers legacy 1.21.11
-examples only.
+Minecraft 26.1 introduced Java 25 and unobfuscated game executables. For 26.1.2
+and 26.3 projects, start from the ModDevGradle MDK for that exact version (see
+`references/versions.md`) and preserve its build layout. Do not copy the
+1.21.11 dependency pins or Java 21 snippets of this skill into a 26.1.2 or 26.3
+project. `references/neoforge-api.md` covers 1.21.11 examples only.
 
 ### Routing Boundaries
 
@@ -88,8 +88,9 @@ version number from memory. Check it first, in this order:
    selected, and the NeoForge changelog for that version.
 3. A local clone of the upstream repo, if one exists, especially for addon
    APIs such as AE2.
-4. This skill's references. `references/neoforge-api.md` is for 1.21.x only.
-   For 26.x, use the sections labelled 26.x in `references/common-patterns.md`.
+4. This skill's references. `references/neoforge-api.md` is for 1.21.11 only.
+   For 26.1.2 and 26.3, use the sections labelled 26.1.2 and 26.3 in
+   `references/common-patterns.md`.
 
 Without the MCP server, use the docs and the changelog. If a lookup fails and
 the answer still matters, say what could not be verified instead of guessing.
@@ -197,8 +198,8 @@ the project's Minecraft version and the key files, then runs `./gradlew build`.
 # NeoForge Game Tests (when the project configures this run)
 ./gradlew runGameTestServer
 
-# Current NeoForge MDK data generation
-./gradlew runClientData
+# Data generation. The 1.21.1, 1.21.11, 26.1.2 and 26.3 MDKs name the run "data".
+./gradlew runData
 
 # Remove this project's generated build outputs before a fresh rebuild
 ./gradlew clean
@@ -244,30 +245,31 @@ Mojang names for the registry constants:
 | Sound events | `BuiltInRegistries.SOUND_EVENT` |
 | Biomes | `Registries.BIOME` registry keys |
 
-Do not copy older `Registry.BLOCK` / `Registry.ITEM` constants into 1.21.x
-code. Those names are stale for the examples in this skill.
+Do not copy older `Registry.BLOCK` / `Registry.ITEM` constants into 1.21.1,
+1.21.11, 26.1.2 or 26.3 code. Those names are stale for the examples in this
+skill.
 
 ### ResourceLocation / Identifier
 
 Every registry entry needs a namespaced ID:
 
 ```java
-// 1.21.11 and 26.x
+// 1.21.11, 26.1.2 and 26.3
 Identifier id = Identifier.fromNamespaceAndPath("mymod", "my_block");
 ```
 
-1.21.1 uses `ResourceLocation`. 1.21.11 renamed it to `Identifier`, and 26.x
-keeps `Identifier`. Keep the class name that the project's version uses.
+1.21.1 uses `ResourceLocation`. 1.21.11 renamed it to `Identifier`, and 26.1.2
+and 26.3 keep `Identifier`. Keep the class name that the project's version uses.
 
 ---
 
 ## 4. NeoForge Quick Patterns
 
-For 26.x, use the explicitly labelled 26.x sections in
+For 26.1.2 and 26.3, use the sections labelled 26.1.2 and 26.3 in
 `references/common-patterns.md` and select the project's exact version in the
 [NeoForge documentation](https://docs.neoforged.net/docs/gettingstarted/).
-`references/neoforge-api.md` contains legacy 1.21.x / Java 21 patterns only.
-Do not copy its dependency pins into a 26.x project.
+`references/neoforge-api.md` contains 1.21.11 / Java 21 patterns only. Do not
+copy its dependency pins into a 26.1.2 or 26.3 project.
 
 ```java
 // Main mod class
@@ -324,9 +326,12 @@ See `references/common-patterns.md` for full JSON templates for:
 
 ## 6. Data Generation
 
-Use the project's configured data providers. Current NeoForge uses
-`GatherDataEvent.Client` / `.Server` and `event.createProvider(...)`. The MDK
-normally generates both asset and data providers with `runClientData`. See the
+Use the project's configured data providers. NeoForge 1.21.11, 26.1.2 and 26.3
+use `GatherDataEvent.Client` / `.Server` and `event.createProvider(...)`. The
+MDKs for those versions configure the `data` run with `clientData()`, so
+`runData` generates both asset and data providers. NeoForge 1.21.1 has one
+`GatherDataEvent` with `includeClient()` and `includeServer()`, and its MDK
+configures the `data` run with `data()`. See the
 [version-matched resource guide](https://docs.neoforged.net/docs/resources/)
 before you wire providers. Keep older projects on their own datagen tasks, then
 inspect the generated files.
