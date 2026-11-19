@@ -194,8 +194,8 @@ public class MyMod implements ModInitializer {
 ```
 
 ```java
-// Fabric 26.1.2 and 26.3 with official Mojang mappings. Create the key before the object
-// so its properties receive the required id during construction.
+// Fabric 26.1.2 and 26.3 with official Mojang mappings. Create the key before
+// the object so its properties receive the required id during construction.
 public final class ModBlocks {
     public static final ResourceKey<Block> MY_BLOCK_KEY = ResourceKey.create(
         Registries.BLOCK,
