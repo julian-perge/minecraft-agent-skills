@@ -651,6 +651,8 @@ expect_fail_contains "worldgen legacy path" "legacy path detected" \
 
 # The datapack, resource-pack and worldgen validators fall back to their skill's jq-shim.mjs when jq is not on PATH.
 # CI installs jq, so these cases run the validators again with a PATH folder that has a link to every command on PATH except jq.
+# The validators run jq with its errors hidden, so a filter that jq-shim.mjs does not support only changes a check result.
+# Each case therefore expects the same output and exit code with and without jq.
 make_no_jq_path() {
   local dir path_dir candidate name
   local -a path_dirs targets=()
@@ -682,23 +684,38 @@ if ! (PATH="$no_jq_path" command -v node >/dev/null 2>&1); then
   exit 1
 fi
 
-expect_pass "datapack valid without jq" \
-  env PATH="$no_jq_path" ./.agents/skills/minecraft-datapack/scripts/validate-datapack.sh \
+expect_same_without_jq() {
+  local name="$1"
+  shift
+  local with_jq_output without_jq_output with_jq_status=0 without_jq_status=0
+  with_jq_output="$("$@" 2>&1)" || with_jq_status=$?
+  without_jq_output="$(PATH="$no_jq_path" "$@" 2>&1)" || without_jq_status=$?
+  if [[ "$with_jq_status" != "$without_jq_status" || "$with_jq_output" != "$without_jq_output" ]]; then
+    echo "$FAIL $name (exit $with_jq_status with jq, exit $without_jq_status without jq)" >&2
+    diff <(printf '%s\n' "$with_jq_output") <(printf '%s\n' "$without_jq_output") >&2 || true
+    exit 1
+  fi
+  printf '%s\n' "$without_jq_output"
+  echo "$PASS $name"
+}
+
+expect_same_without_jq "datapack valid without jq" \
+  ./.agents/skills/minecraft-datapack/scripts/validate-datapack.sh \
   --root tests/fixtures/validators/datapack/valid
-expect_fail_contains "datapack invalid pack version without jq" "pack.mcmeta pack.min_format must be an integer or a one/two-integer array" \
-  env PATH="$no_jq_path" ./.agents/skills/minecraft-datapack/scripts/validate-datapack.sh \
+expect_same_without_jq "datapack invalid pack version without jq" \
+  ./.agents/skills/minecraft-datapack/scripts/validate-datapack.sh \
   --root tests/fixtures/validators/datapack/invalid-pack-version
-expect_pass "resource-pack valid without jq" \
-  env PATH="$no_jq_path" ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+expect_same_without_jq "resource-pack valid without jq" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
   --root tests/fixtures/validators/resource-pack/valid
-expect_fail_contains "resource-pack invalid without jq" "missing texture" \
-  env PATH="$no_jq_path" ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+expect_same_without_jq "resource-pack invalid without jq" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
   --root tests/fixtures/validators/resource-pack/invalid
-expect_pass "worldgen valid without jq" \
-  env PATH="$no_jq_path" ./.agents/skills/minecraft-world-generation/scripts/validate-worldgen-json.sh \
+expect_same_without_jq "worldgen valid without jq" \
+  ./.agents/skills/minecraft-world-generation/scripts/validate-worldgen-json.sh \
   --root tests/fixtures/validators/worldgen/valid
-expect_fail_contains "worldgen invalid without jq" "placed_feature references missing configured_feature" \
-  env PATH="$no_jq_path" ./.agents/skills/minecraft-world-generation/scripts/validate-worldgen-json.sh \
+expect_same_without_jq "worldgen invalid without jq" \
+  ./.agents/skills/minecraft-world-generation/scripts/validate-worldgen-json.sh \
   --root tests/fixtures/validators/worldgen/invalid
 rm -rf "$no_jq_path"
 
