@@ -161,16 +161,16 @@ void playerJoin_getsWelcomeMessage() {
 }
 
 @Test
-void onBlockBreak_cancelledForNonOp() {
+void onBlockBreak_cancelledWithDenyPermission() {
     PlayerMock player = server.addPlayer();
-    player.setOp(false);
+    player.addAttachment(plugin, "myplugin.break.deny", true);
 
     Block block = player.getWorld().getBlockAt(0, 64, 0);
     block.setType(Material.STONE);
     BlockBreakEvent event = new BlockBreakEvent(block, player);
     server.getPluginManager().callEvent(event);
 
-    assertTrue(event.isCancelled(), "Non-op should not be able to break blocks");
+    assertTrue(event.isCancelled(), "The listener cancels breaks for myplugin.break.deny");
 }
 ```
 
@@ -384,7 +384,7 @@ from ordinary unit tests.
 fabricApi {
     configureTests {
         createSourceSet = true
-        modId = "example-mod-test-${project.name}"
+        modId = "example-mod-test"
         enableGameTests = true
         enableClientGameTests = true
         eula = true
@@ -424,18 +424,19 @@ public final class ExampleGameTest implements CustomTestMethodInvoker {
 ### `src/gametest/resources/fabric.mod.json`
 ```json
 {
+  "schemaVersion": 1,
+  "id": "example-mod-test",
+  "version": "1.0.0",
   "entrypoints": {
-    "fabric-gametest": [
-      "com.example.mymod.ExampleGameTest"
-    ]
+    "fabric-gametest": ["com.example.mymod.ExampleGameTest"]
   }
 }
 ```
 
-Keep the `fabric-gametest` entrypoint in sync with the concrete Game Test class.
+Fabric Loader requires `id` and `version`; the `id` must equal the `modId`
+in `configureTests`, and the entrypoint must name the Game Test class.
 Fabric's server Game Tests run with `build`; use `runClientGameTest` for client
-tests. Follow the current Fabric documentation for project-specific Loom options
-and headless client CI.
+tests. See the Fabric documentation for Loom options and headless client CI.
 
 ---
 

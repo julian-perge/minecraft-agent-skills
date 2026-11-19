@@ -59,7 +59,7 @@ src/
     resources/
       META-INF/neoforge.mods.toml
       data/mymod/structure/
-        empty.nbt
+        example_structure.nbt
       data/mymod/test_instance/
         example_test.json
   test/                         # only when JUnit tests exist
