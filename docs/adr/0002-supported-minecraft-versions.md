@@ -18,8 +18,8 @@ The user set the supported list for this repo on 2026-11-19 (issue #40).
 
 - The skills support Minecraft 1.21.11 (Java 21), 26.1.2 and 26.3 (Java 25).
 - 26.2 is skipped. It is not a target in any example.
-- `minecraft-forge` stays on Forge 1.20.1, Java 17 and ForgeGradle 6.
-- `minecraft-neoforge` keeps 1.21.1 until the user decides otherwise, because dropping a supported version needs the user's decision.
+- `minecraft-forge` stays on Forge 1.20.1 and Java 17. It targets ForgeGradle 7, the build of the Forge 47.4.29 and later MDK. The user chose ForgeGradle 7 on 2026-11-19 (#93). A project on ForgeGradle 6 keeps its build unless the user asks to move it.
+- `minecraft-neoforge` keeps 1.21.1. The user confirmed this on 2026-11-19 (#93).
 - Skills, docs and validators name these versions exactly. Format tables and migration notes keep their history.
 
 ## Alternatives Considered
@@ -34,7 +34,7 @@ The user set the supported list for this repo on 2026-11-19 (issue #40).
 
 - Pros: one 1.21 version everywhere.
 - Cons: removes a version that the NeoForge skill, its scripts and its drift patterns support today.
-- Rejected for now: deferred to the user.
+- Rejected: the user chose to keep 1.21.1 (#93).
 
 ## Consequences
 

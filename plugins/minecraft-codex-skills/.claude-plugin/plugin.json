@@ -1,7 +1,7 @@
 {
   "name": "minecraft-codex-skills",
   "description": "15 Minecraft development and operations skills for Codex and Claude Code.",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "author": {
     "name": "Julian Perge",
     "url": "https://github.com/julian-perge"

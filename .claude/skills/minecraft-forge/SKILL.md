@@ -1,6 +1,6 @@
 ---
 name: minecraft-forge
-description: "Create, modify, or debug MinecraftForge mods for Minecraft 1.20.1 on Java 17 with ForgeGradle 6. Use for Forge 1.20.1 gameplay code, registries, events, assets and data generation; not for NeoForge or Fabric projects."
+description: "Create, modify, or debug MinecraftForge mods for Minecraft 1.20.1 on Java 17 with ForgeGradle 7. Use for Forge 1.20.1 gameplay code, registries, events, assets and data generation; not for NeoForge or Fabric projects."
 ---
 
 # Minecraft Forge 1.20.1 Skill
@@ -11,16 +11,19 @@ Supported platform:
 
 | Platform | MC Version | Java | Build System |
 |---|---|---|---|
-| **Forge** | 1.20.1 legacy lane | Java 17 | Gradle + ForgeGradle 6 |
+| **Forge** | 1.20.1 legacy lane | Java 17 | Gradle + ForgeGradle 7 |
 
-This skill covers MinecraftForge `47.4.x` for Minecraft 1.20.1 only. Confirm
+This skill covers MinecraftForge `47.4.x` for Minecraft 1.20.1 only, on the
+ForgeGradle 7 build of the `47.4.29` and later MDK. Confirm
 `minecraft_version=1.20.1` and the `net.minecraftforge:forge` dependency in
 `gradle.properties` and `build.gradle` before you write mod code. If the
 project uses another Minecraft version, do not apply these patterns.
 
 Forge 1.20.1 is not NeoForge. Keep `mods.toml`, `net.minecraftforge.*`
-imports, Java 17 and ForgeGradle 6 patterns. Read
-`references/forge-1.20.1-api.md` before you edit a Forge 1.20.1 project.
+imports, Java 17 and ForgeGradle 7 patterns. Read
+`references/forge-1.20.1-api.md` before you edit a Forge 1.20.1 project. A
+project on ForgeGradle 6 keeps its build unless the user asks to move it. The
+reference has a ForgeGradle 6 section.
 
 ### Routing Boundaries
 
@@ -45,7 +48,9 @@ Key files:
 
 - `src/main/resources/META-INF/mods.toml`
 - `net.minecraftforge:forge` dependency in `build.gradle`
-- `id 'net.minecraftforge.gradle' version '[6.0,6.2)'` plugin
+- `id 'net.minecraftforge.gradle' version '[7.0,8)'` and
+  `id 'net.minecraftforge.renamer'` plugins (a ForgeGradle 6 project has
+  `id 'net.minecraftforge.gradle' version '[6.0,6.2)'`)
 - `@Mod` main class that accepts `FMLJavaModLoadingContext`
 
 `scripts/check-build.sh` checks the Forge signature, Java 17 and the key files,
@@ -76,7 +81,9 @@ build.
 `./gradlew build` runs the project's configured build tasks. Candidate mod jars
 are usually under `build/libs/`, but task names and file names are
 project-specific. Check the build result, then identify the intended
-distributable before you publish it.
+distributable before you publish it. With the ForgeGradle 7 MDK build, ship
+`build/libs/<archivesName>-<version>.jar`, which `renameJar` writes. The
+`-unobfuscated` jar does not load outside the development environment.
 
 ---
 

@@ -9,14 +9,19 @@ and [Forge 1.20.x documentation](https://docs.minecraftforge.net/en/1.20.x/).
 
 ## Project Detection
 
-A Forge 1.20.1 project usually has these signatures:
+A Forge 1.20.1 project on the ForgeGradle 7 MDK usually has these signatures:
 
 ```text
-build.gradle: id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+build.gradle: id 'net.minecraftforge.gradle' version '[7.0,8)'
+build.gradle: id 'net.minecraftforge.renamer' version '1.1.8+'
 gradle.properties: minecraft_version=1.20.1
-gradle.properties: forge_version=47.4.28
+gradle.properties: forge_version=47.4.29
 src/main/resources/META-INF/mods.toml
 ```
+
+A project that uses `id 'net.minecraftforge.gradle' version '[6.0,6.2)'` is on
+ForgeGradle 6. Read [ForgeGradle 6 projects](#forgegradle-6-projects) before
+you change its build.
 
 Use Java 17 for Forge 1.20.1. The official MDK template sets:
 
@@ -27,12 +32,19 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 ## Gradle Properties
 
 ```properties
-org.gradle.jvmargs=-Xmx3G
-org.gradle.daemon=false
+org.gradle.caching=true
+org.gradle.parallel=true
+org.gradle.configureondemand=true
+
+org.gradle.configuration-cache=true
+org.gradle.configuration-cache.parallel=true
+org.gradle.configuration-cache.problems=warn
+
+net.minecraftforge.gradle.merge-source-sets=true
 
 minecraft_version=1.20.1
-minecraft_version_range=[1.20.1,1.21)
-forge_version=47.4.28
+minecraft_version_range=[1.20.1,1.20.2)
+forge_version=47.4.29
 forge_version_range=[47,)
 loader_version_range=[47,)
 mapping_channel=official
@@ -52,8 +64,27 @@ scaffolding a new project. Keep `minecraft_version` and the left side of the
 Forge artifact coordinate paired as `1.20.1-${forge_version}`.
 
 The MDK download for Forge `47.4.29` and later uses ForgeGradle 7 and the
-`net.minecraftforge.renamer` plugin, not `reobfJar`. This reference covers the
-ForgeGradle 6 build of the `47.4.28` MDK.
+`net.minecraftforge.renamer` plugin. This reference covers that build. The
+patterns come from the `mdk/` folder of the `1.20.1` branch of
+[MinecraftForge](https://github.com/MinecraftForge/MinecraftForge/tree/1.20.1/mdk).
+
+## settings.gradle and the Gradle Wrapper
+
+```gradle
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+rootProject.name = 'mymod'
+```
+
+ForgeGradle 7 is on the Gradle Plugin Portal, so `settings.gradle` needs no
+`pluginManagement` block for the Forge maven. The MDK ships the Gradle 9.8.2
+wrapper:
+
+```properties
+distributionUrl=https\://services.gradle.org/distributions/gradle-9.8.2-bin.zip
+```
 
 ## build.gradle Essentials
 
@@ -61,8 +92,10 @@ ForgeGradle 6 build of the `47.4.28` MDK.
 plugins {
     id 'eclipse'
     id 'idea'
+    id 'java'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'net.minecraftforge.gradle' version '[7.0,8)'
+    id 'net.minecraftforge.renamer' version '1.1.8+'
 }
 
 version = mod_version
@@ -76,44 +109,47 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
     mappings channel: mapping_channel, version: mapping_version
-    copyIdeResources = true
 
     runs {
         configureEach {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
+            workingDir.convention layout.projectDirectory.dir('run')
         }
 
-        client {
-            property 'forge.enabledGameTestNamespaces', mod_id
+        register('client') {
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
         }
 
-        server {
-            property 'forge.enabledGameTestNamespaces', mod_id
+        register('server') {
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
             args '--nogui'
         }
 
-        data {
-            workingDirectory project.file('run-data')
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'),
-                '--existing', file('src/main/resources/')
+        register('gameTestServer') {
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
+        }
+
+        register('data') {
+            workingDir = layout.projectDirectory.dir('run-data')
+            args '--mod', mod_id, '--all',
+                '--output', layout.projectDirectory.dir('src/generated/resources'),
+                '--existing', layout.projectDirectory.dir('src/main/resources')
         }
     }
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
 }
 
-tasks.named('processResources', ProcessResources).configure {
+dependencies {
+    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+}
+
+tasks.named('processResources', ProcessResources) {
     var replaceProperties = [
             minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
             forge_version: forge_version, forge_version_range: forge_version_range,
@@ -121,29 +157,67 @@ tasks.named('processResources', ProcessResources).configure {
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
             mod_authors: mod_authors, mod_description: mod_description,
     ]
-    inputs.properties replaceProperties
+    inputs.property('replaceProperties', replaceProperties)
 
     filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
-        expand replaceProperties + [project: project]
+        expand replaceProperties
     }
 }
 
-tasks.named('jar', Jar).configure {
-    finalizedBy 'reobfJar'
+tasks.named('jar', Jar) {
+    archiveClassifier = 'unobfuscated'
+}
+
+renamer.mappings.from minecraft.dependency.toSrgFile
+
+renamer.classes(tasks.named('jar', Jar)) {
+    archiveClassifier = ''
 }
 ```
 
-The `processResources` block comes from the Forge `47.4.28` MDK. It replaces
+Each `register('<name>')` run adds a `run<Name>` task: `runClient`,
+`runServer`, `runGameTestServer` and `runData`. Without the
+`configureEach` block, a run works in `runs/main/<name>`.
+
+The ForgeGradle 7 MDK has no `srcDir 'src/generated/resources'` line. Add it,
+or the jar does not include the files that `runData` writes.
+
+The `processResources` block comes from the Forge `47.4.29` MDK. It replaces
 the `${...}` placeholders in `mods.toml` with the `gradle.properties` values.
 Without it, the placeholders ship as literal text and Forge rejects the mod.
 Keep the property map in step with the placeholders that `mods.toml` uses.
+Do not add `[project: project]` to the `expand` map. The MDK turns on the
+Gradle configuration cache, and the cache cannot store a `project` reference.
 
 The MDK does not ship a `pack.mcmeta`. The `filesMatching` list names it so
 that a `pack.mcmeta` you add also gets the expanded values.
 
-`finalizedBy 'reobfJar'` makes ForgeGradle 6 remap the `jar` output from
-Mojang names to SRG names after each `jar` task. The game loads that
-reobfuscated jar outside the development environment.
+`renamer.classes(tasks.named('jar', Jar))` registers the `renameJar` task. It
+remaps the `jar` output from Mojang names to SRG names, and `assemble` depends
+on it, so `./gradlew build` runs it. The game loads the renamed jar outside
+the development environment. With these classifiers, `jar` writes
+`build/libs/<archivesName>-<version>-unobfuscated.jar` and `renameJar` writes
+`build/libs/<archivesName>-<version>.jar`. Ship the renamed jar.
+
+`renamer.mappings.from minecraft.dependency.toSrgFile` must come after the
+`minecraft.dependency(...)` call, because it reads the mappings of that
+dependency.
+
+A mod dependency that needs remapping to the project's names uses
+`implementation renamer.dependency('<group>:<name>:<version>')`. A mod with
+mixins also needs `renamer.enableMixinRefmaps`. The MDK comments and
+[MDKExamples](https://github.com/MinecraftForge/MDKExamples) show both.
+
+## ForgeGradle 6 projects
+
+A project on Forge `47.4.28` or earlier usually uses ForgeGradle 6:
+`id 'net.minecraftforge.gradle' version '[6.0,6.2)'`, a
+`minecraft "net.minecraftforge:forge:..."` dependency, `fg.deobf(...)` for
+mod dependencies, and `finalizedBy 'reobfJar'` on the `jar` task. Keep that
+build when you change mod code in such a project. The mod code patterns in
+this reference apply to both builds. Move the build to ForgeGradle 7 only when
+the user asks. To move it, copy the build files from the Forge `47.4.29` or
+later MDK and port the project's own changes to them.
 
 ## mods.toml
 
@@ -337,7 +411,7 @@ public record SyncEnergyPacket(BlockPos pos, int energy) {
 ```
 
 Send packets through the channel and Forge `PacketDistributor` helpers. In Forge
-`47.4.28`, `PacketDistributor<T>.with` takes a `Supplier<T>`. For `PLAYER`,
+`47.4.29`, `PacketDistributor<T>.with` takes a `Supplier<T>`. For `PLAYER`,
 pass `() -> serverPlayer`, not the `ServerPlayer` itself.
 
 ```java

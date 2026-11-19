@@ -21,6 +21,7 @@ const checks = [
       /ForgeRegistries\.BLOCKS/,
       /FMLJavaModLoadingContext/,
       /Forge\*\* \| 1\.20\.1 legacy lane/,
+      /Gradle \+ ForgeGradle 7/,
       /Loot table JSON -> Minecraft 1\.21 and later: `data\/<modid>\/loot_table\/blocks\/<name>\.json`; Forge 1\.20\.1: `data\/<modid>\/loot_tables\/blocks\/<name>\.json`/
     ]
   },
@@ -28,7 +29,13 @@ const checks = [
     file: ".agents/skills/minecraft-forge/references/forge-1.20.1-api.md",
     required: [
       /minecraft_version=1\.20\.1/,
-      /forge_version=47\.4\.28/,
+      /forge_version=47\.4\.29/,
+      /id 'net\.minecraftforge\.gradle' version '\[7\.0,8\)'/,
+      /id 'net\.minecraftforge\.renamer' version '1\.1\.8\+'/,
+      /implementation minecraft\.dependency\("net\.minecraftforge:forge:/,
+      /renamer\.classes\(tasks\.named\('jar', Jar\)\)/,
+      /gradle-9\.8\.2-bin\.zip/,
+      /## ForgeGradle 6 projects/,
       /java\.toolchain\.languageVersion = JavaLanguageVersion\.of\(17\)/,
       /src\/main\/resources\/META-INF\/mods\.toml/,
       /FMLJavaModLoadingContext context/,
@@ -38,8 +45,7 @@ const checks = [
       /NetworkRegistry\.newSimpleChannel/,
       /PacketDistributor\.PLAYER\.with\(\(\) -> serverPlayer\)/,
       /tasks\.named\('processResources', ProcessResources\)/,
-      /filesMatching\(\['META-INF\/mods\.toml', 'pack\.mcmeta'\]\) \{\r?\n\s+expand replaceProperties \+ \[project: project\]/,
-      /finalizedBy 'reobfJar'/,
+      /filesMatching\(\['META-INF\/mods\.toml', 'pack\.mcmeta'\]\) \{\r?\n\s+expand replaceProperties\r?\n/,
       /modEventBus\.addListener\(ModDataGen::gatherData\)/,
       /class ModBlockStateProvider extends BlockStateProvider/,
       /class ModRecipeProvider extends RecipeProvider/,
@@ -47,7 +53,10 @@ const checks = [
       /data\/<modid>\/loot_tables\/blocks\/<block>\.json/
     ],
     forbidden: [
-      /PacketDistributor\.PLAYER\.with\(serverPlayer\)/
+      /PacketDistributor\.PLAYER\.with\(serverPlayer\)/,
+      /expand replaceProperties \+ \[project: project\]/,
+      /^\s+minecraft ['"]net\.minecraftforge:forge:/m,
+      /^\s+finalizedBy 'reobfJar'/m
     ]
   },
   {

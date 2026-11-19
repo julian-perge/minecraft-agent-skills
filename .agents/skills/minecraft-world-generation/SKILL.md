@@ -45,7 +45,7 @@ the random-patch pattern with a separate `minecraft:simple_block` configured
 feature and placements for count, random offset, and block-predicate filtering.
 Inspect the relevant primer section before migrating code or data.
 
-Read [1.21.11 JSON patterns](references/legacy-1.21-worldgen-json.md) only
+Read [1.21.11 JSON patterns](references/worldgen-json-1.21.11.md) only
 when the project targets Minecraft 1.21.11. Do not use those examples for 26.1.2
 or 26.3.
 
@@ -120,7 +120,7 @@ organize placed features; choose the semantically appropriate step and keep ore
 placement in `underground_ores`.
 
 The 1.21.11 biome and dimension examples are in
-[1.21.11 JSON patterns](references/legacy-1.21-worldgen-json.md).
+[1.21.11 JSON patterns](references/worldgen-json-1.21.11.md).
 
 ## 26.3 feature pattern
 
@@ -215,7 +215,7 @@ For Fabric registration or mod datagen, use the exact loader and API version's
 documentation rather than copying 1.21.11 code into a 26.1.2 or 26.3 project.
 
 The 1.21.11 structure and dimension examples are in
-[1.21.11 JSON patterns](references/legacy-1.21-worldgen-json.md).
+[1.21.11 JSON patterns](references/worldgen-json-1.21.11.md).
 
 ---
 
