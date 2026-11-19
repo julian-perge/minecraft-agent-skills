@@ -433,7 +433,7 @@ public final class ExampleGameTest implements CustomTestMethodInvoker {
 }
 ```
 
-Fabric Loader requires `id` and `version`; the `id` must equal the `modId`
+Fabric Loader requires `id` and `version`; the `id` should equal the `modId`
 in `configureTests`, and the entrypoint must name the Game Test class.
 Fabric's server Game Tests run with `build`; use `runClientGameTest` for client
 tests. See the Fabric documentation for Loom options and headless client CI.
