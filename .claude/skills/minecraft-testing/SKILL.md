@@ -192,9 +192,9 @@ void mypluginReload_requiresAdminPermission() {
 @Test
 void giveKitCommand_givesPlayerItems() {
     PlayerMock player = server.addPlayer();
-    
+
     server.dispatchCommand(player, "kit starter");
-    
+
     // Check inventory
     assertTrue(player.getInventory().contains(Material.STONE_SWORD));
     assertTrue(player.getInventory().contains(Material.BREAD, 16));
@@ -206,10 +206,10 @@ void giveKitCommand_givesPlayerItems() {
 @Test
 void repeatingTask_firesAfterDelay() {
     PlayerMock player = server.addPlayer();
-    
+
     // Execute 40 ticks worth of scheduled tasks
     server.getScheduler().performTicks(40L);
-    
+
     // Assert expected side effect happened
     assertEquals(2, plugin.getTaskCount());
 }

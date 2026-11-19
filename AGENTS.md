@@ -11,7 +11,14 @@ This repository contains 15 Minecraft skills and a plugin for Codex and Claude C
 - Do not hand-edit mirrored skill trees.
 - Run `bun run check` before publishing changes.
 - The root `justfile` has one recipe for each `package.json` script, plus
-  `bash-n`, `install` and `clean`. Run `just` to list them. The recipes use bun.
+  `bash-n`, `lint`, `fmt`, `install` and `clean`. Run `just` to list them. The
+  recipes use bun.
+- `just lint` runs the prek hooks in `prek.toml`: whitespace, final newlines,
+  line endings, JSON and YAML syntax, and shebangs. Both `just lint` and
+  `just fmt` write the fixes of the hooks to disk. `just lint` fails when a
+  hook changes a file. `just fmt` runs the hooks again and fails only on a
+  problem that no hook can fix. Fix a finding in `.agents/skills/`, then run
+  `bun run sync:skills`.
 - `bun.lock` is the only lockfile. CI installs from it with
   `bun install --frozen-lockfile` and runs `bun run check`.
 
