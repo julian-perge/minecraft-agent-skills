@@ -16,11 +16,11 @@ need_cmd() {
 
 install_with_apt() {
   sudo apt-get update
-  sudo apt-get install -y jq rsync
+  sudo apt-get install -y jq
 }
 
 install_with_brew() {
-  brew install jq rsync
+  brew install jq
 }
 
 if ! need_cmd node || ! need_cmd bun; then
@@ -29,8 +29,8 @@ if ! need_cmd node || ! need_cmd bun; then
   exit 1
 fi
 
-if need_cmd jq && need_cmd rsync; then
-  echo "$PASS Required support tools already installed: jq, rsync"
+if need_cmd jq; then
+  echo "$PASS Required support tool already installed: jq"
 else
   echo "[INFO] Installing missing support tools..."
   case "$OS" in
@@ -38,7 +38,7 @@ else
       if need_cmd apt-get; then
         install_with_apt
       else
-        echo "$FAIL Unsupported Linux package manager. Install manually: jq rsync"
+        echo "$FAIL Unsupported Linux package manager. Install manually: jq"
         exit 1
       fi
       ;;
@@ -52,13 +52,13 @@ else
       ;;
     *)
       echo "$FAIL Unsupported OS: $OS"
-      echo "$WARN Install manually: jq, rsync, node, bun"
+      echo "$WARN Install manually: jq, node, bun"
       exit 1
       ;;
   esac
 fi
 
-for cmd in jq rsync node bun; do
+for cmd in jq node bun; do
   if need_cmd "$cmd"; then
     ver="$($cmd --version 2>/dev/null | head -n 1 || true)"
     echo "$PASS $cmd ${ver}"
@@ -68,17 +68,18 @@ for cmd in jq rsync node bun; do
   fi
 done
 
-if need_cmd rsync; then
-  ver="$(rsync --version 2>/dev/null | head -n 1 || true)"
-  echo "$PASS rsync ${ver}"
-else
-  echo "$WARN rsync not found; mirror sync will use the Node fallback"
-fi
-
 node_major="$(node --version | sed -E 's/^v([0-9]+).*/\1/')"
 if [[ -z "$node_major" || "$node_major" -lt 22 ]]; then
   echo "$FAIL Node 22+ is required, but found $(node --version 2>/dev/null || echo missing)"
   echo "$WARN Install Node 22+ with nvm, fnm, Volta, Homebrew, or NodeSource, then rerun."
+  exit 1
+fi
+
+bun_version="$(bun --version 2>/dev/null || echo 0.0.0)"
+IFS=. read -r bun_major bun_minor bun_patch <<<"${bun_version%%-*}"
+if (( bun_major < 1 || (bun_major == 1 && bun_minor < 4) || (bun_major == 1 && bun_minor == 4 && ${bun_patch:-0} < 4) )); then
+  echo "$FAIL bun 1.4.4+ is required, but found $bun_version"
+  echo "$WARN Install bun 1.4.4 or later from https://bun.sh, then rerun."
   exit 1
 fi
 
