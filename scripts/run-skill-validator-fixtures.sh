@@ -283,6 +283,9 @@ expect_pass_contains "resource-pack ttf font strict" "font file exists: mypack:c
 expect_fail_contains "resource-pack missing ttf font" "missing font file: mypack:missing.ttf (expected assets/mypack/font/missing.ttf)" \
   ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
   --root tests/fixtures/validators/resource-pack/missing-ttf-font
+expect_fail_contains "resource-pack missing minecraft ttf font" "missing font file: minecraft:missing.ttf" \
+  ./.agents/skills/minecraft-resource-pack/scripts/validate-resource-pack.sh \
+  --root tests/fixtures/validators/resource-pack/missing-minecraft-ttf-font
 
 expect_path "tests/fixtures/validators/ci-release/valid/SKILL.md"
 expect_path "tests/fixtures/validators/ci-release/invalid/SKILL.md"
