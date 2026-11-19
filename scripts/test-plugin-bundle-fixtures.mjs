@@ -10,7 +10,6 @@ const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "minecraft-plugin-bundle-
 const claudeMarketplace = ".claude-plugin/marketplace.json";
 const copiedFiles = [
   "package.json",
-  "package-lock.json",
   ".agents/plugins/marketplace.json",
   claudeMarketplace,
   "plugins/minecraft-codex-skills/.codex-plugin/plugin.json",

@@ -5,7 +5,6 @@ import path from "node:path";
 const ROOT = process.cwd();
 const PLUGIN_NAME = "minecraft-codex-skills";
 const PACKAGE_JSON = path.join(ROOT, "package.json");
-const PACKAGE_LOCK = path.join(ROOT, "package-lock.json");
 const PLUGIN_ROOT = path.join(ROOT, "plugins", PLUGIN_NAME);
 const CODEX_MANIFEST = path.join(PLUGIN_ROOT, ".codex-plugin", "plugin.json");
 const CLAUDE_MANIFEST = path.join(PLUGIN_ROOT, ".claude-plugin", "plugin.json");
@@ -40,7 +39,6 @@ function requireText(value, file, field) {
 }
 
 const pkg = readJson(PACKAGE_JSON);
-const packageLock = readJson(PACKAGE_LOCK);
 const codexManifest = readJson(CODEX_MANIFEST);
 const claudeManifest = readJson(CLAUDE_MANIFEST);
 const marketplace = readJson(MARKETPLACE);
@@ -51,13 +49,6 @@ if (!fs.existsSync(PLUGIN_SKILLS)) addError(PLUGIN_SKILLS, "plugin skills direct
 
 const releaseVersion = pkg?.version;
 requireText(releaseVersion, PACKAGE_JSON, "version");
-
-if (packageLock) {
-  if (packageLock.version !== releaseVersion) addError(PACKAGE_LOCK, `expected version \`${releaseVersion}\``);
-  if (packageLock.packages?.[""]?.version !== releaseVersion) {
-    addError(PACKAGE_LOCK, `expected root package version \`${releaseVersion}\``);
-  }
-}
 
 if (codexManifest) {
   if (codexManifest.name !== PLUGIN_NAME) addError(CODEX_MANIFEST, `expected name \`${PLUGIN_NAME}\``);

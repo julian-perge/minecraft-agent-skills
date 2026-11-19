@@ -3,6 +3,7 @@
   "private": true,
   "version": "3.0.0",
   "type": "module",
+  "packageManager": "bun@1.4.4",
   "scripts": {
     "audit:skills": "node ./scripts/audit-skills.mjs",
     "test:validators": "node ./scripts/run-bash.mjs ./scripts/run-skill-validator-fixtures.sh",
@@ -14,7 +15,7 @@
     "check:version-drift": "node ./scripts/check-version-drift.mjs",
     "check:workflow-pins": "node ./scripts/check-workflow-action-pins.mjs",
     "lint:md": "markdownlint-cli2 \"*.md\" \"!CLAUDE.md\" \".agents/**/*.md\" \".codex/**/*.md\" \".claude/**/*.md\" \"plugins/**/*.md\" \"tests/**/*.md\"",
-    "check": "npm run check:sync && npm run check:plugin-bundle && npm run audit:skills && npm run check:version-drift && npm run test:docs && npm run test:validators && npm run test:repo-policy && npm run check:workflow-pins && npm run lint:md"
+    "check": "bun run check:sync && bun run check:plugin-bundle && bun run audit:skills && bun run check:version-drift && bun run test:docs && bun run test:validators && bun run test:repo-policy && bun run check:workflow-pins && bun run lint:md"
   },
   "engines": {
     "node": ">=22"
