@@ -381,7 +381,7 @@ while IFS= read -r -d '' font_file; do
     fi
     if [[ -f "$target" ]]; then
       pass "$font_kind exists: $target_ns:$target_path"
-    elif [[ "$target_ns" == "minecraft" && "$font_kind" == 'font texture' ]]; then
+    elif [[ "$target_ns" == "minecraft" && "$font_type" != "ttf" ]]; then
       continue
     elif [[ "$target_ns" != "$ns" ]]; then
       warn "external $font_kind not locally verifiable: $target_ns:$target_path"
