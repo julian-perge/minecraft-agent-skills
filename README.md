@@ -183,8 +183,14 @@ IDs or reasoning settings.
 
 Bundled validators check file structure and common mistakes. Test builds and
 in-game behavior in your Minecraft project.
-Reviewed against Minecraft 26.3 / Java 25 on October 29, 2026. See the
-[review notes](docs/skill-audit-2026-10.md) for sources and validation limits.
+The 13 skills published at that time were reviewed against Minecraft 26.3 and
+Java 25 on October 29, 2026 ([review notes](docs/skill-audit-2026-10.md)).
+On November 19, 2026, all 15 skills were aligned with the supported versions
+in [ADR-0002](docs/adr/0002-supported-minecraft-versions.md): Minecraft
+1.21.11, 26.1.2 and 26.3, NeoForge 1.21.1, and Forge 1.20.1
+([spec](spec/40-version-alignment.md)). The broken examples found in that
+day's audit were fixed against primary sources
+([spec](spec/61-audit-example-fixes.md)).
 
 ## Maintaining the bundle
 
