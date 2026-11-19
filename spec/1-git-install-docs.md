@@ -10,12 +10,12 @@ Let Julian install one versioned skill, or the whole bundle, from this git repo 
 
 ## Tech Stack
 
-Markdown, JSON, SVG text. Node 22 scripts for validation. Package manager: `bun` first and `npm` as the fallback in docs and in `AGENTS.md`. `bun.lock` is the local lockfile since #13. CI stays on `npm ci` and `npm run check` until #14 (see Boundaries).
+Markdown, JSON, SVG text. Node 22 scripts for validation. Package manager: this module wrote `bun` first and `npm` as the fallback in docs and in `AGENTS.md`. #14 then made bun the only package manager, moved CI to `bun run check` and removed the npm lockfile. See `spec/14-bun-ci.md`.
 
 ## Commands
 
 ```bash
-bun run check                                   # npm run check as fallback
+bun run check
 bun run lint:md
 claude plugin validate .                        # checks .claude-plugin/marketplace.json (verified in the Claude Code docs)
 claude plugin validate ./plugins/minecraft-codex-skills
@@ -34,13 +34,13 @@ claude plugin install minecraft-codex-skills@minecraft-agent-skills
 
 ```text
 README.md                                   rewritten install section, MCP section, bun-first maintain section
-AGENTS.md                                   bun run check first, npm run check fallback (two lines)
+AGENTS.md                                   bun run check first, npm form as the fallback (two lines; #14 removed the fallback)
 docs/assets/how-it-works.svg                text updated: "13" counts and "modding" label (lines 50, 113, 119, 145)
 .claude-plugin/marketplace.json             NEW, at the repo root
 plugins/minecraft-codex-skills/.claude-plugin/plugin.json   author, homepage, repository, version
 plugins/minecraft-codex-skills/.codex-plugin/plugin.json    version (it has no author fields)
 plugins/minecraft-codex-skills/README.md    skill count, bun-first maintain line
-package.json, package-lock.json             version 3.0.0 (lock has 2 fields)
+package.json, npm lockfile                  version 3.0.0 (#14 later removed the lockfile)
 scripts/validate-plugin-bundle.mjs          also validates .claude-plugin/marketplace.json
 ```
 
@@ -86,7 +86,7 @@ JSON with 2-space indentation. Prose in plain ASCII, short sentences. Example of
 
 | Level | What | How |
 |---|---|---|
-| Static | JSON validity, bundle rules, markdown lint, versions equal across the five files | `bun run check` and `npm run check` |
+| Static | JSON validity, bundle rules, markdown lint, versions equal across the five files | `bun run check` (this module also ran the npm form; #14 removed it) |
 | Static | Marketplace schema | `claude plugin validate .` |
 | Install, local | `skills add` from this repo's path into an empty directory, `bunx` and `npx` forms | by hand, in `~/tmp` |
 | Install, remote | The same two forms with `julian-perge/minecraft-agent-skills`, and `claude plugin marketplace add` | after the branch is pushed. Ask first. |
@@ -98,7 +98,7 @@ JSON with 2-space indentation. Prose in plain ASCII, short sentences. Example of
 - Always: keep the plugin name `minecraft-codex-skills`; keep all version fields equal; mark any install form that was not run as `unverified`.
 - Ask first: pushing a branch for the remote install test; `claude plugin marketplace add` (it writes user settings, so remove it after with `claude plugin marketplace remove minecraft-agent-skills`); changing `.github/workflows/skills-audit.yml`.
 - Never: publish to npm; add a plugin `.mcp.json` (it would start a Node server for every plugin user); open an upstream PR; touch `~/.claude/settings.json`.
-- CI stays on npm until #14: the workflow runs `npm ci` against `package-lock.json` and caches npm. `bun.lock` is the local lockfile since #13, so a dependency change updates both lockfiles until #14 removes `package-lock.json`. This module does not change CI.
+- CI stayed on npm while this module was built. #14 then moved CI to `bun install --frozen-lockfile` and `bun run check` and removed the npm lockfile, so `bun.lock` is the only lockfile. See `spec/14-bun-ci.md`. This module did not change CI.
 
 ## Success Criteria
 
@@ -107,15 +107,15 @@ JSON with 2-space indentation. Prose in plain ASCII, short sentences. Example of
 3. After the push, the same test passes with `julian-perge/minecraft-agent-skills`. Until then the README marks the remote form `unverified`.
 4. `claude plugin marketplace add` and `claude plugin install minecraft-codex-skills@minecraft-agent-skills` succeed, and `claude plugin list` shows the plugin enabled. The marketplace is removed afterwards.
 5. The Claude manifest has author `Julian Perge` with url `https://github.com/julian-perge`, and homepage and repository `https://github.com/julian-perge/minecraft-agent-skills`. No email appears.
-6. `package.json`, both `package-lock.json` version fields, and both plugin manifests say `3.0.0`.
-7. `AGENTS.md` says `bun run check` with `npm run check` as the fallback, in the Editing and Every task lines. `bun run check` and `npm run check` both exit 0.
+6. `package.json`, both version fields of the npm lockfile, and both plugin manifests say `3.0.0`. #14 later removed the lockfile and its version check.
+7. `AGENTS.md` says `bun run check`, with the npm form as the fallback, in the Editing and Every task lines, and both forms exit 0. #14 later removed the npm fallback (`spec/14-bun-ci.md`).
 8. The README has the five install paths and the MCP section described above. It has no mention of `minecraft-modding` as a skill. `docs/assets/how-it-works.svg` and `plugins/minecraft-codex-skills/README.md` show 15 skills and no stale name.
 9. `scripts/validate-plugin-bundle.mjs` fails on a marketplace whose entry name or source is wrong. Show this with one temporary bad copy that is not committed.
 
 ## Out of Scope (Deferred)
 
 - An npm publish, a plugin `.mcp.json`, syncing from Jahrome907, and upstream PRs.
-- Moving CI to bun and removing `package-lock.json`: #14.
+- Moving CI to bun and removing the npm lockfile: #14, done in `spec/14-bun-ci.md`.
 - A Windows install guide.
 - A tagged release or changelog for 3.0.0. This module sets the version only.
 - Codex plugin author fields. The Codex manifest has none today.
